@@ -1,0 +1,53 @@
+// Toy Story Theme Colors
+$toystory-blue: #3C92D6;  // Toy Story sky blue
+$toystory-yellow: #FEDD00; // Toy Story yellow
+$toystory-red: #DA291C;    // Toy Story red
+$toystory-white: #FFFFFF;  // White for contrast
+$toystory-green: #71C837;  // Buzz Lightyear green
+
+@function hex-to-rgb($hex) {
+  @return red($hex), green($hex), blue($hex);
+}
+
+// Apply custom colors to Bootstrap
+:root {
+  --bs-primary: #{$toystory-blue};
+  --bs-primary-rgb: #{hex-to-rgb($toystory-blue)};
+  --bs-secondary: #{$toystory-yellow};
+  --bs-danger: #{$toystory-red};
+  --bs-light: #{$toystory-white};
+  --bs-success: #{$toystory-green};
+  --bs-border-color-translucent: #{darken($toystory-blue, 10%)};
+}
+
+body {
+  background: radial-gradient(circle, #A2D9F5 0%, #3C92D6 100%); // Toy Story sky
+  font-family: "Comic Sans MS", "Chalkboard SE", sans-serif; // Playful font
+}
+
+h1, h2, h3, h4 {
+  font-family: "Luckiest Guy", cursive; // Pixar-style font (consider using Google Fonts)
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+  margin-top: 0.75rem;
+}
+
+.progress-bar {
+  font-weight: bold;
+}
+
+nav.navbar {
+  background: $toystory-blue;
+  border-bottom: 5px solid $toystory-yellow;
+}
+nav .navbar-brand {
+  font-family: "Luckiest Guy", cursive;
+}
+.navbar-nav .nav-link.active {
+  font-weight: bold;
+  color: $toystory-yellow !important;
+  //border-bottom: 3px solid $toystory-red;
+}

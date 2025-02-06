@@ -5,7 +5,6 @@
     </div>
 
     <div class="card-body">
-
       <ul class="nav nav-tabs" id="leaderboardTabs" role="tablist">
         <li class="nav-item" role="presentation">
           <a class="nav-link active" id="users-tab" data-bs-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">
@@ -39,7 +38,7 @@
                 <td><%= user.scanned_locations %></td>
                 <td><%= user.total_locations %></td>
                 <td style="min-width: 150px;">
-                  <div class="progress bg-dark border" style="height: 20px;">
+                  <div class="progress border border-success-subtle" style="height: 20px;">
                     <div class="progress-bar bg-success" role="progressbar" style="width: <%= user.completion_percentage || 0 %>%;">
                       <%= number_to_percentage(user.completion_percentage || 0, precision: 0) %>
                     </div>
@@ -73,7 +72,7 @@
                 <td><%= rfid_tag.scanned_locations %></td>
                 <td><%= rfid_tag.total_locations %></td>
                 <td style="min-width: 150px;">
-                  <div class="progress bg-dark border" style="height: 20px;">
+                  <div class="progress border border-success-subtle" style="height: 20px;">
                     <div class="progress-bar bg-success" role="progressbar" style="width: <%= rfid_tag.completion_percentage || 0 %>%;">
                       <%= number_to_percentage(rfid_tag.completion_percentage || 0, precision: 0) %>
                     </div>
