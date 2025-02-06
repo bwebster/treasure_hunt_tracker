@@ -4,7 +4,7 @@ require 'securerandom'
 
 desc "Simulate tracking events"
 task :simulate => :environment do
-  API_ENDPOINT = "http://localhost:5000/api/tracking_events" # Change if needed
+  API_ENDPOINT = "http://localhost:3000/api/tracking_events" # Change if needed
   SIMULATED_EVENT_COUNT = 50 # Adjust the number of tracking events
   DELAY_RANGE = 1..5 # Random delay between events (in seconds)
 

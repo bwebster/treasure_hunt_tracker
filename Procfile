@@ -1,2 +1,2 @@
-web: bundle exec rails server
-# an workers: bundle exec rails solid_queue:start
+web: env PORT=3000 bin/rails server
+workers: env bundle exec rake solid_queue:start
