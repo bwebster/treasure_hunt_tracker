@@ -1,0 +1,29 @@
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4>User <%= @user.id %> Details</h4>
+    </div>
+    <div class="card-body">
+      <p><strong>Username:</strong> <%= @user.username %></p>
+      <p><strong>First Name:</strong> <%= @user.first_name %></p>
+      <p><strong>Last Name:</strong> <%= @user.last_name %></p>
+      <p><strong>Email:</strong> <%= @user.email %></p>
+
+      <p><strong>RFID Tags:</strong></p>
+      <ul>
+        <% if @user.rfid_tags.any? %>
+          <% @user.rfid_tags.each do |tag| %>
+            <span class="badge bg-info"><%= tag.tag_id %></span>
+          <% end %>
+        <% else %>
+          <span class="text-muted">No tags</span>
+        <% end %>
+      </ul>
+
+      <div class="text-end">
+        <%= link_to "Back to Users", users_path, class: "btn btn-secondary" %>
+        <%= link_to "Edit", edit_user_path(@user), class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4>Leader Board</h4>
+    </div>
+
+    <div class="card-body">
+
+      <ul class="nav nav-tabs" id="leaderboardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="users-tab" data-bs-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">
+            Users
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="rfid-tab" data-bs-toggle="tab" href="#rfid" role="tab" aria-controls="rfid" aria-selected="false">
+            RFID Tags
+          </a>
+        </li>
+      </ul>
+
+      <div class="tab-content mt-3" id="leaderboardTabsContent">
+        <!-- Users Tab -->
+        <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Scanned Locations</th>
+              <th>Total Locations</th>
+              <th>Completion %</th>
+            </thead>
+            <tbody>
+            <% @results.each_with_index do |user, index| %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= user.username || "Anonymous" %> <%= user.last_name %></td>
+                <td><%= user.scanned_locations %></td>
+                <td><%= user.total_locations %></td>
+                <td style="min-width: 150px;">
+                  <div class="progress bg-dark border" style="height: 20px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: <%= user.completion_percentage || 0 %>%;">
+                      <%= number_to_percentage(user.completion_percentage || 0, precision: 0) %>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- RFID Tags Tab -->
+        <div class="tab-pane fade" id="rfid" role="tabpanel" aria-labelledby="rfid-tab">
+          <table class="table table-striped align-middle">
+            <thead>
+            <tr>
+              <th>Rank</th>
+              <th>RFID Tag</th>
+              <th>Username</th>
+              <th>Scanned Locations</th>
+              <th>Total Locations</th>
+              <th>Completion %</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @rfid_tags.each_with_index do |rfid_tag, index| %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= rfid_tag.label %></td>
+                <td><%= rfid_tag.user&.username %></td>
+                <td><%= rfid_tag.scanned_locations %></td>
+                <td><%= rfid_tag.total_locations %></td>
+                <td style="min-width: 150px;">
+                  <div class="progress bg-dark border" style="height: 20px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: <%= rfid_tag.completion_percentage || 0 %>%;">
+                      <%= number_to_percentage(rfid_tag.completion_percentage || 0, precision: 0) %>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
