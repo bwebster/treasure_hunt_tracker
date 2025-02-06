@@ -7,3 +7,24 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+{
+  Date.new(2025, 7, 6) => ["Front Entry", "Kids Lobby", "Kids Hallway"],
+  Date.new(2025, 7, 13) => ["Front Entry", "Hospitality", "Back Wall"],
+  Date.new(2025, 7, 20) => ["Kids Lobby", "Hospitality", "Community Wall"],
+  Date.new(2025, 7, 27) => ["Front Entry", "Hospitality", "Kids Hallway"],
+}.each_with_index do |(date, locations), index|
+  e = Event.find_or_create_by!(name: "Sunday #{index+1}", date: date)
+  puts "Created event #{e.name} on #{date}"
+
+  locations.each do |loc|
+    loc = Location.find_or_create_by!(name: loc, event: e)
+    e.locations << loc if e.new_record?
+    puts "  Added location #{loc.name}"
+  end
+end
+
+%w[Amy Blake Charlie Devin Ellie Freddy Gemma Haddie Illia].each do |name|
+  u = User.find_or_create_by!(username: name)
+  puts "Created user #{u.username}"
+end
