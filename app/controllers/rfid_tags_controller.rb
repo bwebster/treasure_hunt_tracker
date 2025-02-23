@@ -24,7 +24,7 @@ class RfidTagsController < ApplicationController
   end
 
   def edit
-    @users = User.order(:username) # List users for selection
+    @users = User.order(:username)
   end
 
   def update
@@ -38,9 +38,14 @@ class RfidTagsController < ApplicationController
     if @rfid_tag.save
       redirect_to rfid_tags_path, notice: "RFID tag updated successfully."
     else
+      @users = User.order(:username)
       flash.now[:alert] = "Error updating RFID tag."
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
+  end
+
+  def register
+    render "register"
   end
 
   private
@@ -54,6 +59,6 @@ class RfidTagsController < ApplicationController
   end
 
   def rfid_tag_params
-    params.require(:rfid_tag).permit(:tag_id, :user_id)
+    params.require(:rfid_tag).permit(:user_id, :label)
   end
 end

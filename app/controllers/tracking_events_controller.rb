@@ -1,5 +1,5 @@
 class TrackingEventsController < ApplicationController
   def index
-    @tracking_events = TrackingEvent.left_joins(location: :event).order(scanned_at: :desc)
+    @tracking_events = TrackingEvent.left_joins(location: :event).order(created_at: :desc)
   end
 end

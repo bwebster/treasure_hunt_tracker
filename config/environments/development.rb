@@ -64,6 +64,10 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
+  # config.action_cable.mount_path = "/cable"
+  # config.action_cable.disable_request_forgery_protection = true
+  # config.action_cable.allowed_request_origins = ["http://localhost:3000"]
+
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 
@@ -73,4 +77,10 @@ Rails.application.configure do
   # Use Solid Queue in Development.
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
+
+  config.assets.debug = true
+  config.assets.check_precompiled_asset = false
+  # config.public_file_server.headers = {
+  #   "Cache-Control" => "no-store, no-cache, must-revalidate, max-age=0"
+  # }
 end

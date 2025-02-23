@@ -2,7 +2,7 @@
 #
 # Table name: events
 #
-#  id         :integer          not null, primary key
+#  id         :uuid             not null, primary key
 #  name       :string           not null
 #  date       :date
 #  created_at :datetime         not null

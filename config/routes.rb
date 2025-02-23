@@ -25,7 +25,10 @@ Rails.application.routes.draw do
 
   resources :tracking_events, only: [:index]
 
+  get "register" => "rfid_tags#register"
+
   mount MissionControl::Jobs::Engine, at: "/jobs"
+  mount ActionCable.server => "/cable"
 
   # Defines the root path route ("/")
   root "progress#index"

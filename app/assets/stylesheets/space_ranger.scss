@@ -1,0 +1,134 @@
+// Import Bootstrap Functions & Variables
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+@function hex-to-rgb($hex) {
+  @return red($hex), green($hex), blue($hex);
+}
+
+// **Galactic Theme Colors (Custom Bootstrap Variables)**
+$primary: #71C837; // Space Ranger Green
+$secondary: #8A2BE2; // Buzz Lightyear Purple
+$info: #00FFFF; // Neon Blue
+$dark: #020A24; // Deep Space Blue
+$light: #B0B0B0; // Tech Gray
+$danger: #DA291C; // Laser Red
+$warning: #FEDD00; // Buzz Yellow
+
+// Override Bootstrap Theme Colors
+$theme-colors: (
+        "primary": $primary,
+        "secondary": $secondary,
+        "info": $info,
+        "dark": $dark,
+        "light": $light,
+        "danger": $danger,
+        "warning": $warning
+);
+
+// **Typography**
+$font-family-base: "Orbitron", sans-serif; // Sci-Fi Font
+$headings-font-family: "Orbitron", sans-serif;
+$headings-text-transform: uppercase;
+$headings-letter-spacing: 1.5px;
+
+// **Body**
+$body-bg: $dark;
+$body-color: $info;
+$text-muted: $light;
+
+$body-secondary-color: $light;
+
+// **Buttons**
+$btn-border-radius: 12px;
+$btn-font-weight: bold;
+$btn-text-transform: uppercase;
+
+// **Tables**
+$table-border-color: $info;
+$table-striped-bg: rgba($info, 0.1);
+$table-hover-bg: rgba($info, 0.2);
+
+// **Cards**
+$card-bg: transparent;
+$card-border-color: $info;
+$card-border-width: 1px;
+$card-border-radius: 12px;
+
+// **Progress Bar**
+$progress-bg: $dark;
+$progress-height: 25px;
+$progress-border-radius: 12px;
+$progress-bar-color: $dark;
+$progress-bar-bg: $info;
+
+$navbar-light-brand-color: $info;
+$navbar-light-color: $info;
+$nav-link-color: $info;
+$nav-tabs-link-active-border-color: $info;
+$nav-tabs-link-active-color: $info;
+$nav-tabs-border-color: $info;
+$nav-tabs-link-active-border-color: $info;
+$nav-tabs-link-hover-border-color: $primary;
+$nav-link-hover-color: $primary;
+
+$link-color: $info;
+$link-decoration: border-bottom 1px solid $info;
+
+$table-color: $info;
+$table-striped-color: lighten($info, 10%);
+
+// Import Bootstrap (After Variables)
+@import "bootstrap/scss/bootstrap";
+
+:root {
+  --bs-nav-link-hover-color: $info;
+}
+
+
+// **Custom Galactic Styles**
+//body {
+//  background: $dark;
+//  color: $info;
+//  text-align: center;
+//}
+
+// Glowing Text Effect
+//@keyframes glow {
+//  0% { text-shadow: 0 0 5px $info, 0 0 10px rgba($info, 0.8); }
+//  100% { text-shadow: 0 0 10px $info, 0 0 20px rgba($info, 0.8); }
+//}
+//
+//.glow-text {
+//  font-size: 2rem;
+//  color: $info;
+//  animation: glow 1.5s infinite alternate;
+//  text-transform: uppercase;
+//  font-weight: bold;
+//}
+
+// Navbar Customization
+//.navbar {
+//  background: $dark;
+//  border-bottom: 3px solid $info;
+//}
+
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:focus {
+  color: $info !important;
+}
+
+//.navbar-nav .nav-link.active {
+//  font-weight: bold;
+//  color: $warning !important;
+//  border-bottom: 3px solid $danger;
+//}
+
+//// Rank Column Styling
+//.rank {
+//  font-size: 1.8rem;
+//  font-weight: bold;
+//  color: $info;
+//  text-shadow: 0 0 10px rgba($info, 0.8);
+//}

@@ -1,6 +1,6 @@
 <div class="container mt-5">
   <div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header">
       <h4>Tracking Events</h4>
     </div>
     <div class="card-body">
@@ -9,7 +9,8 @@
           <thead>
           <tr>
             <th>Scanned At</th>
-            <th>Tag</th>
+            <th>Tag Label</th>
+            <th>Tag UID</th>
             <th>User</th>
             <th>Event</th>
             <th>Location</th>
@@ -21,8 +22,10 @@
             <tr>
               <td><%= tracking_event.scanned_at.strftime("%B %d, %Y %H:%M:%S") %></td>
               <td>
-                <span class="badge bg-info"><%= tracking_event.rfid_tag.tag_id %></span>
                 <%= tracking_event.rfid_tag.label %>
+              </td>
+              <td>
+                <%= tracking_event.rfid_tag.tag_id %>
               </td>
               <td>
                 <% if tracking_event.rfid_tag.user.present? %>
@@ -40,9 +43,9 @@
               </td>
               <td>
                 <% if tracking_event.location.present? %>
-                  <%= tracking_event.location.name %>
+                  <%= tracking_event.location.name %> (<%= tracking_event.submitted_location %>)
                 <% elsif tracking_event.submitted_location %>
-                  <%= tracking_event.submitted_location %> (submitted)
+                  (<%= tracking_event.submitted_location %>)
                 <% else %>
                   <span class="text-muted">No Location</span>
                 <% end %>

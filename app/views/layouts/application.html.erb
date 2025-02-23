@@ -19,6 +19,7 @@
 
   <%# Includes all stylesheet files in app/assets/stylesheets %>
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -28,7 +29,7 @@
 
 <nav class="navbar navbar-expand-lg">
   <div class="container">
-    <a class="navbar-brand text-white fw-bold" href="/">
+    <a class="navbar-brand" href="/">
       <i class="bi bi-stars"></i> ATM Scan Tracking
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -37,7 +38,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <%= link_to "Leader Board", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+          <%= link_to "Leader Board", root_path(anchor: "scores"), class: "nav-link #{'active' if current_page?(root_path)}" %>
         </li>
         <li class="nav-item">
           <%= link_to "RFID Tags", rfid_tags_path, class: "nav-link #{'active' if current_page?(rfid_tags_path)}" %>

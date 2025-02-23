@@ -17,8 +17,10 @@
   e = Event.find_or_create_by!(name: "Sunday #{index+1}", date: date)
   puts "Created event #{e.name} on #{date}"
 
-  locations.each do |loc|
-    loc = Location.find_or_create_by!(name: loc, event: e)
+  Location.find_or_create_by!(name: "Registration", event: e, number: 0, registration: true)
+
+  locations.each_with_index do |loc, idx|
+    loc = Location.find_or_create_by!(name: loc, event: e, number: idx+1)
     e.locations << loc if e.new_record?
     puts "  Added location #{loc.name}"
   end

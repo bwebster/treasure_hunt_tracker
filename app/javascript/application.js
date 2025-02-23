@@ -2,11 +2,47 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "bootstrap"
+import "channels/register_channel";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("turbo:load", () => {
+    const register = "[Register]";
+    const exitRegistration = "[Exit Registration]";
+
+    document.querySelectorAll(".toggle-registration").forEach(button => {
+        button.addEventListener("click", (event) => {
+            const number = event.target.getAttribute("data-location-number");
+
+            const locationNumber = localStorage.getItem("listening_enabled");
+            if (locationNumber === number) {
+                event.target.innerHTML = register;
+                localStorage.removeItem("listening_enabled");
+                console.log(`✅ Registration exited for location ${locationNumber}`);
+            } else {
+                document.querySelectorAll(`.toggle-registration[data-location-number="${locationNumber}"]`).forEach(el => {
+                    el.innerHTML = register;
+                });
+
+                localStorage.setItem("listening_enabled", number);
+                event.target.innerHTML = exitRegistration;
+                console.log(`✅ Registration entered for location ${number}`);
+            }
+        });
+    });
+
+
+    const locationNumber = localStorage.getItem("listening_enabled");
+    console.log("Current location number", locationNumber);
+    if (locationNumber) {
+        console.log(`✅ Registration entered for location ${locationNumber} at load`);
+        document.querySelectorAll(`.toggle-registration`).forEach(el => {
+            el.innerHTML = register;
+        });
+        document.querySelectorAll(`.toggle-registration[data-location-number="${locationNumber}"]`).forEach(el => {
+            el.innerHTML = exitRegistration;
+        });
+    }
+
     const tabElements = document.querySelectorAll('a[data-bs-toggle="tab"]');
-
-    // Function to switch tabs when clicked
     tabElements.forEach(tab => {
         tab.addEventListener("click", function (event) {
             event.preventDefault();

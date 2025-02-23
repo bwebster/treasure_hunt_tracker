@@ -24,7 +24,7 @@ class LocationsController < ApplicationController
       redirect_to edit_event_path(@event), notice: "Location updated successfully."
     else
       flash.now[:alert] = "Error updating location."
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -44,6 +44,6 @@ class LocationsController < ApplicationController
   end
 
   def location_params
-    params.require(:location).permit(:name)
+    params.require(:location).permit(:name, :number, :registration)
   end
 end

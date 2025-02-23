@@ -44,5 +44,9 @@ module TreasureHuntTracker
       config.solid_queue.logger = ActiveSupport::Logger.new(STDOUT)
       config.solid_queue.logger.level = Logger::INFO
     end
+
+    config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+    end
   end
 end

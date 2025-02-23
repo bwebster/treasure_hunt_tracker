@@ -4,7 +4,7 @@
   </div>
 
   <div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header">
       <h4>Event List</h4>
     </div>
     <div class="card-body">
@@ -26,7 +26,13 @@
               <td>
                 <ul>
                 <% event.locations.each do |loc| %>
-                  <li><%= loc.name %></li>
+                  <li>
+                    (<%= loc.number %>)
+                    <%= loc.name %>
+                    <% if loc.registration? %>
+                      <button id="toggle-listening" data-location-id="<%= loc.id %>" data-location-number="<%= loc.number %>" class="toggle-registration btn btn-link text-primary p-0 border-0 align-baseline">[Register]</button>
+                    <% end %>
+                  </li>
                 <% end %>
                 </ul>
               </td>

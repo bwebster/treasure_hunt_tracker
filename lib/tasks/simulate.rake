@@ -25,9 +25,9 @@ task :simulate => :environment do
     rfid_tag = rfid_tags.sample # Pick a random RFID tag
 
     payload = {
-      rfid_id: rfid_tag,
-      location: location.name,
-      scanned_at: event.date
+      id: rfid_tag,
+      loc: location.name,
+      at: event.date
     }
 
     # Send the HTTP POST request to create a tracking event

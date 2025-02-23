@@ -1,7 +1,7 @@
 <div class="container mt-5">
 
   <div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header">
       <h4>Edit Event</h4>
     </div>
     <div class="card-body">
@@ -47,14 +47,22 @@
         <table class="table table-striped">
           <thead>
           <tr>
+            <th>#</th>
             <th>Name</th>
+            <th>Registration Station</th>
             <th>Actions</th>
           </tr>
           </thead>
           <tbody>
           <% @event.locations.each do |location| %>
             <tr>
+              <td><%= location.number %></td>
               <td><%= location.name %></td>
+              <td>
+                <% if location.registration? %>
+                  Yes
+                <% end %>
+                </td>
               <td>
                 <%= link_to "Edit", edit_event_location_path(@event, location), class: "btn btn-sm btn-warning" %>
                 <%= form_with url: event_location_path(@event, location), method: :delete, data: { confirm: "Are you sure?" }, class: "d-inline" do %>

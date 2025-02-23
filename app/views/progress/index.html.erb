@@ -1,13 +1,18 @@
 <div class="container mt-5">
   <div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header">
       <h4>Leader Board</h4>
     </div>
 
     <div class="card-body">
       <ul class="nav nav-tabs" id="leaderboardTabs" role="tablist">
         <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="users-tab" data-bs-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">
+          <a class="nav-link active" id="scores-tab" data-bs-toggle="tab" href="#scores" role="tab" aria-controls="scores" aria-selected="true">
+            Scores
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="users-tab" data-bs-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">
             Users
           </a>
         </li>
@@ -19,8 +24,33 @@
       </ul>
 
       <div class="tab-content mt-3" id="leaderboardTabsContent">
+        <!-- Scores Tab -->
+        <div class="tab-pane fade show active" id="scores" role="tabpanel" aria-labelledby="scores-tab">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Tag</th>
+              <th>Level</th>
+              <th>Title</th>
+              <th>Score</th>
+            </thead>
+            <tbody>
+            <% @scores.each_with_index do |score, index| %>
+              <tr>
+                <td><%= score.rank.ordinalize %></td>
+                <td><%= score.rfid_tag.label %></td>
+                <td><%= leveling(score.score).level %></td>
+                <td><%= leveling(score.score).title %></td>
+                <td><%= number_with_delimiter(score.score) %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+
         <!-- Users Tab -->
-        <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+        <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
           <table class="table table-striped">
             <thead>
             <tr>

@@ -4,22 +4,32 @@ class ProcessTrackingEventJob < ApplicationJob
   def perform(tracking_event_id:)
     tracking_event = TrackingEvent.find(tracking_event_id)
 
+    map_to_event_and_location(tracking_event)
+    insert_score(tracking_event)
+
+    Rails.logger.info "Processing tracking event #{tracking_event_id}"
+  end
+
+  private
+
+  def insert_score(tracking_event)
+    ScoringService.score(tracking_event: tracking_event)
+  end
+
+  def map_to_event_and_location(tracking_event)
     Rails.logger.info "Mapping to location"
     Rails.logger.info "Submitted location is #{tracking_event.submitted_location}"
     Rails.logger.info "Scanned at #{tracking_event.scanned_at}"
 
     event = Event.find_by(date: tracking_event.scanned_at.to_date)
     Rails.logger.info "Event is #{event&.id}"
+    return unless event
 
-    if event
-      location = event.locations.find_by(name: tracking_event.submitted_location)
-      Rails.logger.info "Location is #{location&.name}"
+    location = event.locations.find_by(number: tracking_event.submitted_location)
+    Rails.logger.info "Location is #{location&.name}"
 
-      if location
-        tracking_event.update(location_id: location.id)
-      end
+    if location
+      tracking_event.update(location_id: location.id)
     end
-
-    Rails.logger.info "Processing tracking event #{tracking_event_id}"
   end
 end
