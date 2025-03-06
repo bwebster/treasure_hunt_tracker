@@ -3,12 +3,16 @@
 # Table name: users
 #
 #  id         :uuid             not null, primary key
-#  username   :string
+#  email      :string
 #  first_name :string
 #  last_name  :string
-#  email      :string
+#  username   :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_username  (username) UNIQUE
 #
 
 require 'rails_helper'

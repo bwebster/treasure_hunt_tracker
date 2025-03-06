@@ -6,3 +6,28 @@
 
 // or all inclusive theme
 @import "space_ranger";
+
+.hide-navbar .navbar {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-in-out;
+  position: fixed;
+  width: 100%;
+}
+
+.hide-navbar .navbar:hover {
+  transform: translateY(0);
+}
+
+.hide-navbar .navbar-hover-area {
+  height: 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+/* When hovering over the top area, show the navbar */
+.hide-navbar .navbar-hover-area:hover + .navbar {
+  transform: translateY(0);
+}

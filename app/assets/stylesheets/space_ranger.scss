@@ -37,7 +37,6 @@ $headings-letter-spacing: 1.5px;
 $body-bg: $dark;
 $body-color: $info;
 $text-muted: $light;
-
 $body-secondary-color: $light;
 
 // **Buttons**
@@ -81,54 +80,3 @@ $table-striped-color: lighten($info, 10%);
 
 // Import Bootstrap (After Variables)
 @import "bootstrap/scss/bootstrap";
-
-:root {
-  --bs-nav-link-hover-color: $info;
-}
-
-
-// **Custom Galactic Styles**
-//body {
-//  background: $dark;
-//  color: $info;
-//  text-align: center;
-//}
-
-// Glowing Text Effect
-//@keyframes glow {
-//  0% { text-shadow: 0 0 5px $info, 0 0 10px rgba($info, 0.8); }
-//  100% { text-shadow: 0 0 10px $info, 0 0 20px rgba($info, 0.8); }
-//}
-//
-//.glow-text {
-//  font-size: 2rem;
-//  color: $info;
-//  animation: glow 1.5s infinite alternate;
-//  text-transform: uppercase;
-//  font-weight: bold;
-//}
-
-// Navbar Customization
-//.navbar {
-//  background: $dark;
-//  border-bottom: 3px solid $info;
-//}
-
-.navbar-nav .nav-link.active,
-.navbar-nav .nav-link:focus {
-  color: $info !important;
-}
-
-//.navbar-nav .nav-link.active {
-//  font-weight: bold;
-//  color: $warning !important;
-//  border-bottom: 3px solid $danger;
-//}
-
-//// Rank Column Styling
-//.rank {
-//  font-size: 1.8rem;
-//  font-weight: bold;
-//  color: $info;
-//  text-shadow: 0 0 10px rgba($info, 0.8);
-//}

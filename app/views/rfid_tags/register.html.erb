@@ -1,11 +1,18 @@
-<div class="container mt-5">
-  <div class="card shadow-sm border-3">
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow-sm border-3" style="width: 400px;">
     <div class="card-header glow-text">
-      Waiting for New RFID Tag Registration...
+      Registration Station
     </div>
     <div class="card-body">
-      <p id="event-message" class="text-muted">Listening for new events...</p>
-      <h2 id="event-data" class="text-center text-info"></h2>
+      <% flash.each do |type, message| %>
+        <% if type == "alert" %>
+          <div class="alert alert-danger"><%= message %></div>
+        <% else %>
+          <div class="alert alert-info"><%= message %></div>
+        <% end %>
+      <% end %>
+
+      <p id="event-message" class="text-muted">Waiting for scan...</p>
     </div>
   </div>
 </div>

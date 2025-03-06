@@ -14,7 +14,6 @@
             <th>User</th>
             <th>Event</th>
             <th>Location</th>
-            <th>Metadata</th>
           </tr>
           </thead>
           <tbody>
@@ -43,18 +42,11 @@
               </td>
               <td>
                 <% if tracking_event.location.present? %>
-                  <%= tracking_event.location.name %> (<%= tracking_event.submitted_location %>)
+                  #<%= tracking_event.submitted_location %> - <%= tracking_event.location.name %>
                 <% elsif tracking_event.submitted_location %>
                   (<%= tracking_event.submitted_location %>)
                 <% else %>
                   <span class="text-muted">No Location</span>
-                <% end %>
-              </td>
-              <td>
-                <% if tracking_event.metadata.present? %>
-                  <pre class="mb-0"><%= tracking_event.metadata.to_json %></pre>
-                <% else %>
-                  <span class="text-muted">No Metadata</span>
                 <% end %>
               </td>
             </tr>

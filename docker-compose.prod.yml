@@ -1,7 +1,7 @@
 services:
   app:
-    build: .
-#    image: docker.io/library/treasure_hunt_tracker
+#    build: .
+    image: docker.io/library/treasure_hunt_tracker
     container_name: treasure_hunt_tracker
 #    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
     volumes:
@@ -11,10 +11,10 @@ services:
     depends_on:
       - db
     environment:
-      RAILS_ENV: production
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
-      DATABASE_HOST: db
+#      RAILS_ENV: production
+#      DATABASE_USER: postgres
+#      DATABASE_PASSWORD: postgres
+#      DATABASE_HOST: db
       DATABASE_URL: postgresql://postgres:postgres@db:5432/treasure_hunt_tracker_production
       RAILS_MASTER_KEY: 6ac96df1051ce40797145801b1d66888
 

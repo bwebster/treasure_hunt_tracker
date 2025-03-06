@@ -13,10 +13,6 @@
   <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
   <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-  <!--    <link rel="icon" href="/icon.png" type="image/png">-->
-  <!--    <link rel="icon" href="/icon.svg" type="image/svg+xml">-->
-  <!--    <link rel="apple-touch-icon" href="/icon.png">-->
-
   <%# Includes all stylesheet files in app/assets/stylesheets %>
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
@@ -25,10 +21,11 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 </head>
 
-<body>
+<body class="<%= 'hide-navbar' if current_page?(register_path) || current_page?(root_path) %>">
 
-<nav class="navbar navbar-expand-lg">
-  <div class="container">
+<div class="navbar-hover-area"></div>
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+  <div class="container-fluid">
     <a class="navbar-brand" href="/">
       <i class="bi bi-stars"></i> ATM Scan Tracking
     </a>
@@ -41,6 +38,9 @@
           <%= link_to "Leader Board", root_path(anchor: "scores"), class: "nav-link #{'active' if current_page?(root_path)}" %>
         </li>
         <li class="nav-item">
+          <%= link_to "Registration", register_path, class: "nav-link #{'active' if current_page?(register_path)}" %>
+        </li>
+        <li class="nav-item">
           <%= link_to "RFID Tags", rfid_tags_path, class: "nav-link #{'active' if current_page?(rfid_tags_path)}" %>
         </li>
         <li class="nav-item">
@@ -50,14 +50,16 @@
           <%= link_to "Events", events_path, class: "nav-link #{'active' if current_page?(events_path)}" %>
         </li>
         <li class="nav-item">
-          <%= link_to "Tracking Events", tracking_events_path, class: "nav-link #{'active' if current_page?(tracking_events_path)}"  %>
+          <%= link_to "Tracking Events", tracking_events_path, class: "nav-link #{'active' if current_page?(tracking_events_path)}" %>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 
+<div class="container pt-5">
+  <%= yield %>
+</div>
 
-<%= yield %>
 </body>
 </html>

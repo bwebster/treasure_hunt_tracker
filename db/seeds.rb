@@ -30,3 +30,8 @@ end
   u = User.find_or_create_by!(username: name)
   puts "Created user #{u.username}"
 end
+
+5.times do
+  tag = RfidTag.create!(tag_id: SecureRandom.hex(4), label: RfidTag.generate_label)
+  puts "Created tag #{tag.tag_id}"
+end

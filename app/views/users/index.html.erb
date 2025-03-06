@@ -1,6 +1,6 @@
 <div class="container mt-5">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <%= link_to "New User", new_user_path, class: "btn btn-success" %>
+    <%= link_to "New User", new_user_path, class: "btn btn-sm btn-success" %>
   </div>
 
   <div class="card shadow-sm">
@@ -12,7 +12,6 @@
         <table class="table table-striped">
           <thead>
           <tr>
-            <th>ID</th>
             <th>Username</th>
             <th>Name</th>
             <th>Email</th>
@@ -23,14 +22,13 @@
           <tbody>
           <% @users.each do |user| %>
             <tr>
-              <td><%= user.id %></td>
               <td><%= user.username %></td>
               <td><%= user.first_name %> <%= user.last_name %></td>
               <td><%= user.email || "N/A" %></td>
               <td>
                 <% if user.rfid_tags.any? %>
                   <% user.rfid_tags.each do |tag| %>
-                    <span class="badge bg-info"><%= tag.tag_id %></span>
+                    <div><%= tag.tag_id %></div>
                   <% end %>
                 <% else %>
                   <span class="text-muted">No tags</span>

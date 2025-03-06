@@ -1,4 +1,12 @@
 <div class="container mt-5">
+  <% flash.each do |type, message| %>
+    <% if type == "alert" %>
+      <div class="alert alert-danger"><%= message %></div>
+    <% else %>
+      <div class="alert alert-info"><%= message %></div>
+    <% end %>
+  <% end %>
+
   <div class="card shadow-sm">
     <div class="card-header">
       <h4>RFID Tags</h4>
@@ -38,6 +46,6 @@
       <% else %>
         <p class="text-muted">No RFID tags found.</p>
       <% end %>
+      </div>
     </div>
   </div>
-</div>

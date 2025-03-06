@@ -5,12 +5,12 @@ import "bootstrap"
 import "channels/register_channel";
 
 document.addEventListener("turbo:load", () => {
-    const register = "[Register]";
-    const exitRegistration = "[Exit Registration]";
+    const register = "Register";
+    const exitRegistration = "Exit Registration";
 
     document.querySelectorAll(".toggle-registration").forEach(button => {
         button.addEventListener("click", (event) => {
-            const number = event.target.getAttribute("data-location-number");
+            const number = event.target.getAttribute("data-location-id");
 
             const locationNumber = localStorage.getItem("listening_enabled");
             if (locationNumber === number) {
@@ -18,13 +18,14 @@ document.addEventListener("turbo:load", () => {
                 localStorage.removeItem("listening_enabled");
                 console.log(`✅ Registration exited for location ${locationNumber}`);
             } else {
-                document.querySelectorAll(`.toggle-registration[data-location-number="${locationNumber}"]`).forEach(el => {
+                document.querySelectorAll(`.toggle-registration[data-location-id="${locationNumber}"]`).forEach(el => {
                     el.innerHTML = register;
                 });
 
                 localStorage.setItem("listening_enabled", number);
                 event.target.innerHTML = exitRegistration;
                 console.log(`✅ Registration entered for location ${number}`);
+                window.location.href = '/register';
             }
         });
     });
@@ -37,9 +38,12 @@ document.addEventListener("turbo:load", () => {
         document.querySelectorAll(`.toggle-registration`).forEach(el => {
             el.innerHTML = register;
         });
-        document.querySelectorAll(`.toggle-registration[data-location-number="${locationNumber}"]`).forEach(el => {
+        document.querySelectorAll(`.toggle-registration[data-location-id="${locationNumber}"]`).forEach(el => {
             el.innerHTML = exitRegistration;
         });
+        document.querySelectorAll('input[name="registration_mode"]').forEach(el => {
+            el.value = true;
+        })
     }
 
     const tabElements = document.querySelectorAll('a[data-bs-toggle="tab"]');

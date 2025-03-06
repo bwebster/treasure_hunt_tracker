@@ -1,10 +1,16 @@
 desc "Simulate RFID registration event"
-task :register, [:location_number] => :environment do |_, args|
-  location_number = args[:location_number] || 0
+task register: :environment do
+  date = ENV.fetch("DATE")
+  location_number = ENV.fetch("LOCATION")
 
-  rfid_id = SecureRandom.hex(3).upcase # Generate a random RFID ID
-  puts "Registering RFID Tag #{rfid_id} at location #{location_number}"
+  event = Event.find_by(date: date)
+  raise "No event found for date #{date}" unless event
 
-  # Broadcast event to WebSockets
-  ActionCable.server.broadcast("register_channel", { rfid_id: RfidTag.all.sample(1).first.id, location_number: location_number })
+  location = event.locations.find_by(number: location_number)
+  rails "No location found for number #{location_number}" unless location
+
+  rfid = RfidTag.all.sample(1).first
+  puts "Registering RFID #{rfid.tag_id} (#{rfid.id}) at location #{location.number} (#{location.id})"
+
+  ActionCable.server.broadcast("register_channel", { rfid_id: rfid.id, location_number: location.id })
 end

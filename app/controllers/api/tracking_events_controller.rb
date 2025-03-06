@@ -24,8 +24,9 @@ class Api::TrackingEventsController < ApplicationController
       end
     end
 
-    if location.zero?
-      ActionCable.server.broadcast("register_channel", { rfid_id: rfid_tag.id, location_number: location })
+    location = find_location(location, scanned_at)
+    if location&.registration?
+      ActionCable.server.broadcast("register_channel", { rfid_id: rfid_tag.id, location_number: location.id })
     else
       ProcessTrackingEventJob.perform_later(tracking_event_id: tracking_event.id)
     end
@@ -34,6 +35,13 @@ class Api::TrackingEventsController < ApplicationController
   end
 
   private
+
+  def find_location(location, scanned_at)
+    event = Event.find_by(date: scanned_at.to_date)
+    return false unless event
+
+    event.locations.find_by(number: location)
+  end
 
   def handle_exception(exception)
     render json: {

@@ -3,14 +3,21 @@
 # Table name: users
 #
 #  id         :uuid             not null, primary key
-#  username   :string
+#  email      :string
 #  first_name :string
 #  last_name  :string
-#  email      :string
+#  username   :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_username  (username) UNIQUE
 #
 
 class User < ApplicationRecord
   has_many :rfid_tags
+
+  validates :username, presence: true
+  validates_uniqueness_of :username, case_sensitive: false
 end

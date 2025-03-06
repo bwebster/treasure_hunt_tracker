@@ -28,6 +28,8 @@ class RfidTag < ApplicationRecord
   validates_presence_of :label
   validates_uniqueness_of :label
 
+  delegate :username, to: :user
+
   # Generates a random label consisting of a color followed by 4 random digits, zero padded.
   def self.generate_label
     colors = %w[red blue green yellow purple orange black white gray pink]
