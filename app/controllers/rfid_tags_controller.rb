@@ -1,4 +1,4 @@
-class RfidTagsController < ApplicationController
+class RfidTagsController < AdminController
   before_action :set_user, only: [:create, :destroy]
   before_action :set_rfid_tag, only: [:edit, :update]
 

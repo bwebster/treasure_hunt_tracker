@@ -1,4 +1,4 @@
-class LocationsController < ApplicationController
+class LocationsController < AdminController
   before_action :set_event
   before_action :set_location, only: [:edit, :update, :destroy]
 

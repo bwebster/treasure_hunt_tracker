@@ -1,0 +1,29 @@
+services:
+  web:
+    image: registry.digitalocean.com/burkewebster/treasure_hunt_tracker
+    restart: always
+    command: ["./bin/rails", "server", "-b", "0.0.0.0"]
+    ports:
+      - "80:3000"
+    depends_on:
+      - db
+    environment:
+      SOLID_QUEUE_IN_PUMA: true
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/treasure_hunt_tracker_production
+      RAILS_MASTER_KEY: 6ac96df1051ce40797145801b1d66888
+      BASIC_AUTH_USERNAME: clive
+      BASIC_AUTH_PASSWORD: 2025
+
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: treasure_hunt_tracker_production
+    ports:
+      - "5432:5432"
+    volumes:
+      - /mnt/postgres_data/pgdata:/var/lib/postgresql/data
+
+volumes: {}
