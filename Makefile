@@ -19,8 +19,14 @@ prune_old:
 build:
 	docker build --platform=linux/amd64 -t registry.digitalocean.com/burkewebster/treasure_hunt_tracker:latest .
 
+buildnc:
+	docker build --no-cache --platform=linux/amd64 -t registry.digitalocean.com/burkewebster/treasure_hunt_tracker:latest .
+
 login:
 	doctl registry login
 
 push: login
 	docker push registry.digitalocean.com/burkewebster/treasure_hunt_tracker:latest
+
+deploy:
+	cd infra && terraform plan && terraform apply
