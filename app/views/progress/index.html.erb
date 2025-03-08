@@ -18,7 +18,7 @@
         <% @scores.each_with_index do |score, index| %>
           <tr>
             <td><%= score.rank.ordinalize %></td>
-            <td><%= score.rfid_tag.label %></td>
+            <td><%= score.rfid_tag.user&.username || score.rfid_tag.label %></td>
             <td><%= leveling(score.score).level %></td>
             <td><%= leveling(score.score).title %></td>
             <td><%= number_with_delimiter(score.score) %></td>
