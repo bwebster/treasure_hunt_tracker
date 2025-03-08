@@ -8,7 +8,7 @@ task :simulate => :environment do
   SIMULATED_EVENT_COUNT = 50 # Adjust the number of tracking events
   DELAY_RANGE = 1..5 # Random delay between events (in seconds)
 
-  rfid_tags = Array.new(20) { SecureRandom.alphanumeric(6).upcase }
+  rfid_tags = Array.new(20) { SecureRandom.hex(4) }
 
   # Fetch all available events with locations
   events = Event.includes(:locations).where.not(locations: { id: nil }).to_a
@@ -22,11 +22,14 @@ task :simulate => :environment do
   SIMULATED_EVENT_COUNT.times do |i|
     event = events.sample # Pick a random event
     location = event.locations.sample # Pick a random location from the event
+    while location.registration?
+      location = event.locations.sample
+    end
     rfid_tag = rfid_tags.sample # Pick a random RFID tag
 
     payload = {
       id: rfid_tag,
-      loc: location.name,
+      loc: location.number,
       at: event.date
     }
 

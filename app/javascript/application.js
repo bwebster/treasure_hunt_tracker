@@ -30,7 +30,6 @@ document.addEventListener("turbo:load", () => {
         });
     });
 
-
     const locationNumber = localStorage.getItem("listening_enabled");
     console.log("Current location number", locationNumber);
     if (locationNumber) {

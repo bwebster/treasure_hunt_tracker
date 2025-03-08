@@ -1,4 +1,11 @@
 <div class="container mt-5">
+  <% flash.each do |type, message| %>
+    <% if type == "alert" %>
+      <div class="alert alert-danger"><%= message %></div>
+    <% else %>
+      <div class="alert alert-info"><%= message %></div>
+    <% end %>
+  <% end %>
 
   <div class="card shadow-sm">
     <div class="card-header">
@@ -55,19 +62,23 @@
           <tbody>
           <% @event.locations.each do |location| %>
             <tr>
-              <td><%= location.number %></td>
-              <td><%= location.name %></td>
+              <td>
+                <%= location.number %>
+              </td>
+              <td>
+                <%= link_to location.name, edit_event_location_path(@event, location) %>
+              </td>
               <td>
                 <% if location.registration? %>
                   Yes
                 <% end %>
                 </td>
               <td>
-                <%= link_to "Edit", edit_event_location_path(@event, location), class: "btn btn-sm btn-warning" %>
-                <%= form_with url: event_location_path(@event, location), method: :delete, data: { confirm: "Are you sure?" }, class: "d-inline" do %>
-                  <button type="submit" class="btn btn-sm btn-danger">
-                    Delete
-                  </button>
+                <%= link_to event_location_path(@event, location),
+                            method: :delete,
+                            data: { turbo_method: :delete, confirm: "Are you sure?" },
+                            class: "btn btn-link text-danger p-0" do %>
+                  <i class="bi bi-trash"></i>
                 <% end %>
               </td>
             </tr>

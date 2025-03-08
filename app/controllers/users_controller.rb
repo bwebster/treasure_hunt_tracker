@@ -1,5 +1,5 @@
 class UsersController < AdminController
-  before_action :set_user, only: [:edit, :update]
+  before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
     @users = User.all.order(username: :asc)
@@ -40,6 +40,11 @@ class UsersController < AdminController
       flash.now[:alert] = "Error updating user."
       render :edit
     end
+  end
+
+  def destroy
+    @user.destroy
+    redirect_to user_path(@user), notice: "User removed."
   end
 
   private

@@ -63,7 +63,7 @@ class RfidTagsController < AdminController
 
     if @rfid_tag.save
       @users = get_all_users
-      if params[:registration_mode]
+      if params[:registration_mode] == "true"
         redirect_to register_path, notice: "RFID tag updated successfully."
       else
         redirect_to rfid_tags_path, notice: "RFID tag updated successfully."

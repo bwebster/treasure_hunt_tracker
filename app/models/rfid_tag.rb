@@ -32,7 +32,7 @@ class RfidTag < ApplicationRecord
 
   # Generates a random label consisting of a color followed by 4 random digits, zero padded.
   def self.generate_label
-    colors = %w[red blue green yellow purple orange black white gray pink]
-    "#{colors.sample}-#{format('%04d', rand(10000))}"
+    words = %w[Galaxy Ranger Star Astro Lightyear Rocket Nebula Cosmo Lunar Orbit]
+    "#{words.sample}-#{rand(100)}"
   end
 end

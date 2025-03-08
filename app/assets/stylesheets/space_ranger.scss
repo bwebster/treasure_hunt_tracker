@@ -46,11 +46,12 @@ $btn-text-transform: uppercase;
 
 // **Tables**
 $table-border-color: $info;
+$table-bg: transparent;
 $table-striped-bg: rgba($info, 0.1);
 $table-hover-bg: rgba($info, 0.2);
 
 // **Cards**
-$card-bg: transparent;
+$card-bg: rgba(255, 255, 255, 0.08);
 $card-border-color: $info;
 $card-border-width: 1px;
 $card-border-radius: 12px;

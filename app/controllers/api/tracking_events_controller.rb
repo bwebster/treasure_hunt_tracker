@@ -12,17 +12,21 @@ module Api
 
       rfid_tag = nil
       tracking_event = ActiveRecord::Base.transaction do
-        rfid_tag = RfidTag.find_or_create_by!(tag_id: rfid_id) do |tag|
-          tag.label = RfidTag.generate_label
+        begin
+          rfid_tag = RfidTag.find_or_create_by!(tag_id: rfid_id) do |tag|
+            tag.label = RfidTag.generate_label
+          end
+        rescue ActiveRecord::RecordInvalid => e
+          if e.message =~ "Label has already been taken"
+            retry
+          end
         end
 
-        unless location.zero?
-          rfid_tag.tracking_events.create!(
-            submitted_location: location,
-            scanned_at: scanned_at,
-            metadata: metadata
-          )
-        end
+        rfid_tag.tracking_events.create!(
+          submitted_location: location,
+          scanned_at: scanned_at,
+          metadata: metadata
+        )
       end
 
       location = find_location(location, scanned_at)

@@ -19,7 +19,7 @@
 
         <div class="mb-3">
           <%= f.label :number, "Station Number", class: "form-label" %>
-          <%= f.select :number, (0..20).to_a, {}, class: "form-select" %>
+          <%= f.select :number, unused_locations(@event, @location), {}, class: "form-select" %>
         </div>
 
         <div class="mb-3">

@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     resources :tracking_events, only: [:create]
   end
 
-  resources :users, only: [:index, :show, :edit, :update, :new, :create] do
+  resources :users, only: [:index, :show, :edit, :update, :new, :create, :destroy] do
     resources :rfid_tags, only: [:create, :destroy]
   end
 

@@ -17,10 +17,10 @@ prune_old:
 	fi
 
 build:
-	docker build -t registry.digitalocean.com/burkewebster/treasure_hunt_tracker:latest .
+	docker build --platform=linux/amd64 -t registry.digitalocean.com/burkewebster/treasure_hunt_tracker:latest .
 
 buildnc:
-	docker build --no-cache -t registry.digitalocean.com/burkewebster/treasure_hunt_tracker:latest .
+	docker build --no-cache --platform=linux/amd64 -t registry.digitalocean.com/burkewebster/treasure_hunt_tracker:latest .
 
 login:
 	doctl registry login
@@ -34,4 +34,4 @@ deploy:
 # Run from host system
 dind_build:
 	docker compose -f docker-compose.dind.yaml up -d
-	docker compose -f docker-compose.dind.yaml exec dind sh -c "apk add make curl doctl && cd /rails && make build push"
+	docker compose -f docker-compose.dind.yaml exec dind sh -c "apk add make curl doctl && cd /rails && make buildnc push"

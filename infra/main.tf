@@ -60,6 +60,22 @@ resource "null_resource" "configure_server" {
     }
 
     inline = [
+      # New
+      "sudo apt-get update && sudo apt-get upgrade -y",
+
+      "sudo apt-get install -y git curl build-essential libssl-dev libreadline-dev zlib1g-dev libffi.",
+
+      "git clone https://github.com/rbenv/rbenv.git ~/.rbenv",
+      "~/.rbenv/bin/rbenv init",
+      "git clone https://github.com/rbenv/ruby-build.git \"$(rbenv root)\"/plugins/ruby-build",
+
+      "rbenv install 3.3.6",
+
+      # Old
+
+
+
+
       # Wait until apt lock is released
       # "while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do echo 'Waiting for apt lock...'; sleep 5; done",
       # "while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do echo 'Waiting for dpkg lock...'; sleep 5; done",
