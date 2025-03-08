@@ -5,21 +5,19 @@
 # docker build -t treasure_hunt_tracker .
 # docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name treasure_hunt_tracker treasure_hunt_tracker
 
+# For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
+
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=3.3.6
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+FROM docker.io/library/ruby:$RUBY_VERSION AS base
 
 # Rails app lives here
 WORKDIR /rails
 
-# Install only runtime dependencies
-RUN apt-get update && \
-    dpkg --add-architecture amd64 &&  \
-    apt-get install -y --no-install-recommends \
-      postgresql-client \
-      tzdata \
-      bash \
-      && rm -rf /var/lib/apt/lists/*
+# Install base packages
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
 ENV RAILS_ENV="production" \
@@ -30,43 +28,29 @@ ENV RAILS_ENV="production" \
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
-RUN apt-get update && \
-      apt-get install -y --no-install-recommends curl && \
-      curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-      apt-get install -y nodejs && \
-      npm install -g npm@latest && \
-      rm -rf /var/lib/apt/lists/*
-
 # Install packages needed to build gems and node modules
-RUN apt-get update && \
-    dpkg --add-architecture amd64 &&  \
-    apt-get install -y --no-install-recommends \
-      build-essential \
-      ruby-dev \
-      libpq-dev \
-      python3-pip \
-      libssl-dev \
-      pkgconf \
-      && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev node-gyp pkg-config python-is-python3 && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install JavaScript dependencies
+ARG NODE_VERSION=20.11.0
 ARG YARN_VERSION=1.22.22
 ENV PATH=/usr/local/node/bin:$PATH
-RUN npm install -g yarn@$YARN_VERSION
+RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+    /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
+    npm install -g yarn@$YARN_VERSION && \
+    rm -rf /tmp/node-build-master
+
+# Install application gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+    bundle exec bootsnap precompile --gemfile
 
 # Install node modules
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-
-RUN bundle install && \
-    rm -rf ~/.bundle/ \
-           "${BUNDLE_PATH}/ruby/*/cache" \
-           "${BUNDLE_PATH}/ruby/*/bundler/gems/*/.git" \
-           "${BUNDLE_PATH}/ruby/*/extensions/*" \
-           "${BUNDLE_PATH}/ruby/*/doc"
 
 # Copy application code
 COPY . .
@@ -77,17 +61,9 @@ RUN bundle exec bootsnap precompile app/ lib/
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-RUN rm -rf node_modules && \
-    rm -rf infra && \
-    rm -rf log/* && \
-    rm -rf tmp/*
 
-# Remove build dependencies
-RUN apt-get remove -y build-essential ruby-dev libpq-dev linux-headers-amd64 \
-                     libssl-dev pkg-config make gcc \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN rm -rf node_modules
+
 
 # Final stage for app image
 FROM base
@@ -97,13 +73,10 @@ COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
 # Run and own only the runtime files as a non-root user for security
-# Create a system group and user for Rails
-RUN addgroup -S rails -g 1000 && \
-    adduser -S rails -u 1000 -G rails -h /home/rails -s /bin/sh && \
+RUN groupadd --system --gid 1000 rails && \
+    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp
-
-# Switch to the new Rails user
-USER rails
+USER 1000:1000
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]

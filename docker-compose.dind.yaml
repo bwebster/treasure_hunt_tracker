@@ -1,0 +1,16 @@
+services:
+  dind:
+    image: docker:20-dind
+    privileged: true
+    environment:
+      # Disable TLS for simplicity. (Do not do this in production!)
+      - DOCKER_TLS_CERTDIR=
+    volumes:
+      - dind-data:/var/lib/docker
+      - .:/rails  # Mount current directory into /rails inside the container
+    ports:
+      # Optionally expose Docker daemon port (2375) if you need remote access.
+      - "2375:2375"
+
+volumes:
+  dind-data:
