@@ -16,7 +16,7 @@
 #
 
 class User < ApplicationRecord
-  has_many :rfid_tags
+  has_many :rfid_tags, dependent: :nullify
 
   validates :username, presence: true
   validates_uniqueness_of :username, case_sensitive: false
