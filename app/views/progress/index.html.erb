@@ -26,7 +26,10 @@
               <td><%= score.rank.ordinalize %></td>
               <td><%= score.rfid_tag.user&.username || score.rfid_tag.label %></td>
               <td>
-                <%= leveling(score.score).level %> - <%= leveling(score.score).title %>
+                <%= leveling(score.score).level %>
+                <span class="d-none d-md-inline">
+                    : <%= leveling(score.score).title %>
+                </span>
               </td>
               <td><%= number_with_delimiter(score.score) %></td>
             </tr>

@@ -32,7 +32,6 @@
           <%= link_to "Cancel", events_path, class: "btn btn-secondary" %>
           <%= f.submit "Save", class: "btn btn-primary" %>
         </div>
-
       <% end %>
     </div>
   </div>
@@ -83,6 +82,22 @@
         </div>
       <% else %>
         <p class="text-muted">No locations found.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5>Delete Event</h5>
+    </div>
+    <div class="card-body">
+      <p class="text-muted">Deleting a event will also delete all locations, and cannot be undone.</p>
+
+      <%= link_to event_path(@event),
+                  method: :delete,
+                  data: { turbo_method: :delete, confirm: "Are you sure?" },
+                  class: "btn btn-link text-danger p-0" do %>
+        <button class="btn btn-danger">Delete</button>
       <% end %>
     </div>
   </div>

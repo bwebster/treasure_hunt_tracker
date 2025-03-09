@@ -18,7 +18,6 @@
               <th>Name</th>
               <th>Date</th>
               <th>Locations</th>
-              <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -29,24 +28,22 @@
                 </td>
                 <td><%= event.date.strftime("%B %d, %Y") %></td>
                 <td>
-                  <ul>
+
+                  <table class="table table-sm table-borderless mb-0">
+                    <tbody>
                     <% event.locations.each do |loc| %>
-                      <li>
-                        #<%= loc.number %> - <%= loc.name %>
-                        <% if loc.registration? %>
-                          <button id="toggle-listening" data-location-id="<%= loc.id %>" class="toggle-registration btn btn-sm btn-primary">Register</button>
-                        <% end %>
-                      </li>
+                      <tr>
+                        <td>#<%= loc.number %></td>
+                        <td>
+                          <%= loc.name %>
+                          <% if loc.registration? %>
+                            <button id="toggle-listening" data-location-id="<%= loc.id %>" class="toggle-registration btn btn-sm btn-primary p-0 px-1 mx-2">Register</button>
+                          <% end %>
+                        </td>
+                      </tr>
                     <% end %>
-                  </ul>
-                </td>
-                <td>
-                  <%= link_to event_path(event),
-                              method: :delete,
-                              data: { turbo_method: :delete, confirm: "Are you sure?" },
-                              class: "btn btn-link text-danger p-0" do %>
-                    <i class="bi bi-trash"></i>
-                  <% end %>
+                    </tbody>
+                  </table>
                 </td>
               </tr>
             <% end %>
