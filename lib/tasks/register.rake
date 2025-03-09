@@ -7,7 +7,7 @@ task register: :environment do
   raise "No event found for date #{date}" unless event
 
   location = event.locations.find_by(number: location_number)
-  rails "No location found for number #{location_number}" unless location
+  raise "No location found for number #{location_number}" unless location
 
   rfid = RfidTag.all.sample(1).first
   puts "Registering RFID #{rfid.tag_id} (#{rfid.id}) at location #{location.number} (#{location.id})"
