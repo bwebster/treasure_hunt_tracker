@@ -2,7 +2,12 @@
   <div class="card shadow-sm" style="height: 86vh;">
     <div class="card-header d-flex justify-content-between align-items-center">
       <h4 class="mb-0">Leader Board</h4>
-      <span id="page-number" class="text-muted">Page 1</span>
+      <div class="d-flex align-items-center">
+        <span id="page-number" class="text-muted me-3">Page 1</span>
+        <button id="play-pause-btn" class="btn btn-sm text-muted">
+          <i class="bi bi-pause"></i>
+        </button>
+      </div>
     </div>
 
     <div class="card-body">
@@ -35,17 +40,20 @@
     document.addEventListener("turbo:load", () => {
         const table = document.getElementById("paginated-table");
         const pageNumber = document.getElementById("page-number");
-        if (!table || !pageNumber) return;
+        const playPauseBtn = document.getElementById("play-pause-btn");
+        if (!table || !pageNumber || !playPauseBtn) return;
 
         const rows = table.querySelectorAll("tbody tr");
-        const rowHeight = 40; // Estimated row height in pixels
-        const headerHeight = 100; // Approximate header height
-        const cardPadding = 50; // Adjust for card padding/margins
+        const rowHeight = 40;
+        const headerHeight = 100;
+        const cardPadding = 50;
         const screenHeight = window.innerHeight;
         let rowsPerPage = Math.floor((screenHeight * 0.9 - headerHeight - cardPadding) / rowHeight);
 
         let currentPage = 0;
         const totalPages = Math.ceil(rows.length / rowsPerPage);
+        let isPaused = false;
+        let interval;
 
         function showPage(page) {
             rows.forEach((row, index) => {
@@ -55,21 +63,27 @@
         }
 
         function nextPage() {
+            if (isPaused) return;
             currentPage++;
             if (currentPage >= totalPages) {
-                location.reload(); // 🔄 Reload when looping back to page 0
+                location.reload();
             } else {
                 showPage(currentPage);
             }
         }
 
-        showPage(currentPage);
-        setInterval(nextPage, 5 * 1000);
+        function togglePlayPause() {
+            isPaused = !isPaused;
+            playPauseBtn.innerHTML = isPaused ? '<i class="bi bi-play"></i>' : '<i class="bi bi-pause"></i>';
+        }
 
-        // Adjust number of rows dynamically on window resize
+        showPage(currentPage);
+        interval = setInterval(nextPage, 6000);
+
+        playPauseBtn.addEventListener("click", togglePlayPause);
+
         window.addEventListener("resize", () => {
             rowsPerPage = Math.floor((window.innerHeight * 0.9 - headerHeight - cardPadding) / rowHeight);
-            currentPage = 0;
             showPage(currentPage);
         });
     });
