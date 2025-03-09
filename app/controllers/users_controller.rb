@@ -35,7 +35,7 @@ class UsersController < AdminController
         RfidTag.find(params[:user][:rfid_tag_id]).update(user_id: @user.id)
       end
 
-      redirect_to @user, notice: "User updated successfully."
+      redirect_to users_path, notice: "User updated successfully."
     else
       flash.now[:alert] = "Error updating user."
       render :edit
@@ -44,7 +44,7 @@ class UsersController < AdminController
 
   def destroy
     @user.destroy
-    redirect_to user_path(@user), notice: "User removed."
+    redirect_to users_path, notice: "User removed."
   end
 
   private

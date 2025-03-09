@@ -25,7 +25,7 @@ class RfidTagsController < AdminController
   def destroy
     @rfid_tag = @user.rfid_tags.find(params[:id])
     @rfid_tag.update(user_id: nil)
-    redirect_to @user, notice: "RFID tag removed successfully."
+    redirect_to edit_user_path(@user), notice: "RFID tag removed successfully."
   end
 
   def edit
@@ -33,14 +33,9 @@ class RfidTagsController < AdminController
   end
 
   def update
-    # Remove existing user
-    if params[:rfid_tag][:remove_user] == "1"
-      @rfid_tag.user = nil
-    end
+    update_params = rfid_tag_params
 
-    # Create and assign a new user
     username = params[:rfid_tag][:new_username]
-    exclude_user_id = false
     if username.present?
       begin
         user = User.create!(username: username)
@@ -50,11 +45,8 @@ class RfidTagsController < AdminController
         return
       end
 
-      @rfid_tag.user = user
-      exclude_user_id = true
+      update_params[:user_id] = user.id
     end
-
-    update_params = rfid_tag_params(exclude_user_id: exclude_user_id)
 
     # Regenerate a label if needed
     update_params[:label] = RfidTag.generate_label if update_params[:label].blank?
@@ -93,11 +85,7 @@ class RfidTagsController < AdminController
     @rfid_tag = RfidTag.find(params[:id])
   end
 
-  def rfid_tag_params(exclude_user_id: false)
-    if exclude_user_id
-      return params.require(:rfid_tag).permit(:label)
-    end
-
+  def rfid_tag_params
     params.require(:rfid_tag).permit(:user_id, :label)
   end
 end

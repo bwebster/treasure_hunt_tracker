@@ -26,7 +26,7 @@
                 <td><%= tag.label %></td>
                 <td>
                   <% if tag.user.present? %>
-                    <%= link_to tag.user.username || tag.user.auto_generated_name, user_path(tag.user), class: "text-decoration-none" %>
+                    <%= link_to tag.user.username || tag.user.auto_generated_name, edit_user_path(tag.user) %>
                   <% else %>
                     <span class="text-muted">Unassigned</span>
                   <% end %>

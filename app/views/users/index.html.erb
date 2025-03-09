@@ -21,7 +21,6 @@
               <th>Name</th>
               <th>Email</th>
               <th>RFID Tags</th>
-              <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -35,18 +34,10 @@
                 <td>
                   <% if user.rfid_tags.any? %>
                     <% user.rfid_tags.each do |tag| %>
-                      <div><%= tag.tag_id %></div>
+                      <%= link_to tag.tag_id, edit_rfid_tag_path(tag) %>
                     <% end %>
                   <% else %>
                     <span class="text-muted">No tags</span>
-                  <% end %>
-                </td>
-                <td>
-                  <%= link_to user_path(user),
-                              method: :delete,
-                              data: { turbo_method: :delete, confirm: "Are you sure?" },
-                              class: "btn btn-link text-danger p-0" do %>
-                    <i class="bi bi-trash"></i>
                   <% end %>
                 </td>
               </tr>
