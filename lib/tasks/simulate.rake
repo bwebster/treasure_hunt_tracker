@@ -4,7 +4,7 @@ require 'securerandom'
 
 desc "Simulate tracking events"
 task :simulate => :environment do
-  API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{HEROKU_APP_DEFAULT_DOMAIN_NAME}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
+  API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV["HEROKU_APP_DEFAULT_DOMAIN_NAME"]}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
   SIMULATED_EVENT_COUNT = 50 # Adjust the number of tracking events
   DELAY_RANGE = 1..5 # Random delay between events (in seconds)
 
