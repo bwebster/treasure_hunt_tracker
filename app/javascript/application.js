@@ -42,7 +42,10 @@ document.addEventListener("turbo:load", () => {
         });
         document.querySelectorAll('input[name="registration_mode"]').forEach(el => {
             el.value = true;
-        })
+        });
+        document.querySelectorAll('.rfid_tag_edit_cancel').forEach(el => {
+            el.href = "/register";
+        });
     }
 
     const tabElements = document.querySelectorAll('a[data-bs-toggle="tab"]');

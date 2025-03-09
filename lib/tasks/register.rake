@@ -1,12 +1,11 @@
 desc "Simulate RFID registration event"
 task register: :environment do
-  date = ENV.fetch("DATE")
-  location_number = ENV.fetch("LOCATION")
-
-  event = Event.find_by(date: date)
+  date = ENV.fetch("DATE") { Event.order(date: :asc).first.date }
+  event = Event.where(date: date).first
   raise "No event found for date #{date}" unless event
 
-  location = event.locations.find_by(number: location_number)
+  location_number = ENV.fetch("LOCATION") { event.locations.where(registration: true).first.number }
+  location = Location.find_by(number: location_number)
   raise "No location found for number #{location_number}" unless location
 
   rfid = RfidTag.all.sample(1).first
