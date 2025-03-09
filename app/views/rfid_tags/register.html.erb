@@ -4,13 +4,7 @@
       Registration Station
     </div>
     <div class="card-body">
-      <% flash.each do |type, message| %>
-        <% if type == "alert" %>
-          <div class="alert alert-danger"><%= message %></div>
-        <% else %>
-          <div class="alert alert-info"><%= message %></div>
-        <% end %>
-      <% end %>
+      <%= render partial: "flash" %>
 
       <p id="event-message" class="text-muted">Waiting for scan...</p>
     </div>

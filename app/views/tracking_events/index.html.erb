@@ -5,54 +5,56 @@
     </div>
     <div class="card-body">
       <% if @tracking_events.any? %>
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Scanned At</th>
-            <th>Tag Label</th>
-            <th>Tag UID</th>
-            <th>User</th>
-            <th>Event</th>
-            <th>Location</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @tracking_events.each do |tracking_event| %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
             <tr>
-              <td><%= tracking_event.scanned_at.strftime("%B %d, %Y %H:%M:%S") %></td>
-              <td>
-                <%= tracking_event.rfid_tag.label %>
-              </td>
-              <td>
-                <%= tracking_event.rfid_tag.tag_id %>
-              </td>
-              <td>
-                <% if tracking_event.rfid_tag.user.present? %>
-                  <%= link_to tracking_event.rfid_tag.user.username, user_path(tracking_event.rfid_tag.user), class: "text-decoration-none" %>
-                <% else %>
-                  <span class="text-muted">Unassigned</span>
-                <% end %>
-              </td>
-              <td>
-                <% if tracking_event.event.present? %>
-                  <%= link_to tracking_event.event.name, edit_event_path(tracking_event.event), class: "text-decoration-none" %>
-                <% else %>
-                  <span class="text-muted">No Event</span>
-                <% end %>
-              </td>
-              <td>
-                <% if tracking_event.location.present? %>
-                  #<%= tracking_event.submitted_location %> - <%= tracking_event.location.name %>
-                <% elsif tracking_event.submitted_location %>
-                  (<%= tracking_event.submitted_location %>)
-                <% else %>
-                  <span class="text-muted">No Location</span>
-                <% end %>
-              </td>
+              <th>Scanned At</th>
+              <th>Tag Label</th>
+              <th>Tag UID</th>
+              <th>User</th>
+              <th>Event</th>
+              <th>Location</th>
             </tr>
-          <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            <% @tracking_events.each do |tracking_event| %>
+              <tr>
+                <td><%= tracking_event.scanned_at.strftime("%B %d, %Y %H:%M:%S") %></td>
+                <td>
+                  <%= tracking_event.rfid_tag.label %>
+                </td>
+                <td>
+                  <%= tracking_event.rfid_tag.tag_id %>
+                </td>
+                <td>
+                  <% if tracking_event.rfid_tag.user.present? %>
+                    <%= link_to tracking_event.rfid_tag.user.username, user_path(tracking_event.rfid_tag.user), class: "text-decoration-none" %>
+                  <% else %>
+                    <span class="text-muted">Unassigned</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if tracking_event.event.present? %>
+                    <%= link_to tracking_event.event.name, edit_event_path(tracking_event.event), class: "text-decoration-none" %>
+                  <% else %>
+                    <span class="text-muted">No Event</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if tracking_event.location.present? %>
+                    #<%= tracking_event.submitted_location %> - <%= tracking_event.location.name %>
+                  <% elsif tracking_event.submitted_location %>
+                    (<%= tracking_event.submitted_location %>)
+                  <% else %>
+                    <span class="text-muted">No Location</span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
       <% else %>
         <p class="text-muted">No tracking events found.</p>
       <% end %>

@@ -1,11 +1,5 @@
 <div class="container mt-5">
-  <% flash.each do |type, message| %>
-    <% if type == "alert" %>
-      <div class="alert alert-danger"><%= message %></div>
-    <% else %>
-      <div class="alert alert-info"><%= message %></div>
-    <% end %>
-  <% end %>
+  <%= render partial: "flash" %>
 
   <div class="card shadow-sm">
     <div class="card-header">
@@ -50,41 +44,43 @@
     </div>
     <div class="card-body">
       <% if @event.locations.any? %>
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Registration Station</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @event.locations.each do |location| %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
             <tr>
-              <td>
-                <%= location.number %>
-              </td>
-              <td>
-                <%= link_to location.name, edit_event_location_path(@event, location) %>
-              </td>
-              <td>
-                <% if location.registration? %>
-                  Yes
-                <% end %>
-                </td>
-              <td>
-                <%= link_to event_location_path(@event, location),
-                            method: :delete,
-                            data: { turbo_method: :delete, confirm: "Are you sure?" },
-                            class: "btn btn-link text-danger p-0" do %>
-                  <i class="bi bi-trash"></i>
-                <% end %>
-              </td>
+              <th>#</th>
+              <th>Name</th>
+              <th>Registration Station</th>
+              <th>Actions</th>
             </tr>
-          <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            <% @event.locations.each do |location| %>
+              <tr>
+                <td>
+                  <%= location.number %>
+                </td>
+                <td>
+                  <%= link_to location.name, edit_event_location_path(@event, location) %>
+                </td>
+                <td>
+                  <% if location.registration? %>
+                    Yes
+                  <% end %>
+                </td>
+                <td>
+                  <%= link_to event_location_path(@event, location),
+                              method: :delete,
+                              data: { turbo_method: :delete, confirm: "Are you sure?" },
+                              class: "btn btn-link text-danger p-0" do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
       <% else %>
         <p class="text-muted">No locations found.</p>
       <% end %>

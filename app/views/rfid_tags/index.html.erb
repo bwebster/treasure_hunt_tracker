@@ -1,11 +1,5 @@
 <div class="container mt-5">
-  <% flash.each do |type, message| %>
-    <% if type == "alert" %>
-      <div class="alert alert-danger"><%= message %></div>
-    <% else %>
-      <div class="alert alert-info"><%= message %></div>
-    <% end %>
-  <% end %>
+  <%= render partial: "flash" %>
 
   <div class="card shadow-sm">
     <div class="card-header">
@@ -13,39 +7,41 @@
     </div>
     <div class="card-body">
       <% if @rfid_tags.any? %>
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Tag ID</th>
-            <th>Label</th>
-            <th>Associated User</th>
-            <th>Tracking Events</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @rfid_tags.each do |tag| %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
             <tr>
-              <td>
-                <%= link_to tag.tag_id, edit_rfid_tag_path(tag) %>
-              </td>
-              <td><%= tag.label %></td>
-              <td>
-                <% if tag.user.present? %>
-                  <%= link_to tag.user.username || tag.user.auto_generated_name, user_path(tag.user), class: "text-decoration-none" %>
-                <% else %>
-                  <span class="text-muted">Unassigned</span>
-                <% end %>
-              </td>
-              <td>
-                <%= tag.tracking_events.length %>
-              </td>
+              <th>Tag ID</th>
+              <th>Label</th>
+              <th>Associated User</th>
+              <th>Tracking Events</th>
             </tr>
-          <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            <% @rfid_tags.each do |tag| %>
+              <tr>
+                <td>
+                  <%= link_to tag.tag_id, edit_rfid_tag_path(tag) %>
+                </td>
+                <td><%= tag.label %></td>
+                <td>
+                  <% if tag.user.present? %>
+                    <%= link_to tag.user.username || tag.user.auto_generated_name, user_path(tag.user), class: "text-decoration-none" %>
+                  <% else %>
+                    <span class="text-muted">Unassigned</span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= tag.tracking_events.length %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
       <% else %>
         <p class="text-muted">No RFID tags found.</p>
       <% end %>
-      </div>
     </div>
   </div>
+</div>

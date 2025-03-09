@@ -11,27 +11,29 @@
     </div>
 
     <div class="card-body">
-      <table id="paginated-table" class="table table-striped pb-1">
-        <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Tag</th>
-          <th>Level</th>
-          <th>Score</th>
-        </thead>
-        <tbody>
-        <% @scores.each_with_index do |score, index| %>
+      <div class="table-responsive">
+        <table id="paginated-table" class="table table-striped pb-1">
+          <thead>
           <tr>
-            <td><%= score.rank.ordinalize %></td>
-            <td><%= score.rfid_tag.user&.username || score.rfid_tag.label %></td>
-            <td>
-              <%= leveling(score.score).level %> - <%= leveling(score.score).title %>
-            </td>
-            <td><%= number_with_delimiter(score.score) %></td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
+            <th>Rank</th>
+            <th>Tag</th>
+            <th>Level</th>
+            <th>Score</th>
+          </thead>
+          <tbody>
+          <% @scores.each_with_index do |score, index| %>
+            <tr>
+              <td><%= score.rank.ordinalize %></td>
+              <td><%= score.rfid_tag.user&.username || score.rfid_tag.label %></td>
+              <td>
+                <%= leveling(score.score).level %> - <%= leveling(score.score).title %>
+              </td>
+              <td><%= number_with_delimiter(score.score) %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

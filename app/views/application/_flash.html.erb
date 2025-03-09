@@ -1,0 +1,9 @@
+<div id="flash-container">
+  <% flash.each do |type, message| %>
+    <% if type == "alert" %>
+      <div class="alert alert-danger fade show" role=alert><%= message %></div>
+    <% else %>
+      <div class="alert alert-info fade show" role="alert"><%= message %></div>
+    <% end %>
+  <% end %>
+</div>

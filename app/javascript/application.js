@@ -65,4 +65,13 @@ document.addEventListener("turbo:load", () => {
             new bootstrap.Tab(tabToActivate).show();
         }
     }
+
+    const flashContainer = document.getElementById("flash-container");
+    if (flashContainer) {
+        setTimeout(() => {
+            flashContainer.style.transition = "opacity 0.5s ease-out";
+            flashContainer.style.opacity = "0";
+            setTimeout(() => flashContainer.remove(), 500); // Remove after fade-out
+        }, 5000); // 5-second delay
+    }
 });

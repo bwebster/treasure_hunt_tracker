@@ -1,11 +1,5 @@
 <div class="container mt-5">
-  <% flash.each do |type, message| %>
-    <% if type == "alert" %>
-      <div class="alert alert-danger"><%= message %></div>
-    <% else %>
-      <div class="alert alert-info"><%= message %></div>
-    <% end %>
-  <% end %>
+  <%= render partial: "flash" %>
 
   <div class="d-flex justify-content-between align-items-center mb-3">
     <%= link_to "New User", new_user_path, class: "btn btn-sm btn-success" %>
@@ -19,45 +13,47 @@
 
 
       <% if @users.any? %>
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Username</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>RFID Tags</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @users.each do |user| %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
             <tr>
-              <td>
-                <%= link_to user.username, edit_user_path(user) %>
-              </td>
-              <td><%= user.first_name %> <%= user.last_name %></td>
-              <td><%= user.email || "N/A" %></td>
-              <td>
-                <% if user.rfid_tags.any? %>
-                  <% user.rfid_tags.each do |tag| %>
-                    <div><%= tag.tag_id %></div>
-                  <% end %>
-                <% else %>
-                  <span class="text-muted">No tags</span>
-                <% end %>
-              </td>
-              <td>
-                <%= link_to user_path(user),
-                            method: :delete,
-                            data: { turbo_method: :delete, confirm: "Are you sure?" },
-                            class: "btn btn-link text-danger p-0" do %>
-                  <i class="bi bi-trash"></i>
-                <% end %>
-              </td>
+              <th>Username</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>RFID Tags</th>
+              <th>Actions</th>
             </tr>
-          <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            <% @users.each do |user| %>
+              <tr>
+                <td>
+                  <%= link_to user.username, edit_user_path(user) %>
+                </td>
+                <td><%= user.first_name %> <%= user.last_name %></td>
+                <td><%= user.email || "N/A" %></td>
+                <td>
+                  <% if user.rfid_tags.any? %>
+                    <% user.rfid_tags.each do |tag| %>
+                      <div><%= tag.tag_id %></div>
+                    <% end %>
+                  <% else %>
+                    <span class="text-muted">No tags</span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= link_to user_path(user),
+                              method: :delete,
+                              data: { turbo_method: :delete, confirm: "Are you sure?" },
+                              class: "btn btn-link text-danger p-0" do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
       <% else %>
         <p class="text-muted">No users found.</p>
       <% end %>
