@@ -20,7 +20,7 @@
             <tbody>
             <% @tracking_events.each do |tracking_event| %>
               <tr>
-                <td><%= tracking_event.scanned_at.strftime("%B %d, %Y %H:%M:%S") %></td>
+                <td><%= tracking_event.scanned_at.in_time_zone("America/Chicago").strftime("%B %d %l:%M:%S%P") %></td>
                 <td>
                   <%= tracking_event.rfid_tag.label %>
                 </td>
