@@ -16,8 +16,8 @@ rails db:migrate
 
 ### UI
 
-http://localhost:5000/progress
+http://localhost:3000/progress
 
 ### Job Admin
 
-http://localhost:5000/jobs
+http://localhost:3000/jobs
