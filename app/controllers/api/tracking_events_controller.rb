@@ -43,7 +43,7 @@ module Api
 
     def find_location(location, scanned_at)
       event = Event.find_by(date: scanned_at.to_date)
-      return false unless event
+      return unless event
 
       event.locations.find_by(number: location)
     end
