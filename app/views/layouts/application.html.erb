@@ -57,9 +57,7 @@
   </div>
 </nav>
 
-<div class="container pt-5">
-  <%= yield %>
-</div>
+<%= yield %>
 
 <footer class="text-center py-3 text-muted small">
   Version: <%= ENV["HEROKU_RELEASE_VERSION"] || "Local Dev" %>
