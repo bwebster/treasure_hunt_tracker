@@ -9,4 +9,9 @@ namespace :clean do
   task :scores => :environment do
     Score.destroy_all
   end
+
+  desc "Clean tags from DB"
+  task :tags => :environment do
+    RfidTag.destroy_all
+  end
 end
