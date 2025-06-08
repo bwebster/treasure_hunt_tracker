@@ -54,7 +54,6 @@ class ScoringService
       puts "Count of previous events for rfid=#{tracking_event.rfid_tag_id} event=#{tracking_event.location.event_id} is #{count}a"
     end
 
-    # count = Score.for_tag_id(tracking_event.rfid_tag_id).where(score_type: TYPE_SCAN).where.not(id: scan_score.id).count
     Rails.logger.info "Found #{count} previous tracking events for #{tracking_event.rfid_tag_id}"
     return if count.zero?
 
