@@ -31,7 +31,7 @@
 
                   <table class="table table-sm table-borderless mb-0">
                     <tbody>
-                    <% event.locations.each do |loc| %>
+                    <% event.locations.order(number: :asc).each do |loc| %>
                       <tr>
                         <td>#<%= loc.number %></td>
                         <td>

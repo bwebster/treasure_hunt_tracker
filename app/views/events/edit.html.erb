@@ -42,7 +42,7 @@
       <%= link_to "New Location", new_event_location_path(@event), class: "btn btn-primary btn-sm" %>
     </div>
     <div class="card-body">
-      <% if @event.locations.any? %>
+      <% if @event.locations.order(number: :asc).any? %>
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>
