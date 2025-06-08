@@ -19,5 +19,8 @@
   },
   "browserslist": [
     "defaults"
-  ]
+  ],
+  "engines": {
+    "node": "22.x"
+  }
 }
