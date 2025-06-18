@@ -28,8 +28,8 @@ $theme-colors: (
 );
 
 // **Typography**
-$font-family-base: "Orbitron", sans-serif; // Sci-Fi Font
-$headings-font-family: "Orbitron", sans-serif;
+$font-family-base: "Oxanium", sans-serif; // Sci-Fi Font
+$headings-font-family: "Oxanium", sans-serif;
 $headings-text-transform: uppercase;
 $headings-letter-spacing: 1.5px;
 
@@ -81,3 +81,8 @@ $table-striped-color: lighten($info, 10%);
 
 // Import Bootstrap (After Variables)
 @import "bootstrap/scss/bootstrap";
+
+
+.orbitron-page, .orbitron-page * {
+  font-family: 'Orbitron', sans-serif !important;
+}

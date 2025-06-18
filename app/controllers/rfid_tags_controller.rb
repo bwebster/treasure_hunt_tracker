@@ -30,7 +30,7 @@ class RfidTagsController < AdminController
 
   def edit
     @users = get_all_users
-    @scores = Score.where(rfid_tag: @rfid_tag).order(id: :desc)
+    @scores = Score.where(rfid_tag: @rfid_tag).order(created_at: :asc)
   end
 
   def update
@@ -44,7 +44,7 @@ class RfidTagsController < AdminController
         flash.now[:alert] = "Username #{username} already taken!"
 
         @users = get_all_users
-        @scores = Score.where(rfid_tag: @rfid_tag).order(id: :desc)
+        @scores = Score.where(rfid_tag: @rfid_tag).order(created_at: :asc)
 
         render :edit, status: :unprocessable_entity
         return

@@ -5,8 +5,8 @@ import "bootstrap"
 import "channels/register_channel";
 
 document.addEventListener("turbo:load", () => {
-    const register = "Register";
-    const exitRegistration = "Exit Registration";
+    const register = "Enter Registration Mode";
+    const exitRegistration = "Exit Registration Mode";
 
     document.querySelectorAll(".toggle-registration").forEach(button => {
         button.addEventListener("click", (event) => {
