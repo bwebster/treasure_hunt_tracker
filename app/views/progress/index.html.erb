@@ -23,15 +23,22 @@
           <tbody>
           <% @scores.each_with_index do |score, index| %>
             <tr>
-              <td><%= score.rank.ordinalize %></td>
-              <td><%= score.rfid_tag.user&.username || score.rfid_tag.label %></td>
+              <td><%= score["rank"].ordinalize %></td>
               <td>
-                <%= leveling(score.score).level %>
-                <span class="d-none d-md-inline">
-                    : <%= leveling(score.score).title %>
+                <% if score["type"] == "user" %>
+                  <i class="bi bi-person-circle"></i>
+                  <%= score["label"] %>
+                <% else %>
+                  <i class="bi bi-circle"></i>
+                  <%= score["label"] %>
+                <% end %>
+              </td>
+              <td>
+                <%= leveling(score["score"]).level %>
+                <span class="d-none d-md-inline">: <%= leveling(score["score"]).title %>
                 </span>
               </td>
-              <td><%= number_with_delimiter(score.score) %></td>
+              <td><%= number_with_delimiter(score["score"]) %></td>
             </tr>
           <% end %>
           </tbody>

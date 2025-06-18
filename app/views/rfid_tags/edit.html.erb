@@ -4,6 +4,8 @@
       <h4>Edit RFID Tag</h4>
     </div>
     <div class="card-body">
+      <%= render partial: "flash" %>
+
       <% if @rfid_tag.errors.any? %>
         <div class="alert alert-danger">
           <h5><i class="bi bi-exclamation-triangle"></i> Please fix the following:</h5>
@@ -17,7 +19,7 @@
 
       <div class="row">
         <div class="col-5">
-          <%= form_with model: @rfid_tag, local: true do |f| %>
+          <%= form_with model: @rfid_tag, local: true, data: { turbo: false } do |f| %>
             <input type="hidden" id="in-edit-registration-mode" name="registration_mode" value="false">
 
             <div class="row">
@@ -66,7 +68,8 @@
             <tr>
               <th>Scan</th>
               <th>Points</th>
-              <th>Score Type</th>
+              <th>Event</th>
+              <th>Location</th>
             </tr>
             </thead>
             <tbody>
@@ -74,7 +77,8 @@
             <tr>
               <td><%= score.source %></td>
               <td><%= score.score %></td>
-              <td><%= score.score_type %></td>
+              <td><%= score.event.name %></td>
+              <td><%= score.location.name %></td>
             </tr>
             <% end %>
             </tbody>

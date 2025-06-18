@@ -1,4 +1,10 @@
 namespace :tracking_events do
+  desc "Remove all scores and reprocess tracking events"
+  task rescore: :environment do
+    Rake::Task["clean:scores"].invoke
+    Rake::Task["tracking_events:reprocess"].invoke
+  end
+
   desc "Enqueue ProcessTrackingEventJob for all tracking events"
   task reprocess: :environment do
     puts "Enqueuing all ProcessTrackingEventJob to reprocess..."

@@ -40,8 +40,12 @@ class RfidTagsController < AdminController
     if username.present?
       begin
         user = User.create!(username: username)
-      rescue ActiveRecord::RecordNotUnique
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
         flash.now[:alert] = "Username #{username} already taken!"
+
+        @users = get_all_users
+        @scores = Score.where(rfid_tag: @rfid_tag).order(id: :desc)
+
         render :edit, status: :unprocessable_entity
         return
       end

@@ -21,14 +21,23 @@ class ProgressController < ApplicationController
   end
 
   def scores_by_tag
-    Score.select("
-        rfid_tag_id,
-        sum(score) as score,
-        dense_rank() over (order by sum(score) desc) as rank
-    ")
-      .includes(:rfid_tag)
-      .group("rfid_tag_id")
-      .order("score desc")
+    ActiveRecord::Base.connection.execute(<<~SQL
+      select
+        coalesce(rt.user_id, rt.id) as id,
+        coalesce(u.username, rt.label) as label,
+        case
+            when rt.user_id is not null then 'user'
+            else 'tag'
+        end as type,
+        sum(s.score) as score,
+        dense_rank() over (order by sum(s.score) desc) as rank
+      from scores s
+      left outer join rfid_tags rt on rt.id = s.rfid_tag_id
+      left outer join users u on u.id = rt.user_id
+      group by 1, 2, 3
+      order by 4 desc
+    SQL
+    )
   end
 
   def results_by_user
