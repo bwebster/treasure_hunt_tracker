@@ -10,8 +10,6 @@
       <h4>Users</h4>
     </div>
     <div class="card-body">
-
-
       <% if @users.any? %>
         <div class="table-responsive">
           <table class="table table-striped">
@@ -44,6 +42,10 @@
             <% end %>
             </tbody>
           </table>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <%= paginate @users %>
         </div>
       <% else %>
         <p class="text-muted">No users found.</p>

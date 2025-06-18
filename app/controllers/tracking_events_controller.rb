@@ -1,9 +1,11 @@
 class TrackingEventsController < AdminController
+  PAGE_SIZE = ENV.fetch("TRACKING_EVENTS_PER_PAGE", 30).to_i
+
   def index
     @tracking_events = TrackingEvent
                          .left_joins(location: :event)
                          .order(created_at: :desc)
                          .page(params[:page])
-                         .per(30)
+                         .per(PAGE_SIZE)
   end
 end

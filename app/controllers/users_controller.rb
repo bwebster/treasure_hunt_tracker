@@ -1,8 +1,13 @@
 class UsersController < AdminController
+  PAGE_SIZE = ENV.fetch("USERS_PER_PAGE", 20).to_i
+
   before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
-    @users = User.all.order(username: :asc)
+    @users = User.all
+                 .order(username: :asc)
+                 .page(params[:page])
+                 .per(PAGE_SIZE)
   end
 
   def show

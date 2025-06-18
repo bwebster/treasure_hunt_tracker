@@ -1,4 +1,6 @@
 class RfidTagsController < AdminController
+  PAGE_SIZE = ENV.fetch("RFID_TAGS_PER_PAGE", 30).to_i
+
   before_action :set_user, only: [:create, :destroy]
   before_action :set_rfid_tag, only: [:edit, :update]
 
@@ -8,7 +10,11 @@ class RfidTagsController < AdminController
   end
 
   def index
-    @rfid_tags = RfidTag.includes(:user, :tracking_events).order(:tag_id).page(params[:page]).per(30)
+    @rfid_tags = RfidTag
+                   .includes(:user, :tracking_events)
+                   .order(:tag_id)
+                   .page(params[:page])
+                   .per(PAGE_SIZE)
   end
 
   def create
