@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   end
 
   resources :tracking_events, only: [:index]
+  resources :scores, only: [:index]
 
   get "register" => "rfid_tags#register"
 

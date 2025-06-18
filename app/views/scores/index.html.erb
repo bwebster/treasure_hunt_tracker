@@ -1,0 +1,43 @@
+<div class="container pt-3 mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4>Scores</h4>
+    </div>
+    <div class="card-body">
+      <% if @scores.any? %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Tag</th>
+              <th>Score</th>
+              <th>Score Type</th>
+              <th>Source</th>
+              <th>Event</th>
+              <th>Location</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @scores.each do |score| %>
+              <tr>
+                <td><%= score.rfid_tag.label %></td>
+                <td><%= score.score %></td>
+                <td><%= score.score_type %></td>
+                <td><%= score.source %></td>
+                <td><%= score.event.name %></td>
+                <td><%= score.location.name %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <%= paginate @scores %>
+        </div>
+      <% else %>
+        <p class="text-muted">No tracking events found.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

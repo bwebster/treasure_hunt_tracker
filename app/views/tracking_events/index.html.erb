@@ -55,6 +55,10 @@
             </tbody>
           </table>
         </div>
+
+        <div class="d-flex justify-content-center">
+          <%= paginate @tracking_events %>
+        </div>
       <% else %>
         <p class="text-muted">No tracking events found.</p>
       <% end %>

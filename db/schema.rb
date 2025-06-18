@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_07_220250) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_18_132709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -50,7 +50,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_220250) do
     t.integer "score", null: false
     t.uuid "rfid_tag_id", null: false
     t.string "score_type", null: false
+    t.string "source"
+    t.uuid "tracking_event_id"
+    t.uuid "location_id"
+    t.uuid "event_id"
+    t.datetime "created_at"
+    t.index ["event_id"], name: "index_scores_on_event_id"
+    t.index ["location_id"], name: "index_scores_on_location_id"
     t.index ["rfid_tag_id"], name: "index_scores_on_rfid_tag_id"
+    t.index ["tracking_event_id"], name: "index_scores_on_tracking_event_id"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -208,7 +216,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_220250) do
 
   add_foreign_key "locations", "events"
   add_foreign_key "rfid_tags", "users"
+  add_foreign_key "scores", "events"
+  add_foreign_key "scores", "locations"
   add_foreign_key "scores", "rfid_tags"
+  add_foreign_key "scores", "tracking_events"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

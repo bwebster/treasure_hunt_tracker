@@ -8,7 +8,7 @@ class RfidTagsController < AdminController
   end
 
   def index
-    @rfid_tags = RfidTag.includes(:user, :tracking_events).order(:tag_id)
+    @rfid_tags = RfidTag.includes(:user, :tracking_events).order(:tag_id).page(params[:page]).per(30)
   end
 
   def create
@@ -30,6 +30,7 @@ class RfidTagsController < AdminController
 
   def edit
     @users = get_all_users
+    @scores = Score.where(rfid_tag: @rfid_tag).order(id: :desc)
   end
 
   def update

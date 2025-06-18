@@ -28,6 +28,9 @@ class TrackingEvent < ApplicationRecord
   belongs_to :location, optional: true
   has_one :event, through: :location
 
+  scope :for_tracking_event, ->(event) { where(rfid_tag_id: event.rfid_tag_id) }
+  scope :for_location, ->(location) { where(location_id: location.id) }
+
   delegate :user, to: :rfid_tag, allow_nil: true
   delegate :event, to: :location, allow_nil: true
 end
