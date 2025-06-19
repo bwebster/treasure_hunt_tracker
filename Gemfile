@@ -25,6 +25,9 @@ gem "jbuilder"
 gem "ostruct"
 gem "kaminari"
 gem "brakeman"
+gem "rubocop"
+gem "rubocop-rails"
+gem "rubocop-performance"
 
 gem "redis"
 
