@@ -60,6 +60,7 @@ namespace :simulate do
                    else
                      "http://localhost:3000/api/tracking_events"
                    end
+    simulated_event_count = Integer(ENV.fetch("COUNT", "20"))
     delay_range = 1..5 # Random delay between events (in seconds)
 
     rfid_tags = RfidTag.all.sample(20).pluck(:tag_id)
@@ -74,9 +75,9 @@ namespace :simulate do
       exit
     end
 
-    puts "Starting simulation of #{SIMULATED_EVENT_COUNT} tracking events..."
+    puts "Starting simulation of #{simulated_event_count} tracking events..."
 
-    SIMULATED_EVENT_COUNT.times do |i|
+    simulated_event_count.times do |i|
       event = events.sample # Pick a random event
       location = event.locations.sample # Pick a random location from the event
       location = event.locations.sample while location.registration?
