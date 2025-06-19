@@ -11,3 +11,6 @@ Style/StringLiterals:
 
 Style/Documentation:
   Enabled: false
+
+RSpec/BlockLength:
+  Enabled: false
