@@ -3,9 +3,18 @@
 require "rails_helper"
 
 RSpec.describe "Api::TrackingEvents", type: :request do
-  describe "GET /create" do
+  describe "POST /api/tracking_events" do
     it "returns http success" do
-      get "/api/tracking_events/create"
+      headers = { "CONTENT_TYPE" => "application/json" }
+      payload = {
+        "id" => "abc123",
+        "loc" => "3"
+      }
+
+      expect {
+        post "/api/tracking_events", params: payload.to_json, headers: headers
+      }.to change(TrackingEvent, :count).by(1)
+
       expect(response).to have_http_status(:success)
     end
   end
