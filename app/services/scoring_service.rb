@@ -29,13 +29,17 @@ class ScoringService
 
     # Try to get an advisory lock
     lock_key = Zlib.crc32("rfid:#{tracking_event.rfid_tag_id}")
-    ActiveRecord::Base.connection.execute("SELECT pg_advisory_lock(#{lock_key})")
+    ActiveRecord::Base.connection.execute(
+      ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT pg_advisory_lock(?)", lock_key])
+    )
 
     begin
       scan_score = add_score_for_scan(tracking_event)
       add_score_if_previous_scan(tracking_event) if scan_score
     ensure
-      ActiveRecord::Base.connection.execute("SELECT pg_advisory_unlock(#{lock_key})")
+      ActiveRecord::Base.connection.execute(
+        ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT pg_advisory_unlock(?)", lock_key])
+      )
     end
   end
 
