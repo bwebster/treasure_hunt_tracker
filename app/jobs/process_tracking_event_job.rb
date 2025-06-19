@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProcessTrackingEventJob < ApplicationJob
   queue_as :default
 
@@ -28,8 +30,8 @@ class ProcessTrackingEventJob < ApplicationJob
     location = event.locations.find_by(number: tracking_event.submitted_location)
     Rails.logger.info "Location is #{location&.name}"
 
-    if location
-      tracking_event.update(location_id: location.id)
-    end
+    return unless location
+
+    tracking_event.update(location_id: location.id)
   end
 end

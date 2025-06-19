@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 desc "Simulate RFID registration event"
 task register: :environment do
-  API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV["HEROKU_APP_DEFAULT_DOMAIN_NAME"]}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
+  API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
   METHOD = ENV.fetch("METHOD", "http").downcase
   date = ENV.fetch("DATE") { Event.order(date: :asc).first.date }
   event = Event.where(date: date).first
@@ -22,7 +24,7 @@ task register: :environment do
 
     # Send the HTTP POST request to create a tracking event
     uri = URI(API_ENDPOINT)
-    response = Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
+    Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
   else
     ActionCable.server.broadcast("register_channel", { rfid_id: rfid.id, location_number: location.id })
   end

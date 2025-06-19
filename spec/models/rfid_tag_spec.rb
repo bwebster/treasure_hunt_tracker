@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: rfid_tags
@@ -20,7 +22,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe RfidTag, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"

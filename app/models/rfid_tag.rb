@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: rfid_tags
@@ -25,8 +27,8 @@ class RfidTag < ApplicationRecord
   has_many :tracking_events
 
   validates :tag_id, presence: true, uniqueness: true
-  validates_presence_of :label
-  validates_uniqueness_of :label
+  validates :label, presence: true
+  validates :label, uniqueness: true
 
   delegate :username, to: :user
 

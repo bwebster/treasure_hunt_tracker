@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProgressController < ApplicationController
   def index
     @results = results_by_user
@@ -37,7 +39,7 @@ class ProgressController < ApplicationController
       group by 1, 2, 3
       order by 4 desc
     SQL
-    )
+                                         )
   end
 
   def results_by_user

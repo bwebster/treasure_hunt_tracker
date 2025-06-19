@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTrackingEvents < ActiveRecord::Migration[8.0]
   def change
     create_table :tracking_events, id: :uuid do |t|

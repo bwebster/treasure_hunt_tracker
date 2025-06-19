@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 class UsersController < AdminController
   PAGE_SIZE = ENV.fetch("USERS_PER_PAGE", 20).to_i
 
-  before_action :set_user, only: [:edit, :update, :destroy]
+  before_action :set_user, only: %i[edit update destroy]
 
   def index
     @users = User.all
                  .order(**sorting(:username))
                  .page(params[:page])
                  .per(PAGE_SIZE)
-
   end
 
   def show
@@ -37,9 +38,7 @@ class UsersController < AdminController
   def update
     if @user.update(user_params)
       # If an RFID tag was selected, associate it with the user
-      if params[:user][:rfid_tag_id].present?
-        RfidTag.find(params[:user][:rfid_tag_id]).update(user_id: @user.id)
-      end
+      RfidTag.find(params[:user][:rfid_tag_id]).update(user_id: @user.id) if params[:user][:rfid_tag_id].present?
 
       redirect_to users_path, notice: "User updated successfully."
     else

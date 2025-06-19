@@ -3,6 +3,6 @@
 FactoryBot.define do
   factory :event do
     name { "name-#{SecureRandom.uuid}" }
-    date { Date.today }
+    date { Time.zone.today }
   end
 end

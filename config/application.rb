@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "boot"
 
 require "rails"
@@ -41,7 +43,7 @@ module TreasureHuntTracker
 
     config.active_job.queue_adapter = :solid_queue
     config.after_initialize do
-      config.solid_queue.logger = ActiveSupport::Logger.new(STDOUT)
+      config.solid_queue.logger = ActiveSupport::Logger.new($stdout)
       config.solid_queue.logger.level = Logger::INFO
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :tracking_events do
   desc "Remove all scores and reprocess tracking events"
   task rescore: :environment do

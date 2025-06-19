@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RegisterChannel < ApplicationCable::Channel
   def subscribed
     Rails.logger.info "RegisterChannel subscribed in channels/register_channel.rb"

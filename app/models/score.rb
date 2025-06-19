@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: scores
@@ -33,5 +35,5 @@ class Score < ApplicationRecord
   belongs_to :location
   belongs_to :tracking_event
 
-  scope :for_tag_id, -> (tag_id) { where(rfid_tag_id: tag_id) }
+  scope :for_tag_id, ->(tag_id) { where(rfid_tag_id: tag_id) }
 end

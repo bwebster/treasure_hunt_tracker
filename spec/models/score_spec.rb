@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: scores
@@ -27,7 +29,7 @@
 #  fk_rails_...  (tracking_event_id => tracking_events.id)
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Score, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"

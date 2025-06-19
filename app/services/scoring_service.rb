@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ScoringService
-
   TYPES = [
     TYPE_SCAN = :scan,
     TYPE_MULTIPLE_SCAN_BONUS = :multi_scan_bonus
@@ -58,7 +57,7 @@ class ScoringService
     Score.find_or_create_by!(id: "#{tracking_event.id}-score") do |s|
       s.tracking_event_id = tracking_event.id
       s.event_id = tracking_event.location.event_id
-      s.location_id =  tracking_event.location_id
+      s.location_id = tracking_event.location_id
       s.rfid_tag_id = tracking_event.rfid_tag_id
 
       s.score = SCORING.fetch(TYPE_SCAN)
@@ -72,19 +71,19 @@ class ScoringService
 
   def add_score_if_previous_scan(tracking_event)
     count = Score
-              .where(
-                rfid_tag_id: tracking_event.rfid_tag_id,
-                event_id: tracking_event.location.event_id,
-                score_type: TYPE_SCAN
-              )
-              .where.not(location_id: tracking_event.location_id)
-              .count
+            .where(
+              rfid_tag_id: tracking_event.rfid_tag_id,
+              event_id: tracking_event.location.event_id,
+              score_type: TYPE_SCAN
+            )
+            .where.not(location_id: tracking_event.location_id)
+            .count
     return if count.zero?
 
     Score.find_or_create_by!(id: "#{tracking_event.id}-prev-scan-bonus-#{count}") do |s|
       s.tracking_event_id = tracking_event.id
       s.event_id = tracking_event.location.event_id
-      s.location_id =  tracking_event.location_id
+      s.location_id = tracking_event.location_id
       s.rfid_tag_id = tracking_event.rfid_tag_id
 
       multiplier = SCORING.fetch(TYPE_MULTIPLE_SCAN_BONUS)

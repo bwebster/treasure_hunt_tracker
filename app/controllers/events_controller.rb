@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class EventsController < AdminController
-  before_action :set_event, only: [:edit, :update, :destroy]
+  before_action :set_event, only: %i[edit update destroy]
 
   def index
     @events = Event.order(:date)
@@ -19,8 +21,7 @@ class EventsController < AdminController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @event.update(event_params)

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 ruby "3.3.5"
 
-gem 'dotenv', groups: [:development, :test]
+gem "dotenv", groups: %i[development test]
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.1"
@@ -21,13 +23,13 @@ gem "stimulus-rails"
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
-gem "ostruct"
-gem "kaminari"
 gem "brakeman"
+gem "jbuilder"
+gem "kaminari"
+gem "ostruct"
 gem "rubocop"
-gem "rubocop-rails"
 gem "rubocop-performance"
+gem "rubocop-rails"
 
 gem "redis"
 
@@ -35,12 +37,12 @@ gem "redis"
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+gem "solid_cable"
 gem "solid_cache"
 gem "solid_queue"
-gem "solid_cable"
 
 gem "mission_control-jobs"
 
@@ -55,12 +57,11 @@ gem "thruster", require: false
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "annotaterb"
   gem "web-console"
-  gem 'annotaterb'
 end
 
 group :development, :test do
   gem "factory_bot_rails"
   gem "rspec-rails", "~> 7.1"
 end
-

@@ -30,15 +30,15 @@ RSpec.describe ScoringService do
 
         score = Score.last
         expect(score).to have_attributes(
-                           id: "#{tracking_event.id}-score",
-                           score: 10_000,
-                           score_type: "scan",
-                           source: /Scan at #{tracking_event.location.name} on .*/,
-                           event_id: tracking_event.location.event_id,
-                           location_id: tracking_event.location_id,
-                           rfid_tag_id: tracking_event.rfid_tag_id,
-                           tracking_event_id: tracking_event.id
-                         )
+          id: "#{tracking_event.id}-score",
+          score: 10_000,
+          score_type: "scan",
+          source: /Scan at #{tracking_event.location.name} on .*/,
+          event_id: tracking_event.location.event_id,
+          location_id: tracking_event.location_id,
+          rfid_tag_id: tracking_event.rfid_tag_id,
+          tracking_event_id: tracking_event.id
+        )
 
         score = Score.where(rfid_tag_id: tracking_event.rfid_tag.id).sum(:score)
         expect(score).to eq(10_000)
@@ -59,15 +59,15 @@ RSpec.describe ScoringService do
 
         score = Score.last
         expect(score).to have_attributes(
-                           id: "#{tracking_event.id}-score",
-                           score: 10_000,
-                           score_type: "scan",
-                           source: /Scan at #{tracking_event.location.name} on .*/,
-                           event_id: tracking_event.location.event_id,
-                           location_id: tracking_event.location_id,
-                           rfid_tag_id: rfid_tag.id,
-                           tracking_event_id: tracking_event.id
-                         )
+          id: "#{tracking_event.id}-score",
+          score: 10_000,
+          score_type: "scan",
+          source: /Scan at #{tracking_event.location.name} on .*/,
+          event_id: tracking_event.location.event_id,
+          location_id: tracking_event.location_id,
+          rfid_tag_id: rfid_tag.id,
+          tracking_event_id: tracking_event.id
+        )
 
         tracking_event = events[1]
         expect { described_class.score(tracking_event:) }.to change(Score, :count).by(2)
@@ -75,27 +75,27 @@ RSpec.describe ScoringService do
         scores = Score.order(created_at: :asc).last(2)
         score = scores[0]
         expect(score).to have_attributes(
-                           id: "#{tracking_event.id}-score",
-                           score: 10_000,
-                           score_type: "scan",
-                           source: /Scan at #{tracking_event.location.name} on .*/,
-                           event_id: tracking_event.location.event_id,
-                           location_id: tracking_event.location_id,
-                           rfid_tag_id: tracking_event.rfid_tag_id,
-                           tracking_event_id: tracking_event.id
-                         )
+          id: "#{tracking_event.id}-score",
+          score: 10_000,
+          score_type: "scan",
+          source: /Scan at #{tracking_event.location.name} on .*/,
+          event_id: tracking_event.location.event_id,
+          location_id: tracking_event.location_id,
+          rfid_tag_id: tracking_event.rfid_tag_id,
+          tracking_event_id: tracking_event.id
+        )
 
         score = scores[1]
         expect(score).to have_attributes(
-                           id: "#{tracking_event.id}-prev-scan-bonus-1",
-                           score: 1_000,
-                           score_type: "multi_scan_bonus",
-                           source: "Bonus: 1000 * 1 previous scans",
-                           event_id: tracking_event.location.event_id,
-                           location_id: tracking_event.location_id,
-                           rfid_tag_id: tracking_event.rfid_tag_id,
-                           tracking_event_id: tracking_event.id
-                         )
+          id: "#{tracking_event.id}-prev-scan-bonus-1",
+          score: 1_000,
+          score_type: "multi_scan_bonus",
+          source: "Bonus: 1000 * 1 previous scans",
+          event_id: tracking_event.location.event_id,
+          location_id: tracking_event.location_id,
+          rfid_tag_id: tracking_event.rfid_tag_id,
+          tracking_event_id: tracking_event.id
+        )
 
         score = Score.where(rfid_tag_id: rfid_tag.id).sum(:score)
         expect(score).to eq(10_000 + 10_000 + (1 * 1_000))
@@ -114,15 +114,15 @@ RSpec.describe ScoringService do
 
         score = Score.last
         expect(score).to have_attributes(
-                           id: "#{tracking_event.id}-score",
-                           score: 10_000,
-                           score_type: "scan",
-                           source: /Scan at #{tracking_event.location.name} on .*/,
-                           event_id: tracking_event.location.event_id,
-                           location_id: tracking_event.location_id,
-                           rfid_tag_id: rfid_tag.id,
-                           tracking_event_id: tracking_event.id
-                         )
+          id: "#{tracking_event.id}-score",
+          score: 10_000,
+          score_type: "scan",
+          source: /Scan at #{tracking_event.location.name} on .*/,
+          event_id: tracking_event.location.event_id,
+          location_id: tracking_event.location_id,
+          rfid_tag_id: rfid_tag.id,
+          tracking_event_id: tracking_event.id
+        )
 
         tracking_event = events[1]
         expect { described_class.score(tracking_event:) }.to_not change(Score, :count)
@@ -161,7 +161,7 @@ RSpec.describe ScoringService do
         end
 
         score = Score.where(rfid_tag_id: rfid_tag.id).sum(:score)
-        expect(score).to eq(10_000 + 10_000 + (1 * 1_000) + 10_000 + (2 * 1_000) + 10_000 + (3 * 1_000) + 10_000 +  (4 * 1_000))
+        expect(score).to eq(10_000 + 10_000 + (1 * 1_000) + 10_000 + (2 * 1_000) + 10_000 + (3 * 1_000) + 10_000 + (4 * 1_000))
       end
     end
   end

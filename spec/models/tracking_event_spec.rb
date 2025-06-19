@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: tracking_events
@@ -22,7 +24,7 @@
 #  fk_rails_...  (rfid_tag_id => rfid_tags.id)
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe TrackingEvent, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"

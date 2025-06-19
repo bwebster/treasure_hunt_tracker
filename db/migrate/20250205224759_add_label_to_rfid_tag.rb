@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLabelToRfidTag < ActiveRecord::Migration[8.0]
   def change
     add_column :rfid_tags, :label, :string, null: false

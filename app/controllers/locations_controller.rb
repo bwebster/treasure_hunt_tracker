@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class LocationsController < AdminController
   before_action :set_event
-  before_action :set_location, only: [:edit, :update, :destroy]
+  before_action :set_location, only: %i[edit update destroy]
 
   def new
     @location = @event.locations.new
@@ -16,8 +18,7 @@ class LocationsController < AdminController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @location.update(location_params)

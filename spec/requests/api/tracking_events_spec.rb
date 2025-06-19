@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe "Api::TrackingEvents", type: :request do
   describe "GET /create" do
@@ -7,5 +9,4 @@ RSpec.describe "Api::TrackingEvents", type: :request do
       expect(response).to have_http_status(:success)
     end
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ViewTagChannel < ApplicationCable::Channel
   def subscribed
     stream_from "view_tag_channel"

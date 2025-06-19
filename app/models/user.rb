@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -19,5 +21,5 @@ class User < ApplicationRecord
   has_many :rfid_tags, dependent: :nullify
 
   validates :username, presence: true
-  validates_uniqueness_of :username, case_sensitive: false
+  validates :username, uniqueness: { case_sensitive: false }
 end

@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 module ProgressHelper
   class Level
     attr_accessor :level, :title
+
     def initialize(level, title)
       @level = level
       @title = title

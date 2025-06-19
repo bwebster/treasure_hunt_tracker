@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
@@ -7,15 +9,15 @@ Rails.application.routes.draw do
     resources :tracking_events, only: [:create]
   end
 
-  resources :users, only: [:index, :show, :edit, :update, :new, :create, :destroy] do
-    resources :rfid_tags, only: [:create, :destroy]
+  resources :users, only: %i[index show edit update new create destroy] do
+    resources :rfid_tags, only: %i[create destroy]
   end
 
   resources :events do
-    resources :locations, only: [:new, :create, :edit, :update, :destroy]
+    resources :locations, only: %i[new create edit update destroy]
   end
 
-  resources :rfid_tags, only: [:index, :edit, :update]
+  resources :rfid_tags, only: %i[index edit update]
   resources :progress, only: [:index]
   resources :tracking_events, only: [:index]
   resources :scores, only: [:index]

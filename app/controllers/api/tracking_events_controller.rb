@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   class TrackingEventsController < ApplicationController
     skip_before_action :verify_authenticity_token
@@ -17,9 +19,7 @@ module Api
             tag.label = RfidTag.generate_label
           end
         rescue ActiveRecord::RecordInvalid => e
-          if e.message =~ "Label has already been taken"
-            retry
-          end
+          retry if "Label has already been taken".match?(e.message)
         end
 
         rfid_tag.tracking_events.create!(

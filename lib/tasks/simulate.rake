@@ -1,11 +1,13 @@
-require 'net/http'
-require 'json'
-require 'securerandom'
+# frozen_string_literal: true
+
+require "net/http"
+require "json"
+require "securerandom"
 
 namespace :simulate do
   desc "Simulate a series of tracking events for a single tag"
-  task :one => :environment do
-    API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV["HEROKU_APP_DEFAULT_DOMAIN_NAME"]}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
+  task one: :environment do
+    API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
     RFID_TAG_ID = ENV.fetch("RFID") { RfidTag.all.sample.tag_id }
     DELAY_RANGE = 1..5 # Random delay between events (in seconds)
 
@@ -47,8 +49,8 @@ namespace :simulate do
   end
 
   desc "Simulate multiple tracking events for multiple tags"
-  task :many => :environment do
-    API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV["HEROKU_APP_DEFAULT_DOMAIN_NAME"]}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
+  task many: :environment do
+    API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
     SIMULATED_EVENT_COUNT = 50 # Adjust the number of tracking events
     DELAY_RANGE = 1..5 # Random delay between events (in seconds)
 
@@ -69,9 +71,7 @@ namespace :simulate do
     SIMULATED_EVENT_COUNT.times do |i|
       event = events.sample # Pick a random event
       location = event.locations.sample # Pick a random location from the event
-      while location.registration?
-        location = event.locations.sample
-      end
+      location = event.locations.sample while location.registration?
       rfid_tag = rfid_tags.sample # Pick a random RFID tag
 
       payload = {
@@ -96,5 +96,4 @@ namespace :simulate do
 
     puts "✅ Simulation complete!"
   end
-
 end

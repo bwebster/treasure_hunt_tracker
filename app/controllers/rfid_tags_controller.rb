@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class RfidTagsController < AdminController
   PAGE_SIZE = ENV.fetch("RFID_TAGS_PER_PAGE", 30).to_i
 
-  before_action :set_user, only: [:create, :destroy]
-  before_action :set_rfid_tag, only: [:edit, :update]
+  before_action :set_user, only: %i[create destroy]
+  before_action :set_rfid_tag, only: %i[edit update]
 
   rescue_from ActiveRecord::RecordNotFound do
     flash[:alert] = "RFID Tag Not Found"
@@ -11,10 +13,10 @@ class RfidTagsController < AdminController
 
   def index
     @rfid_tags = RfidTag
-                   .includes(:user, :tracking_events)
-                   .order(**sorting(:label))
-                   .page(params[:page])
-                   .per(PAGE_SIZE)
+                 .includes(:user, :tracking_events)
+                 .order(**sorting(:label))
+                 .page(params[:page])
+                 .per(PAGE_SIZE)
   end
 
   def create
@@ -64,15 +66,14 @@ class RfidTagsController < AdminController
 
     @rfid_tag.assign_attributes(update_params)
 
+    @users = get_all_users
     if @rfid_tag.save
-      @users = get_all_users
       if params[:registration_mode] == "true"
         redirect_to register_path, notice: "RFID tag updated successfully."
       else
         redirect_to rfid_tags_path, notice: "RFID tag updated successfully."
       end
     else
-      @users = get_all_users
       flash.now[:alert] = "Error updating RFID tag."
       render :edit, status: :unprocessable_entity
     end
