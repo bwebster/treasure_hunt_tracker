@@ -3,8 +3,9 @@ class TrackingEventsController < AdminController
 
   def index
     @tracking_events = TrackingEvent
+                         .includes(:rfid_tag, :user)
                          .left_joins(location: :event)
-                         .order(created_at: :desc)
+                         .order(**sorting(:created_at, :desc))
                          .page(params[:page])
                          .per(PAGE_SIZE)
   end

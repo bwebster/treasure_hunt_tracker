@@ -5,9 +5,10 @@ class UsersController < AdminController
 
   def index
     @users = User.all
-                 .order(username: :asc)
+                 .order(**sorting(:username))
                  .page(params[:page])
                  .per(PAGE_SIZE)
+
   end
 
   def show

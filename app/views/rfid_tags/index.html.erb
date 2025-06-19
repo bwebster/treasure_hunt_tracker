@@ -11,9 +11,9 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>Tag ID</th>
-              <th>Label</th>
-              <th>Associated User</th>
+              <th><%= sortable "tag_id" %></th>
+              <th><%= sortable "label", default: true %></th>
+              <th><%= sortable "user.username", title: "Associated User" %></th>
               <th>Tracking Events</th>
             </tr>
             </thead>

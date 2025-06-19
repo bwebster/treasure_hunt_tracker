@@ -9,17 +9,19 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>Tag</th>
+              <th><%= sortable "tracking_event.scanned_at", title: "Scanned At", default: true %></th>
+              <th><%= sortable "rfid_tag.label", title: "Tag Label" %></th>
               <th>Score</th>
-              <th>Score Type</th>
+              <th><%= sortable "score_type" %></th>
               <th>Source</th>
-              <th>Event</th>
-              <th>Location</th>
+              <th><%= sortable "event.name", title: "Event" %></th>
+              <th><%= sortable "location.name", title: "Location" %></th>
             </tr>
             </thead>
             <tbody>
             <% @scores.each do |score| %>
               <tr>
+                <td><%= human_time(score.tracking_event.scanned_at) %></td>
                 <td><%= score.rfid_tag.label %></td>
                 <td><%= score.score %></td>
                 <td><%= score.score_type %></td>

@@ -6,6 +6,12 @@ class AdminController < ApplicationController
 
   private
 
+  def sorting(column, direction = "asc")
+    sort_column = params[:sort] || column
+    sort_direction = params[:direction] || direction
+    { sort_column => sort_direction }
+  end
+
   def authenticate
     return unless Rails.env.production? # Only enable auth in production
 

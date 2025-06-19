@@ -12,7 +12,7 @@ class RfidTagsController < AdminController
   def index
     @rfid_tags = RfidTag
                    .includes(:user, :tracking_events)
-                   .order(:tag_id)
+                   .order(**sorting(:label))
                    .page(params[:page])
                    .per(PAGE_SIZE)
   end

@@ -9,18 +9,20 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>Scanned At</th>
-              <th>Tag Label</th>
-              <th>Tag UID</th>
-              <th>User</th>
-              <th>Event</th>
-              <th>Location</th>
+              <th><%= sortable "scanned_at", default: true %></th>
+              <th><%= sortable "rfid_tag.label", title: "Tag Label" %></th>
+              <th><%= sortable "rfid_tag.tag_id", title: "Tag ID" %></th>
+              <th><%= sortable "user.username", title: "User" %></th>
+              <th><%= sortable "event.name", title: "Event" %></th>
+              <th><%= sortable "location.name", title: "Location" %></th>
             </tr>
             </thead>
             <tbody>
             <% @tracking_events.each do |tracking_event| %>
               <tr>
-                <td><%= tracking_event.scanned_at.in_time_zone("America/Chicago").strftime("%B %d %l:%M:%S%P") %></td>
+                <td>
+                  <%= human_time(tracking_event.scanned_at) %>
+                </td>
                 <td>
                   <%= tracking_event.rfid_tag.label %>
                 </td>
