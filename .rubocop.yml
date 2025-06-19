@@ -12,6 +12,12 @@ Metrics/AbcSize:
   Exclude:
     - "db/migrate/*.rb"
 
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*_spec.rb"
+    - "config/environments/**.rb"
+    - "lib/tasks/*.rake"
+
 Metrics/ClassLength:
   Exclude:
     - "db/migrate/*.rb"
@@ -26,6 +32,3 @@ Style/StringLiterals:
 Style/Documentation:
   Enabled: false
 
-
-RSpec/BlockLength:
-  Enabled: false
