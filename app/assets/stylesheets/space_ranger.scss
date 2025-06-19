@@ -82,7 +82,12 @@ $table-striped-color: lighten($info, 10%);
 // Import Bootstrap (After Variables)
 @import "bootstrap/scss/bootstrap";
 
-
 .orbitron-page, .orbitron-page * {
   font-family: 'Orbitron', sans-serif !important;
+}
+
+.ts-wrapper .ts-control, .ts-wrapper .ts-control input {
+  color: var(--bs-body-color); // or explicitly set a readable color
+  background-color: var(--bs-body-bg); // optional: match your theme background
+  border-color: var(--bs-border-color); // optional: match Bootstrap border
 }

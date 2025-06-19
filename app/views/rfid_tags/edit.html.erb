@@ -30,7 +30,7 @@
 
                   <div class="mt-3">
                     <%= f.label :user_id, "Pick a different user", class: "form-label" %>
-                    <%= f.collection_select :user_id, @users, :id, :username, { include_blank: "Unassigned" }, class: "form-select" %>
+                    <%= f.collection_select :user_id, @users, :id, :username, { include_blank: "Unassigned" }, class: "form-select searchable-select" %>
                   </div>
                 <% else %>
                   <div class="alert alert-warning">
@@ -44,7 +44,7 @@
 
                   <div class="mb-3">
                     <%= f.label :user_id, "Or pick an existing user", class: "form-label" %>
-                    <%= f.collection_select :user_id, @users, :id, :username, { include_blank: "Unassigned" }, class: "form-select" %>
+                    <%= f.collection_select :user_id, @users, :id, :username, { include_blank: "Unassigned" }, class: "form-select searchable-select" %>
                   </div>
                 <% end %>
               </div>

@@ -5,6 +5,18 @@ require "json"
 require "securerandom"
 
 namespace :simulate do
+  desc "Simulate having a ton of users"
+  task many_users: :environment do
+    require "faker"
+
+    count = Integer(ENV.fetch("COUNT", "300"))
+
+    Rails.logger.info "Creating #{count} users"
+    count.times do
+      User.create!(username: Faker::Name.name)
+    end
+  end
+
   desc "Simulate a series of tracking events for a single tag"
   task one: :environment do
     api_endpoint = if ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME")

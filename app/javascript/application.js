@@ -3,10 +3,20 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "bootstrap"
 import "channels/register_channel";
+import "tom-select";
 
 document.addEventListener("turbo:load", () => {
     const register = "Enter Registration Mode";
     const exitRegistration = "Exit Registration Mode";
+
+    document.querySelectorAll(".searchable-select").forEach((el) => {
+        console.log("Adding tom-select to ", el);
+        new TomSelect(el, {
+            maxItems: 1, // allow only one item
+            create: false,
+            plugins: []
+        });
+    });
 
     document.querySelectorAll(".toggle-registration").forEach(button => {
         button.addEventListener("click", (event) => {
