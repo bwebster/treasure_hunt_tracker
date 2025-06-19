@@ -5,8 +5,9 @@ class ScoresController < AdminController
 
   def index
     @scores = Score
+              .joins(:tracking_event)
               .includes(:rfid_tag, :location, :event, :tracking_event)
-              .order(**sorting(:created_at))
+              .order(**sorting("tracking_event.scanned_at", "desc"))
               .page(params[:page])
               .per(PAGE_SIZE)
   end
