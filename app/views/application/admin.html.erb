@@ -1,0 +1,78 @@
+<div class="container pt-3 mt-5">
+  <%= render partial: "flash" %>
+
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h4>Admin</h4>
+        </div>
+        <div class="card-body">
+          <p class="text-muted my-3">
+            Pages below require authentication.  Talk to the Life.Church staff to get the username and password.
+          </p>
+
+          <hr/>
+
+          <table class="table table-borderless w-auto mx-auto">
+            <tbody>
+            <tr>
+              <td>
+                <%= link_to "Registration", register_path %>
+              </td>
+              <td class="text-muted">
+                Landing page for registering tags.  You must first go to <%= link_to "Events", events_path, class: "text-muted" %> page
+                and enter registration mode.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <%= link_to "RFID Tags", rfid_tags_path %>
+              </td>
+              <td class="text-muted">
+                View all RFID tags that have been registered or scanned at least once.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <%= link_to "Users", users_path %>
+              </td>
+              <td class="text-muted">
+                View all users.  Users can be created manually, or created when assigned to a RFID Tag.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <%= link_to "Events", events_path %>
+              </td>
+              <td class="text-muted">
+                View all events and locations.  Events and locations must be configured to track RFID tag scans.
+              </td>
+            </tr>
+            <tr>
+              <td class="text-nowrap">
+                <%= link_to "Tracking Events", tracking_events_path %>
+              </td>
+              <td class="text-muted">
+                View all received tracking events.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <%= link_to "Scores", scores_path %>
+              </td>
+              <td class="text-muted">
+                View all computed scores.  Scores are based off tracking events that have been received for a valid
+                event and location.
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+
+</div>

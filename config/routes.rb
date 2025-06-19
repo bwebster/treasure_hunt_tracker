@@ -3,10 +3,6 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
   namespace :api do
     resources :tracking_events, only: [:create]
   end
@@ -15,18 +11,17 @@ Rails.application.routes.draw do
     resources :rfid_tags, only: [:create, :destroy]
   end
 
-  resources :rfid_tags, only: [:index, :edit, :update]
-
-  resources :progress, only: [:index]
-
   resources :events do
     resources :locations, only: [:new, :create, :edit, :update, :destroy]
   end
 
+  resources :rfid_tags, only: [:index, :edit, :update]
+  resources :progress, only: [:index]
   resources :tracking_events, only: [:index]
   resources :scores, only: [:index]
 
   get "register" => "rfid_tags#register"
+  get "admin" => "application#admin"
 
   mount MissionControl::Jobs::Engine, at: "/jobs"
   mount ActionCable.server => "/cable"
