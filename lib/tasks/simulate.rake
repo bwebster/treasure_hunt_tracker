@@ -4,16 +4,16 @@ require "net/http"
 require "json"
 require "securerandom"
 
-API_ENDPOINT = if ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME")
-                 "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events"
-               else
-                 "http://localhost:3000/api/tracking_events"
-               end
-DELAY_RANGE = 1..5 # Random delay between events (in seconds)
-
 namespace :simulate do
   desc "Simulate a series of tracking events for a single tag"
   task one: :environment do
+    api_endpoint = if ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME")
+                     "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events"
+                   else
+                     "http://localhost:3000/api/tracking_events"
+                   end
+    delay_range = 1..5 # Random delay between events (in seconds)
+
     rfid_tag_id = ENV.fetch("RFID") { RfidTag.all.sample.tag_id }
 
     # Fetch all available events with locations
@@ -36,7 +36,7 @@ namespace :simulate do
         }
 
         # Send the HTTP POST request to create a tracking event
-        uri = URI(API_ENDPOINT)
+        uri = URI(api_endpoint)
         response = Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
 
         if response.code == "201"
@@ -46,7 +46,7 @@ namespace :simulate do
         end
 
         # Wait for a random amount of time before the next request
-        sleep(rand(DELAY_RANGE))
+        sleep(rand(delay_range))
       end
     end
 
@@ -55,6 +55,13 @@ namespace :simulate do
 
   desc "Simulate multiple tracking events for multiple tags"
   task many: :environment do
+    api_endpoint = if ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME")
+                     "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events"
+                   else
+                     "http://localhost:3000/api/tracking_events"
+                   end
+    delay_range = 1..5 # Random delay between events (in seconds)
+
     rfid_tags = RfidTag.all.sample(20).pluck(:tag_id)
     puts "Found #{rfid_tags.count} existing tags to use"
     rfid_tags += Array.new(20 - rfid_tags.count) { SecureRandom.hex(4) }
@@ -82,7 +89,7 @@ namespace :simulate do
       }
 
       # Send the HTTP POST request to create a tracking event
-      uri = URI(API_ENDPOINT)
+      uri = URI(api_endpoint)
       response = Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
 
       if response.code == "201"
@@ -92,7 +99,7 @@ namespace :simulate do
       end
 
       # Wait for a random amount of time before the next request
-      sleep(rand(DELAY_RANGE))
+      sleep(rand(delay_range))
     end
 
     puts "✅ Simulation complete!"
