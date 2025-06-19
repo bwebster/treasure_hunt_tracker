@@ -70,14 +70,7 @@ class ScoringService
   end
 
   def add_score_if_previous_scan(tracking_event)
-    count = Score
-            .where(
-              rfid_tag_id: tracking_event.rfid_tag_id,
-              event_id: tracking_event.location.event_id,
-              score_type: TYPE_SCAN
-            )
-            .where.not(location_id: tracking_event.location_id)
-            .count
+    count = previous_score_count(tracking_event)
     return if count.zero?
 
     Score.find_or_create_by!(id: "#{tracking_event.id}-prev-scan-bonus-#{count}") do |s|
@@ -92,5 +85,18 @@ class ScoringService
 
       s.source = "Bonus: #{multiplier} * #{count} previous scans"
     end
+  end
+
+  private
+
+  def previous_score_count(tracking_event)
+    Score
+      .where(
+        rfid_tag_id: tracking_event.rfid_tag_id,
+        event_id: tracking_event.location.event_id,
+        score_type: TYPE_SCAN
+      )
+      .where.not(location_id: tracking_event.location_id)
+      .count
   end
 end

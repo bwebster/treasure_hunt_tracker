@@ -143,7 +143,9 @@ RSpec.describe ScoringService do
         end
 
         score = Score.where(rfid_tag_id: rfid_tag.id).sum(:score)
-        expect(score).to eq(10_000 + 10_000 + (1 * 1_000) + 10_000 + (2 * 1_000))
+        expect(score).to eq(10_000 +
+                            10_000 + (1 * 1_000) +
+                            10_000 + (2 * 1_000))
       end
     end
 
@@ -161,7 +163,11 @@ RSpec.describe ScoringService do
         end
 
         score = Score.where(rfid_tag_id: rfid_tag.id).sum(:score)
-        expect(score).to eq(10_000 + 10_000 + (1 * 1_000) + 10_000 + (2 * 1_000) + 10_000 + (3 * 1_000) + 10_000 + (4 * 1_000))
+        expect(score).to eq(10_000 +
+                           10_000 + (1 * 1_000) +
+                           10_000 + (2 * 1_000) +
+                           10_000 + (3 * 1_000) +
+                           10_000 + (4 * 1_000))
       end
     end
   end

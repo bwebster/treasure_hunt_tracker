@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 
+API_ENDPOINT = if ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME")
+                 "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events"
+               else
+                 "http://localhost:3000/api/tracking_events"
+               end
+
 desc "Simulate RFID registration event"
 task register: :environment do
-  API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
-  METHOD = ENV.fetch("METHOD", "http").downcase
+
+  method = ENV.fetch("METHOD", "http").downcase
   date = ENV.fetch("DATE") { Event.order(date: :asc).first.date }
   event = Event.where(date: date).first
   raise "No event found for date #{date}" unless event
@@ -15,7 +21,7 @@ task register: :environment do
   rfid = RfidTag.all.sample(1).first
   puts "Registering RFID #{rfid.tag_id} (#{rfid.id}) at location #{location.number} (#{location.id})"
 
-  if METHOD == "http"
+  if method == "http"
     payload = {
       id: rfid.tag_id,
       loc: location.number,

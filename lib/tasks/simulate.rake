@@ -4,12 +4,17 @@ require "net/http"
 require "json"
 require "securerandom"
 
+API_ENDPOINT = if ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME")
+                 "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events"
+               else
+                 "http://localhost:3000/api/tracking_events"
+               end
+DELAY_RANGE = 1..5 # Random delay between events (in seconds)
+
 namespace :simulate do
   desc "Simulate a series of tracking events for a single tag"
   task one: :environment do
-    API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
-    RFID_TAG_ID = ENV.fetch("RFID") { RfidTag.all.sample.tag_id }
-    DELAY_RANGE = 1..5 # Random delay between events (in seconds)
+    rfid_tag_id = ENV.fetch("RFID") { RfidTag.all.sample.tag_id }
 
     # Fetch all available events with locations
     events = Event.includes(:locations).where.not(locations: { id: nil }).order(date: :asc).to_a
@@ -25,7 +30,7 @@ namespace :simulate do
         next if location.registration?
 
         payload = {
-          id: RFID_TAG_ID,
+          id: rfid_tag_id,
           loc: location.number,
           at: event.date
         }
@@ -35,7 +40,7 @@ namespace :simulate do
         response = Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
 
         if response.code == "201"
-          puts "✔ Event: RFID #{RFID_TAG_ID} scanned at #{location.name} (#{event.name}) at #{event.date}"
+          puts "✔ Event: RFID #{rfid_tag_id} scanned at #{location.name} (#{event.name}) at #{event.date}"
         else
           puts "❌ Event failed: #{response.body}"
         end
@@ -50,10 +55,6 @@ namespace :simulate do
 
   desc "Simulate multiple tracking events for multiple tags"
   task many: :environment do
-    API_ENDPOINT = ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME") ? "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events" : "http://localhost:3000/api/tracking_events"
-    SIMULATED_EVENT_COUNT = 50 # Adjust the number of tracking events
-    DELAY_RANGE = 1..5 # Random delay between events (in seconds)
-
     rfid_tags = RfidTag.all.sample(20).pluck(:tag_id)
     puts "Found #{rfid_tags.count} existing tags to use"
     rfid_tags += Array.new(20 - rfid_tags.count) { SecureRandom.hex(4) }

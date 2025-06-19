@@ -1,16 +1,31 @@
-AllCops:
-  TargetRubyVersion: 3.3
-  SuggestExtensions: false
+inherit_from: .rubocop_todo.yml
 
 plugins:
   - rubocop-rails
   - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 3.3
+  SuggestExtensions: false
+
+Metrics/AbcSize:
+  Exclude:
+    - "db/migrate/*.rb"
+
+Metrics/ClassLength:
+  Exclude:
+    - "db/migrate/*.rb"
+
+Metrics/MethodLength:
+  Exclude:
+    - "db/migrate/*.rb"
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/Documentation:
   Enabled: false
+
 
 RSpec/BlockLength:
   Enabled: false
