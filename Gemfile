@@ -24,6 +24,7 @@ gem "cssbundling-rails"
 gem "jbuilder"
 gem "ostruct"
 gem "kaminari"
+gem "brakeman"
 
 gem "redis"
 
