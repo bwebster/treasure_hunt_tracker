@@ -38,11 +38,10 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
+gem "mission_control-jobs"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
-
-# Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
-# gem "kamal", require: false
 
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "thruster", require: false
@@ -53,11 +52,11 @@ gem "thruster", require: false
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-end
-
-gem "rspec-rails", "~> 7.1", :groups => [:development, :test]
-gem "mission_control-jobs"
-
-group :development do
   gem 'annotaterb'
 end
+
+group :development, :test do
+  gem "factory_bot_rails"
+  gem "rspec-rails", "~> 7.1"
+end
+
