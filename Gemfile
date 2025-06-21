@@ -32,6 +32,7 @@ gem "rubocop-performance"
 gem "rubocop-rails"
 gem "rubocop-rspec"
 gem "faker"
+gem "mustache"
 
 gem "redis"
 

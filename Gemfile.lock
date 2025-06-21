@@ -163,6 +163,7 @@ GEM
       stimulus-rails
       turbo-rails
     msgpack (1.8.0)
+    mustache (1.1.1)
     net-imap (0.5.8)
       date
       net-protocol
@@ -381,6 +382,7 @@ DEPENDENCIES
   jbuilder
   kaminari
   mission_control-jobs
+  mustache
   ostruct
   pg (~> 1.1)
   propshaft

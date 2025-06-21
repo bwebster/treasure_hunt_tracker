@@ -25,24 +25,10 @@ class SpeakController < ApplicationController
       return render json: {}, status: :no_content
     end
 
-    line = WelcomeLine.all.sample.text
-    data = {
-      "username" => user.username,
-      "location" => location.name
-    }
-
-    error = false
-    text = line.gsub(/\{\{(\w+)\}\}/) do
-      key = Regexp.last_match(1)
-      data.fetch(key) do
-        error = true
-        nil
-      end
-    end
-    if error
-      Rails.logger.info "Missing template data"
-      return render json: {}, status: :no_content
-    end
+    text = WelcomeLine.all.sample.interpolate(
+      username: user.username,
+      location: location.name,
+    )
 
     uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{get_voice}/stream")
     req = Net::HTTP::Post.new(uri)
