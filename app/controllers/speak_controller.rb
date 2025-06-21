@@ -8,7 +8,7 @@ class SpeakController < ApplicationController
   API_KEY = ENV["ELEVENLABS_API_KEY"]
 
   def tts
-    unless API_KEY.present?
+    if API_KEY.blank?
       Rails.logger.info "Skipping TTS"
       return render json: {}, status: :no_content
     end
@@ -27,7 +27,7 @@ class SpeakController < ApplicationController
 
     text = WelcomeLine.all.sample.interpolate(
       username: user.username,
-      location: location.name,
+      location: location.name
     )
 
     uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{get_voice}/stream")

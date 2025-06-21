@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe WelcomeLinesController, type: :routing do
@@ -17,7 +19,6 @@ RSpec.describe WelcomeLinesController, type: :routing do
     it "routes to #edit" do
       expect(get: "/welcome_lines/1/edit").to route_to("welcome_lines#edit", id: "1")
     end
-
 
     it "routes to #create" do
       expect(post: "/welcome_lines").to route_to("welcome_lines#create")

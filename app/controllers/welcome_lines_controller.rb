@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WelcomeLinesController < ApplicationController
   before_action :set_welcome_line, only: %i[show edit update destroy]
 

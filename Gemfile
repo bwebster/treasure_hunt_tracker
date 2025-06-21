@@ -24,15 +24,15 @@ gem "stimulus-rails"
 gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "brakeman"
+gem "faker"
 gem "jbuilder"
 gem "kaminari"
+gem "mustache"
 gem "ostruct"
 gem "rubocop"
 gem "rubocop-performance"
 gem "rubocop-rails"
 gem "rubocop-rspec"
-gem "faker"
-gem "mustache"
 
 gem "redis"
 
