@@ -12,9 +12,11 @@ document.addEventListener("turbo:load", () => {
     document.querySelectorAll(".searchable-select").forEach((el) => {
         console.log("Adding tom-select to ", el);
         new TomSelect(el, {
-            maxItems: 1, // allow only one item
+            maxItems: 1,
+            allowEmptyOption: true,
             create: false,
-            plugins: []
+            persist: false,
+            plugins: ['clear_button'],
         });
     });
 
