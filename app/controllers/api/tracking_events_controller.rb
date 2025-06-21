@@ -31,7 +31,11 @@ module Api
 
       location = find_location(location, scanned_at)
       if location&.registration?
-        ActionCable.server.broadcast("register_channel", { rfid_id: rfid_tag.id, location_number: location.id })
+        ActionCable.server.broadcast("register_channel", {
+                                       rfid_id: rfid_tag.id,
+                                       location_number: location.id,
+                                       tracking_event_id: tracking_event.id
+                                     })
       else
         ProcessTrackingEventJob.perform_later(tracking_event_id: tracking_event.id)
       end

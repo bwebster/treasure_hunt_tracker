@@ -39,10 +39,14 @@ class RfidTagsController < AdminController
   def edit
     @users = get_all_users
     @scores = Score.where(rfid_tag: @rfid_tag).order(created_at: :asc)
+    @user_id = params[:user_id]
+    @location_id = params[:location_id]
   end
 
   def update
     update_params = rfid_tag_params
+    user_id = params[:user_id]
+    location_id = params[:location_id]
 
     username = params[:rfid_tag][:new_username]
     if username.present?
@@ -67,12 +71,16 @@ class RfidTagsController < AdminController
     had_username = @rfid_tag.user&.username.present?
     @rfid_tag.assign_attributes(update_params)
 
-    set_username = @rfid_tag.user&.username if !had_username && @rfid_tag.user&.username.present?
+    set_username = !had_username && @rfid_tag.user&.username.present?
+    user_id = @rfid_tag.user&.id if set_username
 
     @users = get_all_users
     if @rfid_tag.save
       if params[:registration_mode] == "true"
-        redirect_to register_path(username: set_username), notice: "RFID tag updated successfully."
+        redirect_to register_path(
+          user_id: user_id,
+          location_id: location_id
+        ), notice: "RFID tag updated successfully."
       else
         redirect_to rfid_tags_path, notice: "RFID tag updated successfully."
       end
@@ -83,7 +91,7 @@ class RfidTagsController < AdminController
   end
 
   def register
-    render "register"
+    @welcome_lines = WelcomeLine.all
   end
 
   private

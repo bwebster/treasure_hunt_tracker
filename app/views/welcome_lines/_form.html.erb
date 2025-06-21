@@ -1,0 +1,23 @@
+<%= form_with model: welcome_line, local: true, data: { turbo: false } do |f| %>
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8 my-2">
+      You can use the following variables in your welcome line.  They will be replaced
+      with real values when generating the speech-to-text.
+      <ul class="mt-3">
+        <li><b class="font-monospace">{{username}}</b> the username associated with the RFID tag</li>
+        <li><b class="font-monospace">{{location}}</b> the name of the location where the registration scan occurred</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :text, "Text", class: "form-label" %>
+    <%= f.text_field :text, class: "form-control", required: true %>
+  </div>
+
+  <div class="text-end">
+    <%= link_to "Cancel", welcome_lines_path, class: "btn btn-secondary" %>
+    <%= f.submit "Save", class: "btn btn-primary" %>
+  </div>
+<% end %>

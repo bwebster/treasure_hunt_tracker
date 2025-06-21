@@ -19,6 +19,8 @@
 
       <%= form_with model: @rfid_tag, local: true, data: { turbo: false } do |f| %>
         <input type="hidden" id="in-edit-registration-mode" name="registration_mode" value="false">
+        <input type="hidden"  name="user_id" value="<%= @user_id %>">
+        <input type="hidden"  name="location_id" value="<%= @location_id %>">
         <div class="row">
           <div class="col-md-5">
             <div class="row">

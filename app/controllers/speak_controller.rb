@@ -13,12 +13,43 @@ class SpeakController < ApplicationController
       return render json: {}, status: :no_content
     end
 
+    user = User.find_by(id: params[:user_id])
+    unless user
+      Rails.logger.info "No user found"
+      return render json: {}, status: :no_content
+    end
+
+    location = Location.find_by(id: params[:location_id])
+    unless location
+      Rails.logger.info "No location found"
+      return render json: {}, status: :no_content
+    end
+
+    line = WelcomeLine.all.sample.text
+    data = {
+      "username" => user.username,
+      "location" => location.name
+    }
+
+    error = false
+    text = line.gsub(/\{\{(\w+)\}\}/) do
+      key = Regexp.last_match(1)
+      data.fetch(key) do
+        error = true
+        nil
+      end
+    end
+    if error
+      Rails.logger.info "Missing template data"
+      return render json: {}, status: :no_content
+    end
+
     uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{get_voice}/stream")
     req = Net::HTTP::Post.new(uri)
     req["xi-api-key"] = API_KEY
     req["Content-Type"] = "application/json"
     req.body = {
-      text: params[:text],
+      text:,
       model_id: "eleven_flash_v2",
       voice_settings: {
         stability: 0.5,

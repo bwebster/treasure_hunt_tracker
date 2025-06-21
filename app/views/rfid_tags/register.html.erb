@@ -45,20 +45,15 @@
         }
     });
 
-    <% if params[:username].present? %>
+    <% if params[:user_id].present? && params[:location_id].present? %>
     document.addEventListener("DOMContentLoaded", () => {
-        const enabled = localStorage.getItem("speechEnabled") === "true";
-        if (!enabled) {
-            return;
-        }
-
-        async function speakText(text) {
+        async function speakText(user_id, location_id) {
             const response = await fetch("/tts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ text: text })
+                body: JSON.stringify({ user_id: user_id, location_id: location_id })
             });
 
             if (response.status === 204) { // No TTS content
@@ -75,18 +70,10 @@
             audio.play();
         }
 
-        function randomWelcome(username) {
-            const messages = [
-                "Welcome aboard, {{username}}!",
-                "Mission control online — welcome, {{username}}.",
-                "{{username}}, ready for launch!",
-                "Buzz Lightyear reporting for duty... oh wait, it's {{username}}!"
-            ];
-            const template = messages[Math.floor(Math.random() * messages.length)];
-            return template.replace("{{username}}", username);
+        const enabled = localStorage.getItem("speechEnabled") === "true";
+        if (enabled) {
+            speakText("<%= params[:user_id] %>", "<%= params[:location_id] %>");
         }
-
-        speakText(randomWelcome("<%= j params[:username] %>"));
     });
-  <% end %>
+    <% end %>
 </script>

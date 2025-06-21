@@ -1,0 +1,31 @@
+<% content_for :title, "Editing welcome line" %>
+
+<div class="container pt-3 mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4>Edit Welcome Line</h4>
+    </div>
+
+    <div class="card-body">
+      <% if @welcome_line.errors.any? %>
+        <div class="alert alert-danger">
+          <h5><i class="bi bi-exclamation-triangle"></i> Please fix the following:</h5>
+          <ul>
+            <% @welcome_line.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= render "form", welcome_line: @welcome_line %>
+
+      <%= link_to welcome_line_path(@welcome_line),
+                  method: :delete,
+                  data: { turbo_method: :delete, confirm: "Are you sure?" },
+                  class: "btn btn-link text-danger p-0" do %>
+        <button class="btn btn-danger">Delete</button>
+      <% end %>
+    </div>
+  </div>
+</div>
