@@ -64,12 +64,15 @@ class RfidTagsController < AdminController
     # Regenerate a label if needed
     update_params[:label] = RfidTag.generate_label if update_params[:label].blank?
 
+    had_username = @rfid_tag.user&.username.present?
     @rfid_tag.assign_attributes(update_params)
+
+    set_username = @rfid_tag.user&.username if !had_username && @rfid_tag.user&.username.present?
 
     @users = get_all_users
     if @rfid_tag.save
       if params[:registration_mode] == "true"
-        redirect_to register_path, notice: "RFID tag updated successfully."
+        redirect_to register_path(username: set_username), notice: "RFID tag updated successfully."
       else
         redirect_to rfid_tags_path, notice: "RFID tag updated successfully."
       end

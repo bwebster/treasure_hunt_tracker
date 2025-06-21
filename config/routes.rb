@@ -22,8 +22,9 @@ Rails.application.routes.draw do
   resources :tracking_events, only: [:index]
   resources :scores, only: [:index]
 
-  get "register" => "rfid_tags#register"
-  get "admin" => "application#admin"
+  get "register", to: "rfid_tags#register"
+  get "admin", to: "application#admin"
+  post "tts", to: "speak#tts"
 
   mount MissionControl::Jobs::Engine, at: "/jobs"
   mount ActionCable.server => "/cable"

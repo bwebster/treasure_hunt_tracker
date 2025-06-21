@@ -2,7 +2,13 @@
   <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow-sm border-3" style="width: 400px;">
       <div class="card-header glow-text">
-        Registration Station
+        <div class="d-flex justify-content-between">
+          <div class="pt-1">Registration Station</div>
+
+          <button id="speech-toggle" class="btn btn-sm">
+            <i id="speech-icon" class="bi bi-volume-mute"></i>
+          </button>
+        </div>
       </div>
       <div class="card-body">
         <%= render partial: "flash" %>
@@ -12,3 +18,75 @@
     </div>
   </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("speech-toggle");
+        const icon = document.getElementById("speech-icon");
+
+        // Initialize based on saved state
+        const enabled = localStorage.getItem("speechEnabled") === "true";
+        updateIcon(enabled);
+
+        btn.addEventListener("click", () => {
+            const current = localStorage.getItem("speechEnabled") === "true";
+            const newState = !current;
+            localStorage.setItem("speechEnabled", newState);
+            updateIcon(newState);
+        });
+
+        function updateIcon(enabled) {
+            if (enabled) {
+                icon.classList.remove("bi-volume-mute");
+                icon.classList.add("bi-volume-up-fill");
+            } else {
+                icon.classList.remove("bi-volume-up-fill");
+                icon.classList.add("bi-volume-mute");
+            }
+        }
+    });
+
+    <% if params[:username].present? %>
+    document.addEventListener("DOMContentLoaded", () => {
+        const enabled = localStorage.getItem("speechEnabled") === "true";
+        if (!enabled) {
+            return;
+        }
+
+        async function speakText(text) {
+            const response = await fetch("/tts", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ text: text })
+            });
+
+            if (response.status === 204) { // No TTS content
+                return;
+            } else if (!response.ok) {
+                console.error(`HTTP error: ${response.status}`);
+                return;
+            }
+
+            const audioData = await response.arrayBuffer();
+            const blob = new Blob([audioData], { type: "audio/mpeg" });
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio(url);
+            audio.play();
+        }
+
+        function randomWelcome(username) {
+            const messages = [
+                "Welcome aboard, {{username}}!",
+                "Mission control online — welcome, {{username}}.",
+                "{{username}}, ready for launch!",
+                "Buzz Lightyear reporting for duty... oh wait, it's {{username}}!"
+            ];
+            const template = messages[Math.floor(Math.random() * messages.length)];
+            return template.replace("{{username}}", username);
+        }
+
+        speakText(randomWelcome("<%= j params[:username] %>"));
+    });
+  <% end %>
+</script>
