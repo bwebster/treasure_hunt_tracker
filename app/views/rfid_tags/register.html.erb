@@ -6,7 +6,7 @@
           <div class="pt-1">Registration Station</div>
 
           <button id="speech-toggle" class="btn btn-sm">
-            <i id="speech-icon" class="bi bi-volume-mute"></i>
+            <i id="speech-icon" class="bi bi-volume-up-fill"></i>
           </button>
         </div>
       </div>
@@ -19,12 +19,13 @@
   </div>
 </div>
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("turbo:load", () => {
         const btn = document.getElementById("speech-toggle");
         const icon = document.getElementById("speech-icon");
 
         // Initialize based on saved state
         const enabled = localStorage.getItem("speechEnabled") === "true";
+        console.log("Registration loaded - voice enabled?", enabled);
         updateIcon(enabled);
 
         btn.addEventListener("click", () => {
