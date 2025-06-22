@@ -2,7 +2,7 @@
 
 require "net/http"
 
-class SpeakController < ApplicationController
+class SpeakController < AdminController
   skip_before_action :verify_authenticity_token
 
   API_KEY = ENV["ELEVENLABS_API_KEY"]

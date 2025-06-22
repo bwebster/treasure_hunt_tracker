@@ -4,7 +4,7 @@ require "net/http"
 require "json"
 require "uri"
 
-class VoiceSettingsController < ApplicationController
+class VoiceSettingsController < AdminController
   Usage = Struct.new(
     :character_count,
     :character_limit,

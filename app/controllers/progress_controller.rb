@@ -2,8 +2,8 @@
 
 class ProgressController < ApplicationController
   def index
-    @results = results_by_user
-    @rfid_tags = results_by_tag
+    # @results = results_by_user
+    # @rfid_tags = results_by_tag
     @scores = scores_by_tag
   end
 
