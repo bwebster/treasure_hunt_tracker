@@ -11,12 +11,15 @@ document.addEventListener("turbo:load", () => {
 
     document.querySelectorAll(".searchable-select").forEach((el) => {
         console.log("Adding tom-select to ", el);
-        new TomSelect(el, {
+        const select = new TomSelect(el, {
             maxItems: 1,
             allowEmptyOption: true,
             create: false,
-            persist: false,
-            plugins: ['clear_button'],
+            persist: false, // Don't re-add deleted items automatically
+            onItemRemove(value) {
+                // Clear active option to prevent "Enter" from re-adding it
+                select.setActiveOption(null);
+            },
         });
     });
 
