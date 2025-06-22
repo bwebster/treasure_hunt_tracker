@@ -32,7 +32,7 @@ class SpeakController < ApplicationController
 
     settings = VoiceSetting.singleton
 
-    Rails.logger.info "Calling TTS with settings: #{settings.inspect}"
+    Rails.logger.info "Calling TTS with settings: #{settings.as_json}"
 
     uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{get_voice}/stream")
     req = Net::HTTP::Post.new(uri)
