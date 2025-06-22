@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :welcome_lines
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
@@ -22,6 +21,10 @@ Rails.application.routes.draw do
   resources :progress, only: [:index]
   resources :tracking_events, only: [:index]
   resources :scores, only: [:index]
+  resources :welcome_lines
+
+  get "voice_settings", to: "voice_settings#edit"
+  patch "voice_settings", to: "voice_settings#update"
 
   get "register", to: "rfid_tags#register"
   get "admin", to: "application#admin"

@@ -1,0 +1,102 @@
+<% content_for :title, "Editing voice settings" %>
+
+<div class="container pt-3 mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4>Edit Voice Settings</h4>
+    </div>
+
+    <div class="card-body">
+      <% if @voice_setting.errors.any? %>
+        <div class="alert alert-danger">
+          <h5><i class="bi bi-exclamation-triangle"></i> Please fix the following:</h5>
+          <ul>
+            <% @voice_setting.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with(model: @voice_setting, url: voice_settings_path, local: true, data: { turbo: false } ) do |form| %>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <%= form.label :voice_ids, class: "form-label" %>
+              <%= form.text_field :voice_ids, class: "form-control" %>
+              <div class="form-text">
+                Specify a comma-separated list of voice IDs.  Voices will be randomly selected.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :similarity_boost, class: "form-label" %>
+              <%= form.text_field :similarity_boost, class: "form-control" %>
+              <div class="form-text">
+                Blank -or- number between 0.0 to 1.0.
+                <br/>
+                Determines how closely the AI should adhere to the original voice when attempting to replicate it.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :stability, class: "form-label" %>
+              <%= form.text_field :stability, class: "form-control" %>
+              <div class="form-text">
+                Blank -or- number between 0.0 to 1.0.
+                <br/>
+                Determines how stable the voice is and the randomness between each generation.
+                Lower values introduce broader emotional range for the voice.
+                Higher values can result in a monotonous voice with limited emotion.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :speed, class: "form-label" %>
+              <%= form.text_field :speed, class: "form-control" %>
+              <div class="form-text">
+                Adjusts the speed of the voice. A value of 1.0 is the default speed,
+                while values less than 1.0 slow down the speech, and values greater than 1.0 speed it up.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <%= form.label :model_id, class: "form-label" %>
+              <%= form.text_field :model_id, class: "form-control" %>
+              <div class="form-text">
+                Specify the model to use.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :style, class: "form-label" %>
+              <%= form.text_field :style, class: "form-control" %>
+              <div class="form-text">
+                Blank -or- number between 0.0 to 1.0.
+                <br/>
+                Determines the style exaggeration of the voice.
+                This setting attempts to amplify the style of the original speaker.
+                It does consume additional computational resources and might increase latency if set
+                to anything other than 0.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :use_speaker_boost, class: "form-label" %>
+              <%= form.checkbox :use_speaker_boost, class: "form-checkbox" %>
+              <div class="form-text">
+                This setting boosts the similarity to the original speaker.
+                Using this setting requires a slightly higher computational load, which in turn increases latency.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="my-3 text-end">
+          <%= link_to "Cancel", admin_path, class: "btn btn-secondary" %>
+          <%= form.submit class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

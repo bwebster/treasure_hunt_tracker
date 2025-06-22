@@ -1,7 +1,7 @@
 <div class="container pt-3 mt-5">
   <div class="card shadow-sm">
     <div class="card-header">
-      <h4>Edit RFID Tag</h4>
+      <h4>Edit RFID Tag: <%= @rfid_tag.tag_id %></h4>
     </div>
     <div class="card-body">
       <%= render partial: "flash" %>
@@ -22,60 +22,49 @@
         <input type="hidden"  name="user_id" value="<%= @user_id %>">
         <input type="hidden"  name="location_id" value="<%= @location_id %>">
         <div class="row">
-          <div class="col-md-5">
-            <div class="row">
-              <div class="col-md-12">
-                <% if @rfid_tag.user_id.present? %>
-                  <div class="alert alert-warning">
-                    This tag is owned by <%= @rfid_tag.user.username %>
-                  </div>
-
-                  <div class="mt-3">
-                    <%= f.label :user_id, "Pick a different user", class: "form-label" %>
-                    <%= f.collection_select :user_id, @users, :id, :username, { include_blank: "Unassigned" }, class: "form-select searchable-select" %>
-                  </div>
-                <% else %>
-                  <div class="alert alert-warning">
-                    This tag is not owned by a user.
-                  </div>
-
-                  <div class="mb-3 mt-3">
-                    <%= f.label :new_username, "Enter a new username", class: "form-label" %>
-                    <%= f.text_field :new_username, class: "form-control", id: "new-username", autocomplete: "off" %>
-                  </div>
-
-                  <div class="mb-3">
-                    <%= f.label :user_id, "Or pick an existing user", class: "form-label" %>
-                    <%= f.collection_select :user_id, @users, :id, :username, { include_blank: "Unassigned" }, class: "form-select searchable-select" %>
-                  </div>
-                <% end %>
+          <div class="col-md-8">
+            <% if @rfid_tag.user_id.present? %>
+              <p class="p-3">
+                This RFID tag is owned by the following user.  Use the dropdown to change owners,
+                or to unassign the current owner.
+              </p>
+              <div class="mt-3">
+                <%= f.label :user_id, "Pick a different user", class: "form-label" %>
+                <%= f.collection_select :user_id, @users, :id, :username, { include_blank: "Unassigned" }, class: "form-select form-select-lg searchable-select" %>
               </div>
-            </div>
-
-            <div class="text-end mt-3">
-              <%= link_to "Cancel", rfid_tags_path, class: "btn btn-secondary rfid_tag_edit_cancel" %>
-              <%= f.submit "Save Changes", class: "btn btn-primary" %>
-            </div>
-          </div>
-          <div class="col-md-7 gx-5">
-            <div class="d-block d-md-none">
-              <!-- This content is only visible on small screens (<768px) -->
-              <hr class="mt-3" />
-            </div>
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <%= f.label :tag_id, class: "form-label" %>
-                  <%= f.text_field :tag_id, class: "form-control", readonly: true %>
-                </div>
+            <% else %>
+              <p class="p-3">
+                <i class="bi bi-info-circle"></i> This RFID tag is not assigned to a user.
+                Enter a new username below, or use the dropdown to assign to an existing user.
+              </p>
+              <div class="mb-3 mt-3">
+                <%= f.label :new_username, "New username", class: "form-label" %>
+                <%= f.text_field :new_username, class: "form-control form-control-lg", id: "new-username", autocomplete: "off" %>
               </div>
+              <div class="mb-3">
+                <%= f.label :user_id, "Existing user", class: "form-label" %>
+                <%= f.collection_select :user_id, @users, :id, :username, { include_blank: "Unassigned" }, class: "form-select form-select-lg searchable-select" %>
+              </div>
+            <% end %>
+
+            <div class="row mt-3">
               <div class="col-md-6">
                 <div class="mb-3">
                   <%= f.label :label, class: "form-label" %>
                   <%= f.text_field :label, class: "form-control", id: "label-field" %>
                 </div>
               </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <%= f.label :created_at, class: "form-label" %>
+                  <%= f.text_field :created_at, value: human_time(@rfid_tag.created_at), class: "form-control", id: "label-field", readonly: true %>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-end mt-3 mb-5">
+              <%= link_to "Cancel", rfid_tags_path, class: "btn btn-secondary rfid_tag_edit_cancel" %>
+              <%= f.submit "Save Changes", class: "btn btn-primary" %>
             </div>
 
             <hr/>
@@ -84,8 +73,10 @@
             <table class="table table-striped">
               <thead>
               <tr>
-                <th>Scan</th>
-                <th>Points</th>
+                <th>Scanned At</th>
+                <th>Score</th>
+                <th>Score Type</th>
+                <th>Source</th>
                 <th>Event</th>
                 <th>Location</th>
               </tr>
@@ -93,14 +84,34 @@
               <tbody>
               <% @scores.each do |score| %>
                 <tr>
-                  <td><%= score.source %></td>
+                  <td><%= human_time(score.tracking_event.scanned_at) %></td>
                   <td><%= score.score %></td>
+                  <td><%= score.score_type %></td>
+                  <td><%= score.source %></td>
                   <td><%= score.event.name %></td>
                   <td><%= score.location.name %></td>
                 </tr>
               <% end %>
               </tbody>
             </table>
+          </div>
+          <div class="col-md-4">
+            <div class="card shadow-md text-center">
+              <div class="card-header">
+                <% if @rfid_tag.user.present? %>
+                  <i class="bi bi-person-circle" style="font-size: 5rem;"></i>
+                <% else %>
+                  <i class="bi bi-circle" style="font-size: 5rem;"></i>
+                <% end %>
+              </div>
+              <div class="card-body">
+                <% if @rfid_tag.user.present? %>
+                  <%= @rfid_tag.user.username %>
+                <% else %>
+                  Not assigned to user
+                <% end %>
+              </div>
+            </div>
           </div>
         </div>
       <% end %>

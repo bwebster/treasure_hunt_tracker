@@ -1,6 +1,4 @@
 <div class="container pt-3 mt-5">
-  <%= render partial: "flash" %>
-
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
@@ -9,6 +7,8 @@
           <h4>Admin</h4>
         </div>
         <div class="card-body">
+          <%= render partial: "flash" %>
+
           <p class="text-muted my-3">
             Pages below require authentication.  Talk to the Life.Church staff to get the username and password.
           </p>
@@ -56,6 +56,14 @@
               </td>
               <td class="text-muted">
                 View welcome lines, which are played in registration mode when a username is associated with a RFID tag.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <%= link_to "Voice Settings", voice_settings_path %>
+              </td>
+              <td class="text-muted">
+                Configure voice settings used to speak welcome lines.
               </td>
             </tr>
             <tr>

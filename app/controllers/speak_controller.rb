@@ -30,17 +30,21 @@ class SpeakController < ApplicationController
       location: location.name
     )
 
+    settings = VoiceSetting.singleton
+
     uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{get_voice}/stream")
     req = Net::HTTP::Post.new(uri)
     req["xi-api-key"] = API_KEY
     req["Content-Type"] = "application/json"
     req.body = {
       text:,
-      model_id: "eleven_flash_v2",
+      model_id: settings.model_id,
       voice_settings: {
-        stability: 0.75,
-        similarity_boost: 0.9,
-        speed: 1.0
+        stability: settings.stability,
+        use_speaker_boost: settings.use_speaker_boost,
+        similarity_boost: settings.similarity_boost,
+        style: settings.style,
+        speed: settings.speed
       }
     }.to_json
 

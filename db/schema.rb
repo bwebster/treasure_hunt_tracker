@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_21_164335) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_22_034846) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -212,6 +212,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_164335) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["username"], name: "index_users_on_username", unique: true
+  end
+
+  create_table "voice_settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.decimal "stability"
+    t.boolean "use_speaker_boost"
+    t.decimal "similarity_boost"
+    t.decimal "style"
+    t.decimal "speed"
+    t.string "voice_ids"
+    t.string "model_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "welcome_lines", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
