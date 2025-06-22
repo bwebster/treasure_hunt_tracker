@@ -1,8 +1,28 @@
 # frozen_string_literal: true
 
+require "net/http"
+require "json"
+require "uri"
+
 class VoiceSettingsController < ApplicationController
+  Usage = Struct.new(
+    :character_count,
+    :character_limit,
+    :pct_used,
+    keyword_init: true
+  ) do
+    def self.unknown
+      new(character_limit: 0)
+    end
+
+    def known?
+      !character_limit.zero?
+    end
+  end
+
   def edit
     @voice_setting = VoiceSetting.singleton
+    @usage = get_usage
   end
 
   def update
@@ -18,5 +38,34 @@ class VoiceSettingsController < ApplicationController
 
   def voice_setting_params
     params.expect(voice_setting: %i[stability use_speaker_boost similarity_boost style speed voice_ids])
+  end
+
+  def get_usage
+    api_key = ENV["ELEVENLABS_API_KEY"]
+    return Usage.unknown unless api_key
+
+    uri = URI("https://api.elevenlabs.io/v1/user/subscription")
+    req = Net::HTTP::Get.new(uri)
+    req["xi-api-key"] = api_key
+
+    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+      http.request(req)
+    end
+
+    unless res.is_a?(Net::HTTPSuccess)
+      Rails.logger.error "Failed to fetch usage: #{res.code} #{res.message}"
+      return Usage.unknown
+    end
+
+    data = JSON.parse(res.body)
+    character_count = data["character_count"]
+    character_limit = data["character_limit"]
+    pct_used = (character_count.to_f / character_limit * 100).round(2)
+
+    Usage.new(
+      character_count:,
+      character_limit:,
+      pct_used:
+    )
   end
 end
