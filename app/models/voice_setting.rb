@@ -18,6 +18,9 @@
 class VoiceSetting < ApplicationRecord
   SINGLETON_ID = "1d296973-d532-4f32-b33f-c54346d66bd2"
 
+  validates :voice_ids, presence: true
+  validates :model_id, presence: true
+
   def self.singleton
     find_or_create_by(id: SINGLETON_ID) do |vs|
       vs.voice_ids = "6F5Zhi321D3Oq7v1oNT4" # Hank
@@ -25,5 +28,9 @@ class VoiceSetting < ApplicationRecord
       vs.similarity_boost = 0.9
       vs.model_id = "eleven_flash_v2"
     end
+  end
+
+  def rand_voice
+    (voice_ids || "").split(",").sample
   end
 end

@@ -34,7 +34,7 @@ class SpeakController < ApplicationController
 
     Rails.logger.info "Calling TTS with settings: #{settings.as_json}"
 
-    uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{get_voice}/stream")
+    uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{settings.rand_voice}/stream")
     req = Net::HTTP::Post.new(uri)
     req["xi-api-key"] = API_KEY
     req["Content-Type"] = "application/json"
@@ -57,12 +57,5 @@ class SpeakController < ApplicationController
         self.response_body = response.body
       end
     end
-  end
-
-  private
-
-  def get_voice
-    voice_ids = ENV.fetch("ELEVENLABS_VOICE_IDS").split(",")
-    voice_ids.sample
   end
 end
