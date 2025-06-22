@@ -16,12 +16,6 @@ class VoiceSettingsController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_voice_setting
-    @voice_setting = VoiceSetting.find(params.expect(:id))
-  end
-
-  # Only allow a list of trusted parameters through.
   def voice_setting_params
     params.expect(voice_setting: %i[stability use_speaker_boost similarity_boost style speed voice_ids])
   end
