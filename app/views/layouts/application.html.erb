@@ -41,14 +41,14 @@
         <li class="nav-item">
           <%= link_to "Leader Board", root_path(anchor: "scores"), class: "nav-link #{'active' if current_page?(root_path)}" %>
         </li>
+        <li class="nav-item">
+          <%= link_to "Admin", admin_path, class: "nav-link #{'active' if current_page?(admin_path)}" %>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Admin
+            <i class="bi bi-gear-fill"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li class="dropdown-item">
-              <%= link_to "Admin", admin_path, class: "dropdown-item" %>
-            </li>
             <li class="dropdown-item">
               <%= link_to "Registration", register_path, class: "dropdown-item" %>
             </li>
