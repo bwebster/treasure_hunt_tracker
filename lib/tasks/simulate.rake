@@ -41,10 +41,13 @@ namespace :simulate do
       event.locations.order(id: :asc).each do |location|
         next if location.registration?
 
+        at = event.date.in_time_zone("America/Chicago").to_time # Date in local timezone
+        at += 9.upto(12).to_a.sample.hours
+
         payload = {
           id: rfid_tag_id,
           loc: location.number,
-          at: event.date
+          at: at
         }
 
         # Send the HTTP POST request to create a tracking event
@@ -95,10 +98,13 @@ namespace :simulate do
       location = event.locations.sample while location.registration?
       rfid_tag = rfid_tags.sample # Pick a random RFID tag
 
+      at = event.date.in_time_zone("America/Chicago").to_time # Date in local timezone
+      at += 9.upto(12).to_a.sample.hours
+
       payload = {
         id: rfid_tag,
         loc: location.number,
-        at: event.date
+        at: at
       }
 
       # Send the HTTP POST request to create a tracking event
