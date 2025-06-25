@@ -23,7 +23,7 @@ class ProcessTrackingEventJob < ApplicationJob
     Rails.logger.info "Submitted location is #{tracking_event.submitted_location}"
     Rails.logger.info "Scanned at #{tracking_event.scanned_at}"
 
-    event = Event.find_by(date: tracking_event.scanned_at.to_date)
+    event = Event.find_by(date: tracking_event.scanned_at.in_time_zone("America/Chicago").to_date)
     Rails.logger.info "Event is #{event&.id}"
     return unless event
 
