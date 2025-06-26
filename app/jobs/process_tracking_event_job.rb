@@ -21,9 +21,11 @@ class ProcessTrackingEventJob < ApplicationJob
   def map_to_event_and_location(tracking_event)
     Rails.logger.info "Mapping to location"
     Rails.logger.info "Submitted location is #{tracking_event.submitted_location}"
-    Rails.logger.info "Scanned at #{tracking_event.scanned_at}"
 
-    event = Event.find_by(date: tracking_event.scanned_at.in_time_zone("America/Chicago").to_date)
+    scanned_at = tracking_event.scanned_at.in_time_zone("America/Chicago")
+    Rails.logger.info "Scanned at #{tracking_event.scanned_at} (#{scanned_at.to_date})"
+
+    event = Event.find_by(date: scanned_at.to_date)
     Rails.logger.info "Event is #{event&.id}"
     return unless event
 
