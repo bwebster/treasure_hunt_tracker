@@ -46,7 +46,8 @@ module Api
     private
 
     def find_location(location, scanned_at)
-      event = Event.find_by(date: scanned_at.to_date)
+      scanned_at = scanned_at.in_time_zone("America/Chicago").to_date
+      event = Event.find_by(date: scanned_at)
       return unless event
 
       event.locations.find_by(number: location)
