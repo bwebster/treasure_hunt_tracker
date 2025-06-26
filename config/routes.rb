@@ -27,8 +27,10 @@ Rails.application.routes.draw do
   patch "voice_settings", to: "voice_settings#update"
 
   get "register", to: "rfid_tags#register"
+  get "display", to: "progress#display"
   get "admin", to: "application#admin"
   post "tts", to: "speak#tts"
+  post "tts/progress", to: "speak#progress"
 
   mount MissionControl::Jobs::Engine, at: "/jobs"
   mount ActionCable.server => "/cable"

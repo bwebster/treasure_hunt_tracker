@@ -20,4 +20,12 @@ class Event < ApplicationRecord
 
   validates :name, presence: true
   validates :date, presence: true, uniqueness: { message: "already has an event scheduled." }
+
+  # Find event given a scanned_at time.  NOTE: the passed in timestamp will be in UTC,
+  # so you need to translate it to local time to properly match an event.
+  def self.for_scan(scanned_at)
+    return nil unless scanned_at
+
+    Event.find_by(date: scanned_at.in_time_zone("America/Chicago").to_date)
+  end
 end

@@ -39,6 +39,9 @@
                           <% if loc.registration? %>
                             <button id="toggle-listening" data-location-id="<%= loc.id %>" class="toggle-registration btn btn-sm btn-primary p-0 px-1 mx-2">Enter Registration Mode</button>
                           <% end %>
+                          <% if loc.display? %>
+                            <button id="toggle-listening" data-location-id="<%= loc.id %>" class="toggle-display btn btn-sm btn-primary p-0 px-1 mx-2">Enter Display Mode</button>
+                          <% end %>
                         </td>
                       </tr>
                     <% end %>

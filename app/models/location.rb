@@ -5,6 +5,7 @@
 # Table name: locations
 #
 #  id           :uuid             not null, primary key
+#  display      :boolean
 #  name         :string
 #  number       :integer
 #  registration :boolean          default(FALSE), not null

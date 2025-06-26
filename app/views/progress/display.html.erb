@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-sm border-3" style="width: 80%;">
+      <div class="card-header text-center">
+        <h2 style="font-size: 5rem;"><%= @username %></h2>
+      </div>
+      <div class="card-body text-center py-5">
+        <h1 style="font-size: 8rem;"><%= number_with_delimiter(@score) %> points</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    <% if params[:tracking_event_id].present? %>
+    document.addEventListener("DOMContentLoaded", () => {
+        async function speakText(tracking_event_id, score) {
+            const response = await fetch("/tts/progress", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    tracking_event_id: tracking_event_id,
+                    score: score
+                })
+            });
+
+            if (response.status === 204) { // No TTS content
+                return;
+            } else if (!response.ok) {
+                console.error(`HTTP error: ${response.status}`);
+                return;
+            }
+
+            const audioData = await response.arrayBuffer();
+            const blob = new Blob([audioData], { type: "audio/mpeg" });
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio(url);
+            audio.play();
+
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 5000);
+        }
+
+        speakText("<%= params[:tracking_event_id] %>", <%= @score %>);
+    });
+    <% end %>
+</script>

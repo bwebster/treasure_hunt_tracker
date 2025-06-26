@@ -123,4 +123,43 @@ namespace :simulate do
 
     puts "✅ Simulation complete!"
   end
+
+  desc "Simulate a single display location scan"
+  task display_scan: :environment do
+    api_endpoint = if ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME")
+                     "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/tracking_events"
+                   else
+                     "http://localhost:3000/api/tracking_events"
+                   end
+
+    rfid_tag_id = ENV.fetch("RFID") { RfidTag.all.sample.tag_id }
+
+    location = Location.where(display: true).sample
+    event = location.event
+    unless location
+      puts "No display location found. Exiting."
+      return
+    end
+
+    at = event.date.in_time_zone("America/Chicago").to_time # Date in local timezone
+    at += 9.upto(12).to_a.sample.hours
+
+    payload = {
+      id: rfid_tag_id,
+      loc: location.number,
+      at: at
+    }
+
+    # Send the HTTP POST request to create a tracking event
+    uri = URI(api_endpoint)
+    response = Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
+
+    if response.code == "201"
+      puts "✔ Event: RFID #{rfid_tag_id} scanned at #{location.name} (#{event.name}) at #{event.date}"
+    else
+      puts "❌ Event failed: #{response.body}"
+    end
+
+    puts "✅ Simulation complete!"
+  end
 end

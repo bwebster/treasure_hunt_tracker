@@ -3,14 +3,17 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "bootstrap"
 import "channels/register_channel";
+import "channels/display_channel";
 import "tom-select";
 
 document.addEventListener("turbo:load", () => {
     const register = "Enter Registration Mode";
     const exitRegistration = "Exit Registration Mode";
 
+    const display = "Enter Display Mode";
+    const exitDisplay = "Exit Display Mode";
+
     document.querySelectorAll(".searchable-select").forEach((el) => {
-        console.log("Adding tom-select to ", el);
         const select = new TomSelect(el, {
             maxItems: 1,
             allowEmptyOption: true,
@@ -23,6 +26,7 @@ document.addEventListener("turbo:load", () => {
         });
     });
 
+    // Registration setup
     document.querySelectorAll(".toggle-registration").forEach(button => {
         button.addEventListener("click", (event) => {
             const number = event.target.getAttribute("data-location-id");
@@ -60,6 +64,47 @@ document.addEventListener("turbo:load", () => {
         });
         document.querySelectorAll('.rfid_tag_edit_cancel').forEach(el => {
             el.href = "/register";
+        });
+    }
+
+    // Display setup
+    document.querySelectorAll(".toggle-display").forEach(button => {
+        button.addEventListener("click", (event) => {
+            const number = event.target.getAttribute("data-location-id");
+
+            const locationNumber = localStorage.getItem("display.listening_enabled");
+            if (locationNumber === number) {
+                event.target.innerHTML = register;
+                localStorage.removeItem("listening_enabled");
+                console.log(`✅ Display exited for location ${locationNumber}`);
+            } else {
+                document.querySelectorAll(`.toggle-display[data-location-id="${locationNumber}"]`).forEach(el => {
+                    el.innerHTML = register;
+                });
+
+                localStorage.setItem("display.listening_enabled", number);
+                event.target.innerHTML = exitRegistration;
+                console.log(`✅ Display entered for location ${number}`);
+                window.location.href = '/';
+            }
+        });
+    });
+
+    const displayLocationNumber = localStorage.getItem("display.listening_enabled");
+    console.log("Current display location number", locationNumber);
+    if (displayLocationNumber) {
+        console.log(`✅ Display entered for location ${displayLocationNumber} at load`);
+        document.querySelectorAll(`.toggle-display`).forEach(el => {
+            el.innerHTML = register;
+        });
+        document.querySelectorAll(`.toggle-display[data-location-id="${locationNumber}"]`).forEach(el => {
+            el.innerHTML = exitRegistration;
+        });
+        document.querySelectorAll('input[name="display_mode"]').forEach(el => {
+            el.value = true;
+        });
+        document.querySelectorAll('.rfid_tag_edit_cancel').forEach(el => {
+            el.href = "/";
         });
     }
 

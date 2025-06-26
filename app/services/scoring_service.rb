@@ -11,6 +11,11 @@ class ScoringService
     TYPE_MULTIPLE_SCAN_BONUS => Integer(ENV.fetch("TYPE_MULTIPLE_SCAN_BONUS", "1000")) # multiplied by count of previous scan
   }.freeze
 
+  def self.get_score(user:)
+    ids = user.rfid_tags.map(&:id)
+    Score.where(rfid_tag_id: ids).sum(:score)
+  end
+
   def self.score(tracking_event:)
     new.score(tracking_event: tracking_event)
   end

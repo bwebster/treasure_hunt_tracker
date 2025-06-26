@@ -12,13 +12,13 @@ require "mustache"
 #  updated_at :datetime         not null
 #
 class WelcomeLine < ApplicationRecord
-  VALID_TEMPLATE_KEYS = %w[username location].freeze
+  VALID_TEMPLATE_KEYS = %w[username location score].freeze
 
   validates :text, presence: true
   validate :valid_template
 
-  def interpolate(username:, location:)
-    Mustache.render(text, { username:, location: })
+  def interpolate(username:, location:, score: 0)
+    Mustache.render(text, { username:, location:, score: })
   end
 
   private

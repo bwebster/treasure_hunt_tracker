@@ -8,31 +8,32 @@ module Api
 
     def create
       rfid_id = params[:rfid_id] || params[:id]
-      location = params[:location] || params[:loc]
+      submitted_location = params[:location] || params[:loc]
       scanned_at = params[:scanned_at] || params[:at] || Time.current
       metadata = params[:metadata]
 
+      location = find_location(scanned_at, submitted_location)
+
       rfid_tag = nil
       tracking_event = ActiveRecord::Base.transaction do
-        begin
-          rfid_tag = RfidTag.find_or_create_by!(tag_id: rfid_id) do |tag|
-            tag.label = RfidTag.generate_label
-          end
-        rescue ActiveRecord::RecordInvalid => e
-          retry if "Label has already been taken".match?(e.message)
-        end
+        rfid_tag = find_or_create_tag(rfid_id)
 
         rfid_tag.tracking_events.create!(
-          submitted_location: location,
+          submitted_location: submitted_location,
           scanned_at: scanned_at,
-          metadata: metadata
+          metadata: metadata,
+          location_id: location&.id
         )
       end
 
-      location = find_location(location, scanned_at)
       if location&.registration?
         ActionCable.server.broadcast("register_channel", {
                                        rfid_id: rfid_tag.id,
+                                       location_number: location.id,
+                                       tracking_event_id: tracking_event.id
+                                     })
+      elsif location&.display?
+        ActionCable.server.broadcast("display_channel", {
                                        location_number: location.id,
                                        tracking_event_id: tracking_event.id
                                      })
@@ -45,12 +46,25 @@ module Api
 
     private
 
-    def find_location(location, scanned_at)
-      scanned_at = scanned_at.in_time_zone("America/Chicago").to_date
-      event = Event.find_by(date: scanned_at)
+    def find_or_create_tag(rfid_id)
+      RfidTag.find_or_create_by!(tag_id: rfid_id) do |tag|
+        tag.label = RfidTag.generate_label
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      retry if "Label has already been taken".match?(e.message)
+    end
+
+    def find_location(scanned_at, submitted_location)
+      Rails.logger.info "Finding location for submitted location id #{submitted_location} and date #{scanned_at}"
+
+      event = Event.for_scan(scanned_at)
+      Rails.logger.info "Event is #{event&.id}"
       return unless event
 
-      event.locations.find_by(number: location)
+      location = event.locations.find_by(number: submitted_location)
+      Rails.logger.info "Location is #{location&.name}"
+
+      location
     end
 
     def handle_exception(exception)

@@ -50,6 +50,7 @@
               <th>#</th>
               <th>Name</th>
               <th>Registration Station</th>
+              <th>Display Station</th>
               <th>Actions</th>
             </tr>
             </thead>
@@ -64,6 +65,11 @@
                 </td>
                 <td>
                   <% if location.registration? %>
+                    Yes
+                  <% end %>
+                </td>
+                <td>
+                  <% if location.display? %>
                     Yes
                   <% end %>
                 </td>

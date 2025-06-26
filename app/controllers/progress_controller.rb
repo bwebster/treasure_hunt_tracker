@@ -7,6 +7,25 @@ class ProgressController < ApplicationController
     @scores = scores_by_tag
   end
 
+  def display
+    @score = 0
+    @username = nil
+
+    tracking_event = TrackingEvent.find_by(id: params[:tracking_event_id])
+    return unless tracking_event
+
+    rfid_tag = tracking_event.rfid_tag
+    return unless rfid_tag
+
+    @username = rfid_tag.label
+
+    user = rfid_tag.user
+    return unless user
+
+    @username = user.username
+    @score = ScoringService.get_score(user:)
+  end
+
   private
 
   def results_by_tag
