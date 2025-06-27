@@ -15,7 +15,7 @@ task register: :environment do
   raise "No event found for date #{date}" unless event
 
   location_number = ENV.fetch("LOCATION") { event.locations.where(registration: true).first.number }
-  location = Location.find_by(number: location_number)
+  location = Location.where(event_id: event.id).find_by(number: location_number)
   raise "No location found for number #{location_number}" unless location
 
   rfid = RfidTag.create!(tag_id: SecureRandom.uuid[0..6], label: RfidTag.generate_label)
