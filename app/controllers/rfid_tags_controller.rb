@@ -44,9 +44,12 @@ class RfidTagsController < AdminController
   end
 
   def update
+    # Need to propagate these values for registration mode
+    @user_id = params[:user_id]
+    @location_id = params[:location_id]
+    in_registration_mode = params[:registration_mode]
+
     update_params = rfid_tag_params
-    user_id = params[:user_id]
-    location_id = params[:location_id]
 
     username = params[:rfid_tag][:new_username]
     if username.present?
@@ -72,14 +75,14 @@ class RfidTagsController < AdminController
     @rfid_tag.assign_attributes(update_params)
 
     set_username = !had_username && @rfid_tag.user&.username.present?
-    user_id = @rfid_tag.user&.id if set_username
+    @user_id = @rfid_tag.user&.id if set_username
 
     @users = get_all_users
     if @rfid_tag.save
-      if params[:registration_mode] == "true"
+      if in_registration_mode == "true"
         redirect_to register_path(
-          user_id: user_id,
-          location_id: location_id
+          user_id: @user_id,
+          location_id: @location_id
         ), notice: "RFID tag updated successfully."
       else
         redirect_to rfid_tags_path, notice: "RFID tag updated successfully."

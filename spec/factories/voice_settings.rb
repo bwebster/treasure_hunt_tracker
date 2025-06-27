@@ -5,6 +5,7 @@
 # Table name: voice_settings
 #
 #  id                :uuid             not null, primary key
+#  api_key           :string
 #  similarity_boost  :decimal(, )
 #  speed             :decimal(, )
 #  stability         :decimal(, )

@@ -7,11 +7,11 @@ class SpeakController < AdminController
 
   skip_before_action :verify_authenticity_token
 
-  API_KEY = ENV["ELEVENLABS_API_KEY"]
-
   def progress
-    if API_KEY.blank?
-      Rails.logger.info "Skipping TTS"
+    settings = VoiceSetting.singleton
+
+    if settings.api_key.blank?
+      Rails.logger.info "Skipping TTS - no API key"
       return render json: {}, status: :no_content
     end
 
@@ -61,7 +61,7 @@ class SpeakController < AdminController
 
     uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{settings.rand_voice}/stream")
     req = Net::HTTP::Post.new(uri)
-    req["xi-api-key"] = API_KEY
+    req["xi-api-key"] = settings.api_key
     req["Content-Type"] = "application/json"
     req.body = {
       text:,
@@ -85,8 +85,10 @@ class SpeakController < AdminController
   end
 
   def tts
-    if API_KEY.blank?
-      Rails.logger.info "Skipping TTS"
+    settings = VoiceSetting.singleton
+
+    if settings.api_key.blank?
+      Rails.logger.info "Skipping TTS - no API key"
       return render json: {}, status: :no_content
     end
 
@@ -107,13 +109,11 @@ class SpeakController < AdminController
       location: location.name
     )
 
-    settings = VoiceSetting.singleton
-
     Rails.logger.info "Calling TTS with settings: #{settings.as_json}"
 
     uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{settings.rand_voice}/stream")
     req = Net::HTTP::Post.new(uri)
-    req["xi-api-key"] = API_KEY
+    req["xi-api-key"] = settings.api_key
     req["Content-Type"] = "application/json"
     req.body = {
       text:,

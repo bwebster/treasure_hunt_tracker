@@ -9,8 +9,9 @@ task register: :environment do
                  end
 
   method = ENV.fetch("METHOD", "http").downcase
-  date = ENV.fetch("DATE") { Event.order(date: :asc).first.date }
-  event = Event.where(date: date).first
+  date = ENV.fetch("DATE") { Date.today }
+  event = Event.find_by(date:)
+  event ||= Event.order(date: :asc).first
   raise "No event found for date #{date}" unless event
 
   location_number = ENV.fetch("LOCATION") { event.locations.where(registration: true).first.number }

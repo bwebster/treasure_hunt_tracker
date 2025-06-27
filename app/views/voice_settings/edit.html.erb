@@ -34,10 +34,10 @@
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <%= form.label :voice_ids, class: "form-label" %>
-              <%= form.text_field :voice_ids, class: "form-control" %>
+              <%= form.label :api_key, class: "form-label" %>
+              <%= form.text_field :api_key, class: "form-control" %>
               <div class="form-text">
-                Specify a comma-separated list of voice IDs.  Voices will be randomly selected.
+                API key for ElevenLabs.
               </div>
             </div>
 
@@ -73,6 +73,14 @@
             </div>
           </div>
           <div class="col-md-6">
+            <div class="mb-3">
+              <%= form.label :voice_ids, class: "form-label" %>
+              <%= form.text_field :voice_ids, class: "form-control" %>
+              <div class="form-text">
+                Specify a comma-separated list of voice IDs.  Voices will be randomly selected.
+              </div>
+            </div>
+
             <div class="mb-3">
               <%= form.label :model_id, class: "form-label" %>
               <%= form.text_field :model_id, class: "form-control" %>

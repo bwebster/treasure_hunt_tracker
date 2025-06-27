@@ -37,11 +37,11 @@ class VoiceSettingsController < AdminController
   private
 
   def voice_setting_params
-    params.expect(voice_setting: %i[stability use_speaker_boost similarity_boost style speed voice_ids])
+    params.expect(voice_setting: %i[api_key stability use_speaker_boost similarity_boost style speed voice_ids])
   end
 
   def get_usage
-    api_key = ENV["ELEVENLABS_API_KEY"]
+    api_key = VoiceSetting.singleton.api_key
     return Usage.unknown unless api_key
 
     uri = URI("https://api.elevenlabs.io/v1/user/subscription")
