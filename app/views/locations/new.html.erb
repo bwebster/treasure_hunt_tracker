@@ -32,6 +32,11 @@
           <%= f.label :registration, "Registration Location", class: "form-check-label" %>
         </div>
 
+        <div class="form-check mb-3">
+          <%= f.check_box :display, class: "form-check-input" %>
+          <%= f.label :display, "Display Location", class: "form-check-label" %>
+        </div>
+
         <div class="text-end">
           <%= link_to "Cancel", edit_event_path(@event), class: "btn btn-secondary" %>
           <%= f.submit "Save", class: "btn btn-primary" %>
