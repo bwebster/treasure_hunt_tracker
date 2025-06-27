@@ -26,6 +26,8 @@ module Api
         )
       end
 
+      ProcessTrackingEventJob.perform_later(tracking_event_id: tracking_event.id)
+
       if location&.registration?
         ActionCable.server.broadcast("register_channel", {
                                        rfid_id: rfid_tag.id,
@@ -37,8 +39,6 @@ module Api
                                        location_number: location.id,
                                        tracking_event_id: tracking_event.id
                                      })
-      else
-        ProcessTrackingEventJob.perform_later(tracking_event_id: tracking_event.id)
       end
 
       render json: { success: true, tracking_event: tracking_event }, status: :created
