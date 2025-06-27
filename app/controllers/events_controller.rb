@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EventsController < AdminController
-  before_action :set_event, only: %i[edit update destroy]
+  before_action :set_event, only: %i[edit update destroy copy_locations]
 
   def index
     @events = Event.order(:date)
@@ -21,7 +21,9 @@ class EventsController < AdminController
     end
   end
 
-  def edit; end
+  def edit
+    @other_events = Event.where.not(id: @event.id).order(:date)
+  end
 
   def update
     if @event.update(event_params)
@@ -35,6 +37,20 @@ class EventsController < AdminController
   def destroy
     @event.destroy
     redirect_to events_path, notice: "Event deleted successfully."
+  end
+
+  def copy_locations
+    copy_params = params.require(:event).permit(:copy_locations_from)
+    Event.find(copy_params[:copy_locations_from]).locations.each do |location|
+      @event.locations.build(location.attributes.except("id", "event_id", "created_at", "updated_at"))
+    end
+
+    if @event.save
+      redirect_to edit_event_path(@event), notice: "Locations copied successfully."
+    else
+      flash.now[:alert] = "Error copying locations."
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   private
