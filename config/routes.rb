@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   end
 
   resources :events do
+    patch :copy_locations, on: :member
+
     resources :locations, only: %i[new create edit update destroy]
   end
 

@@ -88,6 +88,16 @@
         </div>
       <% else %>
         <p class="text-muted">No locations found.</p>
+        <%= form_with model: @event, url: copy_locations_event_path(@event), local: true, data: { turbo: false } do |f| %>
+          <div class="mb-3">
+            <%= f.label :copy_locations_from, class: "form-label" %>
+            <%= f.collection_select :copy_locations_from, @other_events, :id, :name, {}, class: "form-select" %>
+          </div>
+
+          <div class="text-end">
+            <%= f.submit "Copy", class: "btn btn-primary" %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
