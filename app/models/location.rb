@@ -30,4 +30,6 @@ class Location < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :event_id, message: "must be unique per event" }
   validates :number, presence: true, uniqueness: { scope: :event_id, message: "must be unique per event" }
+
+  scope :for_event, ->(event) { where(event_id: event.id) }
 end

@@ -8,30 +8,24 @@ task register: :environment do
                    "http://localhost:3000/api/tracking_events"
                  end
 
-  method = ENV.fetch("METHOD", "http").downcase
   date = ENV.fetch("DATE") { Time.zone.now.in_time_zone("America/Chicago").to_date }
   event = Event.find_by(date:)
   event ||= Event.order(date: :asc).first
   raise "No event found for date #{date}" unless event
 
-  location_number = ENV.fetch("LOCATION") { event.locations.where(registration: true).first.number }
-  location = Location.where(event_id: event.id).find_by(number: location_number)
-  raise "No location found for number #{location_number}" unless location
+  number = ENV.fetch("LOCATION") { event.locations.where(registration: true).first&.number }
+  location = Location.for_event(event).find_by(number:)
+  raise "No location found for number #{number}" unless location
 
   rfid = RfidTag.create!(tag_id: SecureRandom.uuid[0..6], label: RfidTag.generate_label)
   puts "Registering RFID #{rfid.tag_id} (#{rfid.id}) at location #{location.number} (#{location.id})"
 
-  if method == "http"
-    payload = {
-      id: rfid.tag_id,
-      loc: location.number,
-      at: event.date
-    }
+  payload = {
+    id: rfid.tag_id,
+    loc: location.number
+  }
 
-    # Send the HTTP POST request to create a tracking event
-    uri = URI(api_endpoint)
-    Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
-  else
-    ActionCable.server.broadcast("register_channel", { rfid_id: rfid.id, location_number: location.id })
-  end
+  # Send the HTTP POST request to create a tracking event
+  uri = URI(api_endpoint)
+  Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
 end
