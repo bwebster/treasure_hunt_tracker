@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animated Eyes</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: white;
+      height: 100%;
+      overflow: hidden;
+    }
+    .face {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5vw;
+      padding: 5vh;
+      box-sizing: border-box;
+    }
+    .eye-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .eye {
+      width: 70vh;
+      height: 70vh;
+      background: white;
+      border: 5px solid black;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+    .pupil {
+      width: 35vh;
+      height: 35vh;
+      background: black;
+      border-radius: 50%;
+      position: absolute;
+      transition: left 1s ease-in-out, top 1s ease-in-out;
+    }
+    .eyelid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      border-radius: 50%;
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.2s ease-in-out;
+      z-index: 2;
+    }
+    .eye.blink .eyelid {
+      transform: scaleY(1);
+    }
+    .eyebrow {
+      width: 18vw;
+      height: 3vh;
+      background: black;
+      margin-bottom: 5vh;
+      transition: transform 0.5s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="face">
+    <div class="eye-wrapper">
+      <div class="eyebrow" id="left-brow"></div>
+      <div class="eye" id="left-eye">
+        <div class="eyelid"></div>
+        <div class="pupil" id="left-pupil"></div>
+      </div>
+    </div>
+    <div class="eye-wrapper">
+      <div class="eyebrow" id="right-brow"></div>
+      <div class="eye" id="right-eye">
+        <div class="eyelid"></div>
+        <div class="pupil" id="right-pupil"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const leftPupil = document.getElementById('left-pupil');
+    const rightPupil = document.getElementById('right-pupil');
+    const eyes = document.querySelectorAll('.eye');
+    const leftBrow = document.getElementById('left-brow');
+    const rightBrow = document.getElementById('right-brow');
+
+    function movePupils() {
+      // eye radius = 35vh, pupil radius = 17.5vh
+      // to hit the edge: max offset = eye radius - pupil radius = 17.5vh
+      const angle = Math.random() * 2 * Math.PI;
+      const dx = Math.cos(angle) * 17.5;
+      const dy = Math.sin(angle) * 17.5;
+
+      leftPupil.style.left = `calc(17.5vh + ${dx}vh)`;
+      leftPupil.style.top = `calc(17.5vh + ${dy}vh)`;
+      rightPupil.style.left = `calc(17.5vh + ${dx}vh)`;
+      rightPupil.style.top = `calc(17.5vh + ${dy}vh)`;
+    }
+
+    function blink() {
+      eyes.forEach(eye => eye.classList.add('blink'));
+      setTimeout(() => {
+        eyes.forEach(eye => eye.classList.remove('blink'));
+      }, 200);
+    }
+
+    function changeEyebrows() {
+      const angle = Math.random() * 40 - 20;
+      leftBrow.style.transform = `rotate(${angle}deg)`;
+      rightBrow.style.transform = `rotate(${-angle}deg)`;
+    }
+
+    setInterval(() => {
+      movePupils();
+      if (Math.random() < 0.3) blink();
+      changeEyebrows();
+    }, 2000);
+  </script>
+</body>
+</html>
