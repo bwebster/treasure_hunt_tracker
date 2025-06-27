@@ -18,7 +18,7 @@ task register: :environment do
   location = Location.find_by(number: location_number)
   raise "No location found for number #{location_number}" unless location
 
-  rfid = RfidTag.all.sample(1).first
+  rfid = RfidTag.create!(tag_id: SecureRandom.uuid[0..6], label: RfidTag.generate_label)
   puts "Registering RFID #{rfid.tag_id} (#{rfid.id}) at location #{location.number} (#{location.id})"
 
   if method == "http"
