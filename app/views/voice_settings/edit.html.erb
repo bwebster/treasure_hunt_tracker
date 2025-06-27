@@ -82,6 +82,15 @@
             </div>
 
             <div class="mb-3">
+              <%= form.label :robot_voice_ids, class: "form-label" %>
+              <%= form.text_field :robot_voice_ids, class: "form-control" %>
+              <div class="form-text">
+                Specify a comma-separated list of ROBOTIC voice IDs.  Voices will be randomly selected and used
+                in situations where a robotic voice is needed.
+              </div>
+            </div>
+
+            <div class="mb-3">
               <%= form.label :model_id, class: "form-label" %>
               <%= form.text_field :model_id, class: "form-control" %>
               <div class="form-text">

@@ -6,6 +6,7 @@
 #
 #  id                :uuid             not null, primary key
 #  api_key           :string
+#  robot_voice_ids   :string
 #  similarity_boost  :decimal(, )
 #  speed             :decimal(, )
 #  stability         :decimal(, )
@@ -25,6 +26,7 @@ class VoiceSetting < ApplicationRecord
   def self.singleton
     find_or_create_by(id: SINGLETON_ID) do |vs|
       vs.voice_ids = "6F5Zhi321D3Oq7v1oNT4" # Hank
+      vs.robot_voice_ids = "nPijfmaNgvm5OSN4xM8H" # Android X.Y. Z. - AI Robot of the Future
       vs.stability = 0.75
       vs.similarity_boost = 0.9
       vs.model_id = "eleven_flash_v2"
@@ -33,5 +35,9 @@ class VoiceSetting < ApplicationRecord
 
   def rand_voice
     (voice_ids || "").split(",").sample
+  end
+
+  def rand_robotic_voice
+    (robot_voice_ids || "").split(",").sample
   end
 end

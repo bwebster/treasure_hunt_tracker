@@ -37,7 +37,7 @@ class VoiceSettingsController < AdminController
   private
 
   def voice_setting_params
-    params.expect(voice_setting: %i[api_key stability use_speaker_boost similarity_boost style speed voice_ids])
+    params.expect(voice_setting: %i[api_key stability use_speaker_boost similarity_boost style speed voice_ids robot_voice_ids])
   end
 
   def get_usage

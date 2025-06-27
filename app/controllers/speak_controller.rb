@@ -59,8 +59,7 @@ class SpeakController < AdminController
 
     Rails.logger.info "Calling TTS with settings: #{settings.as_json}"
 
-    voice_id = "nPijfmaNgvm5OSN4xM8H"; # Android X.Y. Z. - AI Robot of the Future
-    uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{voice_id}/stream")
+    uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{settings.rand_robotic_voice}/stream")
     req = Net::HTTP::Post.new(uri)
     req["xi-api-key"] = settings.api_key
     req["Content-Type"] = "application/json"

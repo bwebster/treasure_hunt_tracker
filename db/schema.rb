@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_27_133746) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_27_183123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -226,6 +226,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_27_133746) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "api_key"
+    t.string "robot_voice_ids"
   end
 
   create_table "welcome_lines", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

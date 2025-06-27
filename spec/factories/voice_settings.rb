@@ -6,6 +6,7 @@
 #
 #  id                :uuid             not null, primary key
 #  api_key           :string
+#  robot_voice_ids   :string
 #  similarity_boost  :decimal(, )
 #  speed             :decimal(, )
 #  stability         :decimal(, )
