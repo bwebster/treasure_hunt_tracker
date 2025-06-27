@@ -83,8 +83,14 @@ namespace :simulate do
     rfid_tags += Array.new(20 - rfid_tags.count) { SecureRandom.hex(4) }
     puts "Added #{20 - rfid_tags.count} new tags to use"
 
-    # Fetch all available events with locations
-    events = Event.includes(:locations).where.not(locations: { id: nil }).to_a
+    # If date is provided, fetch event for date
+    # Otherwise, fetch all available events with locations
+    date = ENV["DATE"]
+    events = if date
+               Event.where(date:).to_a
+             else
+               Event.includes(:locations).where.not(locations: { id: nil }).to_a
+             end
     if events.empty?
       puts "No events with locations found. Exiting."
       exit
@@ -118,7 +124,11 @@ namespace :simulate do
       end
 
       # Wait for a random amount of time before the next request
-      sleep(rand(delay_range))
+      if location.display? && location.registration?
+        sleep(7)
+      else
+        sleep(rand(delay_range))
+      end
     end
 
     puts "✅ Simulation complete!"
