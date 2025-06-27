@@ -9,7 +9,7 @@ task register: :environment do
                  end
 
   method = ENV.fetch("METHOD", "http").downcase
-  date = ENV.fetch("DATE") { Date.today }
+  date = ENV.fetch("DATE") { Time.zone.now.in_time_zone("America/Chicago").to_date }
   event = Event.find_by(date:)
   event ||= Event.order(date: :asc).first
   raise "No event found for date #{date}" unless event
