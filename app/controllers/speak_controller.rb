@@ -59,7 +59,8 @@ class SpeakController < AdminController
 
     Rails.logger.info "Calling TTS with settings: #{settings.as_json}"
 
-    uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{settings.rand_voice}/stream")
+    voice_id = "nPijfmaNgvm5OSN4xM8H"; # Android X.Y. Z. - AI Robot of the Future
+    uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{voice_id}/stream")
     req = Net::HTTP::Post.new(uri)
     req["xi-api-key"] = settings.api_key
     req["Content-Type"] = "application/json"
@@ -67,11 +68,11 @@ class SpeakController < AdminController
       text:,
       model_id: settings.model_id,
       voice_settings: {
-        stability: settings.stability,
-        use_speaker_boost: settings.use_speaker_boost,
-        similarity_boost: settings.similarity_boost,
-        style: settings.style,
-        speed: settings.speed
+        stability: 0.95,
+        # use_speaker_boost: settings.use_speaker_boost,
+        similarity_boost: 0.95,
+        # style: settings.style,
+        speed: 1.2
       }
     }.to_json
 

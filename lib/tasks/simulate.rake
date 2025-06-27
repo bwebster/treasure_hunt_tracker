@@ -134,7 +134,14 @@ namespace :simulate do
 
     rfid_tag_id = ENV.fetch("RFID") { RfidTag.all.sample.tag_id }
 
-    location = Location.where(display: true).sample
+    date = ENV.fetch("DATE") { Time.zone.now.in_time_zone("America/Chicago").to_date }
+    event = Event.find_by(date:)
+    event ||= Event.order(date: :asc).first
+    raise "No event found for date #{date}" unless event
+
+    puts "Found event: #{event.name} on #{event.date}"
+
+    location = Location.for_event(event).where(display: true).sample
     event = location.event
     unless location
       puts "No display location found. Exiting."

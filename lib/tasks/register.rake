@@ -13,6 +13,8 @@ task register: :environment do
   event ||= Event.order(date: :asc).first
   raise "No event found for date #{date}" unless event
 
+  puts "Found event: #{event.name} on #{event.date}"
+
   number = ENV.fetch("LOCATION") { event.locations.where(registration: true).first&.number }
   location = Location.for_event(event).find_by(number:)
   raise "No location found for number #{number}" unless location

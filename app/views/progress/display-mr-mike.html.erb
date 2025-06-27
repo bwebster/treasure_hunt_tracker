@@ -1,0 +1,52 @@
+<% if @username.present? %>
+  <div class="card overlay-card">
+    <div class="card-header text-center">
+      <h2 class="card-title"><%= @username %></h2>
+    </div>
+    <div class="card-body text-center py-5">
+      <h1 class="card-text"><%= number_with_delimiter(@score) %> points</h1>
+    </div>
+  </div>
+  <script>
+      <% if params[:tracking_event_id].present? %>
+      document.addEventListener("DOMContentLoaded", () => {
+          async function speakText(tracking_event_id, score) {
+              const response = await fetch("/tts/progress", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                      tracking_event_id: tracking_event_id,
+                      score: score
+                  })
+              });
+
+              if (response.status === 204) { // No TTS content
+                  return;
+              } else if (!response.ok) {
+                  console.error(`HTTP error: ${response.status}`);
+                  return;
+              }
+
+              const audioData = await response.arrayBuffer();
+              const blob = new Blob([audioData], { type: "audio/mpeg" });
+              const url = URL.createObjectURL(blob);
+              const audio = new Audio(url);
+              audio.play();
+
+              setTimeout(() => {
+                  document.getElementsByClassName('overlay-card')[0].classList.add('hidden');
+                  setTimeout(() => {
+                      console.log("Waited, now redirecting");
+                      window.location.href = '/display';
+                  }, 1000);
+              }, 5000);
+          }
+
+          speakText("<%= params[:tracking_event_id] %>", <%= @score %>);
+      });
+      <% end %>
+  </script>
+
+<% end %>

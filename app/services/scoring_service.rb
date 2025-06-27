@@ -16,6 +16,10 @@ class ScoringService
     Score.where(rfid_tag_id: ids).sum(:score)
   end
 
+  def self.get_score_for_tag(tag:)
+    Score.where(rfid_tag_id: tag.id).sum(:score)
+  end
+
   def self.score(tracking_event:)
     new.score(tracking_event: tracking_event)
   end

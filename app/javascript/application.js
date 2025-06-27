@@ -73,38 +73,33 @@ document.addEventListener("turbo:load", () => {
             const number = event.target.getAttribute("data-location-id");
 
             const locationNumber = localStorage.getItem("display.listening_enabled");
+            console.log(`Currently listening for display events for location ${locationNumber}`);
             if (locationNumber === number) {
-                event.target.innerHTML = register;
-                localStorage.removeItem("listening_enabled");
+                event.target.innerHTML = display;
+                localStorage.removeItem("display.listening_enabled");
                 console.log(`✅ Display exited for location ${locationNumber}`);
             } else {
                 document.querySelectorAll(`.toggle-display[data-location-id="${locationNumber}"]`).forEach(el => {
-                    el.innerHTML = register;
+                    el.innerHTML = display;
                 });
 
                 localStorage.setItem("display.listening_enabled", number);
-                event.target.innerHTML = exitRegistration;
+                event.target.innerHTML = exitDisplay;
                 console.log(`✅ Display entered for location ${number}`);
-                window.location.href = '/';
+                window.location.href = '/display';
             }
         });
     });
 
     const displayLocationNumber = localStorage.getItem("display.listening_enabled");
-    console.log("Current display location number", locationNumber);
+    console.log("Current display location number", displayLocationNumber);
     if (displayLocationNumber) {
         console.log(`✅ Display entered for location ${displayLocationNumber} at load`);
         document.querySelectorAll(`.toggle-display`).forEach(el => {
-            el.innerHTML = register;
+            el.innerHTML = display;
         });
-        document.querySelectorAll(`.toggle-display[data-location-id="${locationNumber}"]`).forEach(el => {
-            el.innerHTML = exitRegistration;
-        });
-        document.querySelectorAll('input[name="display_mode"]').forEach(el => {
-            el.value = true;
-        });
-        document.querySelectorAll('.rfid_tag_edit_cancel').forEach(el => {
-            el.href = "/";
+        document.querySelectorAll(`.toggle-display[data-location-id="${displayLocationNumber}"]`).forEach(el => {
+            el.innerHTML = exitDisplay;
         });
     }
 

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= content_for(:title) || "Life.Church At The Movies" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= yield :head %>
+
+  <title>Mr Mike</title>
+
+  <%# Includes all stylesheet files in app/assets/stylesheets %>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;700&display=swap" rel="stylesheet">
+
+  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <style>
+      html, body {
+          margin: 0;
+          padding: 0;
+          background: white;
+          height: 100%;
+          overflow: hidden;
+      }
+  </style>
+</head>
+<body class="mr-mike">
+<div class="face">
+  <div class="eye-wrapper">
+    <div class="eyebrow" id="left-brow"></div>
+    <div class="eye" id="left-eye">
+      <div class="eyelid"></div>
+      <div class="pupil" id="left-pupil"></div>
+    </div>
+  </div>
+  <div class="eye-wrapper">
+    <div class="eyebrow" id="right-brow"></div>
+    <div class="eye" id="right-eye">
+      <div class="eyelid"></div>
+      <div class="pupil" id="right-pupil"></div>
+    </div>
+  </div>
+</div>
+<%= yield %>
+
+<script>
+    const leftPupil = document.getElementById('left-pupil');
+    const rightPupil = document.getElementById('right-pupil');
+    const eyes = document.querySelectorAll('.eye');
+    const leftBrow = document.getElementById('left-brow');
+    const rightBrow = document.getElementById('right-brow');
+
+    function movePupils() {
+        const angle = Math.random() * 2 * Math.PI;
+        const dx = Math.cos(angle) * 17.5;
+        const dy = Math.sin(angle) * 17.5;
+
+        leftPupil.style.left = `calc(17.5vh + ${dx}vh)`;
+        leftPupil.style.top = `calc(17.5vh + ${dy}vh)`;
+        rightPupil.style.left = `calc(17.5vh + ${dx}vh)`;
+        rightPupil.style.top = `calc(17.5vh + ${dy}vh)`;
+    }
+
+    function blink() {
+        eyes.forEach(eye => eye.classList.add('blink'));
+        setTimeout(() => {
+            eyes.forEach(eye => eye.classList.remove('blink'));
+        }, 200);
+    }
+
+    function changeEyebrows() {
+        const angle = Math.random() * 40 - 20;
+        leftBrow.style.transform = `rotate(${angle}deg)`;
+        rightBrow.style.transform = `rotate(${-angle}deg)`;
+    }
+
+    setInterval(() => {
+        movePupils();
+        if (Math.random() < 0.3) blink();
+        changeEyebrows();
+    }, 2000);
+</script>
+</body>
+</html>

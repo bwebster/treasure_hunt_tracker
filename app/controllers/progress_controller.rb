@@ -12,18 +12,17 @@ class ProgressController < ApplicationController
     @username = nil
 
     tracking_event = TrackingEvent.find_by(id: params[:tracking_event_id])
-    return unless tracking_event
+    return render template: "progress/display-mr-mike", layout: "mr_mike" unless tracking_event
 
     rfid_tag = tracking_event.rfid_tag
-    return unless rfid_tag
+    @username = rfid_tag.user&.username || rfid_tag.label
+    @score = if rfid_tag.user
+               ScoringService.get_score(user: rfid_tag.user) if rfid_tag.user
+             else
+               ScoringService.get_score_for_tag(tag: rfid_tag)
+             end
 
-    @username = rfid_tag.label
-
-    user = rfid_tag.user
-    return unless user
-
-    @username = user.username
-    @score = ScoringService.get_score(user:)
+    render template: "progress/display-mr-mike", layout: "mr_mike"
   end
 
   private

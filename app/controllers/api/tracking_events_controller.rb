@@ -58,11 +58,11 @@ module Api
       Rails.logger.info "Finding location for submitted location id #{submitted_location} and date #{scanned_at}"
 
       event = Event.for_scan(scanned_at)
-      Rails.logger.info "Event is #{event&.id}"
+      Rails.logger.info "Event is #{event&.name} on #{event&.date}"
       return unless event
 
       location = event.locations.find_by(number: submitted_location)
-      Rails.logger.info "Location is #{location&.name}"
+      Rails.logger.info "Location is #{location&.number} - #{location&.name}"
 
       location
     end
