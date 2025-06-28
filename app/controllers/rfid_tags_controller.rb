@@ -2,6 +2,7 @@
 
 class RfidTagsController < AdminController
   PAGE_SIZE = ENV.fetch("RFID_TAGS_PER_PAGE", 30).to_i
+  UUID_REGEX = /\A[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/i
 
   before_action :set_user, only: %i[create destroy]
   before_action :set_rfid_tag, only: %i[edit update]
@@ -44,51 +45,38 @@ class RfidTagsController < AdminController
   end
 
   def update
-    # Need to propagate these values for registration mode
-    @user_id = params[:user_id]
-    @location_id = params[:location_id]
-    in_registration_mode = params[:registration_mode]
+    # For registration - we need to proxy along these params
+    user_id = params[:user_id]
+    location_id = params[:location_id]
 
     update_params = rfid_tag_params
-
-    username = params[:rfid_tag][:new_username]
-    if username.present?
-      begin
-        user = User.create!(username: username)
-      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
-        flash.now[:alert] = "Username #{username} already taken!"
-
-        @users = get_all_users
-        @scores = Score.where(rfid_tag: @rfid_tag).order(created_at: :asc)
-
-        render :edit, status: :unprocessable_entity
-        return
-      end
-
-      update_params[:user_id] = user.id
-    end
+    registration_mode = update_params[:registration_mode] == "true"
 
     # Regenerate a label if needed
     update_params[:label] = RfidTag.generate_label if update_params[:label].blank?
 
-    had_username = @rfid_tag.user&.username.present?
-    @rfid_tag.assign_attributes(update_params)
+    # If it's not a number, treat it as a new username
+    user_id_or_name = update_params[:user_id]
+    if user_id_or_name.present? && !uuid?(user_id_or_name)
+      new_user = User.find_or_create_by(username: user_id_or_name)
+      update_params[:user_id] = new_user.id
+    end
 
-    set_username = !had_username && @rfid_tag.user&.username.present?
-    @user_id = @rfid_tag.user&.id if set_username
+    if @rfid_tag.update(update_params)
+      if registration_mode
+        user_id = @rfid_tag.user&.id if @rfid_tag.user.previous_changes.key?(:username)
 
-    @users = get_all_users
-    if @rfid_tag.save
-      if in_registration_mode == "true"
-        redirect_to register_path(
-          user_id: @user_id,
-          location_id: @location_id
-        ), notice: "RFID tag updated successfully."
+        redirect_to register_path(user_id:, location_id:), notice: "RFID tag updated successfully."
       else
         redirect_to rfid_tags_path, notice: "RFID tag updated successfully."
       end
+    elsif registration_mode
+      # Go back to registration with errors
+      redirect_to register_path(user_id:, location_id:)
     else
-      flash.now[:alert] = "Error updating RFID tag."
+      # Go back to edit with errors
+      @users = get_all_users
+      @scores = Score.where(rfid_tag: @rfid_tag).order(created_at: :asc)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -112,6 +100,10 @@ class RfidTagsController < AdminController
   end
 
   def rfid_tag_params
-    params.require(:rfid_tag).permit(:user_id, :label)
+    params.require(:rfid_tag).permit(:label, :user_id, user_attributes: [:username])
+  end
+
+  def uuid?(value)
+    value.to_s.match?(UUID_REGEX)
   end
 end

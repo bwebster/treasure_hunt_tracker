@@ -91,6 +91,18 @@ $table-striped-color: lighten($info, 10%);
   background-color: var(--bs-body-bg); // optional: match your theme background
   border-color: var(--bs-border-color); // optional: match Bootstrap border
 }
+.ts-control.single .item {
+  background-color: transparent;
+  color: #212529;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.ts-control.single.focus {
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
 
 .mr-mike {
   .face {
@@ -104,12 +116,14 @@ $table-striped-color: lighten($info, 10%);
     padding-bottom: 5vh; /* optional: adds spacing from bottom edge */
     box-sizing: border-box;
   }
+
   .eye-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
   }
+
   .eye {
     width: 70vh; /* radius */
     height: 70vh; /* radius */
@@ -119,6 +133,7 @@ $table-striped-color: lighten($info, 10%);
     position: relative;
     overflow: hidden;
   }
+
   .pupil {
     width: 35vh;
     height: 35vh;
@@ -127,6 +142,7 @@ $table-striped-color: lighten($info, 10%);
     position: absolute;
     transition: left 1s ease-in-out, top 1s ease-in-out;
   }
+
   .eyelid {
     position: absolute;
     top: 0;
@@ -140,9 +156,11 @@ $table-striped-color: lighten($info, 10%);
     transition: transform 0.2s ease-in-out;
     z-index: 2;
   }
+
   .eye.blink .eyelid {
     transform: scaleY(1);
   }
+
   .eyebrow {
     width: 25vh;
     height: 3vh;
@@ -151,10 +169,12 @@ $table-striped-color: lighten($info, 10%);
     top: -10vh;
     transition: transform 0.5s ease-in-out;
   }
+
   #left-brow {
     left: 5vh;
     /* transform: rotate(15deg); */
   }
+
   #right-brow {
     right: 5vh;
     /* transform: rotate(-15deg); */
@@ -171,21 +191,25 @@ $table-striped-color: lighten($info, 10%);
     background-color: #007bff;
     color: white;
     border: 15px solid red;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     transition: transform 0.6s ease, opacity 0.5s ease;
   }
+
   .overlay-card .card-header {
     background-color: lighten(#007bff, 10%);
   }
+
   .overlay-card .card-title {
     color: yellow;
     font-weight: bold;
     font-size: 6rem;
   }
+
   .overlay-card .card-text {
     color: white;
     font-size: 9rem;
   }
+
   .overlay-card.hidden {
     transform: translate(-50%, -150%);
     opacity: 0;
