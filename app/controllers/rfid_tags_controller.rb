@@ -48,9 +48,9 @@ class RfidTagsController < AdminController
     # For registration - we need to proxy along these params
     user_id = params[:user_id]
     location_id = params[:location_id]
+    registration_mode = params[:registration_mode] == "true"
 
     update_params = rfid_tag_params
-    registration_mode = update_params[:registration_mode] == "true"
 
     # Regenerate a label if needed
     update_params[:label] = RfidTag.generate_label if update_params[:label].blank?
@@ -62,9 +62,12 @@ class RfidTagsController < AdminController
       update_params[:user_id] = new_user.id
     end
 
+    prev_username = @rfid_tag.username
+
     if @rfid_tag.update(update_params)
       if registration_mode
-        user_id = @rfid_tag.user&.id if @rfid_tag.user.previous_changes.key?(:username)
+        username_changed = prev_username.nil? || prev_username != @rfid_tag.username
+        user_id = @rfid_tag.user&.id if username_changed
 
         redirect_to register_path(user_id:, location_id:), notice: "RFID tag updated successfully."
       else
