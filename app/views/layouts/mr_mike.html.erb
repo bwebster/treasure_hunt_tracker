@@ -56,11 +56,12 @@
     const eyes = document.querySelectorAll('.eye');
     const leftBrow = document.getElementById('left-brow');
     const rightBrow = document.getElementById('right-brow');
+    const overlayCard = document.getElementById('overlayCard');
 
     function movePupils() {
         const angle = Math.random() * 2 * Math.PI;
-        const dx = Math.cos(angle) * 17.5;
-        const dy = Math.sin(angle) * 17.5;
+        const dx = Math.cos(angle) * 10;
+        const dy = Math.sin(angle) * 10;
 
         leftPupil.style.left = `calc(17.5vh + ${dx}vh)`;
         leftPupil.style.top = `calc(17.5vh + ${dy}vh)`;
@@ -76,9 +77,14 @@
     }
 
     function changeEyebrows() {
-        const angle = Math.random() * 40 - 20;
+        // angles flat or lifted
+        const angle = Math.floor(Math.random() * 26) - 25; // returns an integer between -10 and 0
         leftBrow.style.transform = `rotate(${angle}deg)`;
         rightBrow.style.transform = `rotate(${-angle}deg)`;
+    }
+
+    function hideCard() {
+        overlayCard.classList.add('hidden');
     }
 
     setInterval(() => {

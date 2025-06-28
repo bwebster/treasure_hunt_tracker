@@ -98,10 +98,10 @@ $table-striped-color: lighten($info, 10%);
     width: 100vw;
     height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-end; /* was center */
     justify-content: center;
     gap: 5vw;
-    padding: 5vh;
+    padding-bottom: 5vh; /* optional: adds spacing from bottom edge */
     box-sizing: border-box;
   }
   .eye-wrapper {
@@ -111,10 +111,10 @@ $table-striped-color: lighten($info, 10%);
     position: relative;
   }
   .eye {
-    width: 70vh;
-    height: 70vh;
+    width: 70vh; /* radius */
+    height: 70vh; /* radius */
     background: white;
-    border: 5px solid black;
+    border: 13px solid black; /* even thicker eye outline */
     border-radius: 50%;
     position: relative;
     overflow: hidden;
@@ -144,11 +144,20 @@ $table-striped-color: lighten($info, 10%);
     transform: scaleY(1);
   }
   .eyebrow {
-    width: 18vw;
+    width: 25vh;
     height: 3vh;
     background: black;
-    margin-bottom: 5vh;
+    position: absolute;
+    top: -10vh;
     transition: transform 0.5s ease-in-out;
+  }
+  #left-brow {
+    left: 5vh;
+    /* transform: rotate(15deg); */
+  }
+  #right-brow {
+    right: 5vh;
+    /* transform: rotate(-15deg); */
   }
 
   .overlay-card {
