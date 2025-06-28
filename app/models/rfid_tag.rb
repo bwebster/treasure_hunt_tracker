@@ -30,7 +30,9 @@ class RfidTag < ApplicationRecord
   validates :label, presence: true
   validates :label, uniqueness: true
 
-  delegate :username, to: :user
+  delegate :username, to: :user, allow_nil: true
+
+  accepts_nested_attributes_for :user
 
   # Generates a random label consisting of a color followed by 4 random digits, zero padded.
   def self.generate_label
