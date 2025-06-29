@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :tracking_events, only: [:create]
+    resources :health_checks, only: [:index]
   end
 
   resources :users, only: %i[index show edit update new create destroy] do
