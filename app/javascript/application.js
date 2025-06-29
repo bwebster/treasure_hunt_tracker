@@ -14,13 +14,15 @@ document.addEventListener("turbo:load", () => {
     const exitDisplay = "Exit Display Mode";
 
     document.querySelectorAll(".searchable-select").forEach((el) => {
-        new TomSelect(el, {
+        const sel = new TomSelect(el, {
+            // openOnFocus: true,
             maxItems: 1,
             allowEmptyOption: true,
             create: true,
             plugins: ['clear_button'],
             persist: false // Don't re-add deleted items automatically
         });
+        sel.focus();
     });
 
     // Registration setup
