@@ -13,34 +13,47 @@ class TrackingEventsController < AdminController
   end
 
   def activity
-    # List of dates with tracking data
+    time_zone = "America/Chicago"
+
+    # Get all unique days with tracking data
     @available_days = TrackingEvent
+                      .where.not(scanned_at: nil)
                       .distinct
-                      .pluck("DATE(scanned_at)")
+                      .pluck(Arel.sql("DATE(scanned_at AT TIME ZONE 'UTC' AT TIME ZONE '#{time_zone}')"))
                       .sort
 
     @selected_day = params[:day]&.to_date || @available_days.last
 
-    # Aggregate scans by location and 10-minute buckets
-    time_bucket = "date_trunc('hour', scanned_at) + (date_part('minute', scanned_at)::int / 10) * interval '10 minutes'"
-    @scan_data = TrackingEvent
-                 .where(scanned_at: @selected_day.all_day)
-                 .group(Arel.sql("location_id"), Arel.sql(time_bucket))
-                 .order(Arel.sql("location_id"), Arel.sql(time_bucket))
-                 .count
+    return unless @selected_day.present?
 
-    @locations = Location.where(id: @scan_data.keys.map(&:first).uniq).index_by(&:id)
+    # Precompute 144 10-minute intervals in local time
+    local_day_start = @selected_day.in_time_zone(time_zone).beginning_of_day
+    time_buckets = (0..143).map { |i| local_day_start + i * 10.minutes }
 
-    # Precompute full timeline
-    time_buckets = (0..143).map { |i| @selected_day.beginning_of_day + i * 10.minutes }
+    # SQL to convert scanned_at to local time and truncate into 10-minute intervals
+    time_zone_sql = "scanned_at AT TIME ZONE 'UTC' AT TIME ZONE '#{time_zone}'"
+    time_bucket_sql = <<~SQL.squish
+      date_trunc('hour', #{time_zone_sql}) +
+      floor(date_part('minute', #{time_zone_sql}) / 10) * interval '10 minutes'
+    SQL
 
-    # Map: { location_id => { "HH:MM" => count } }
-    @chart_data = @scan_data
-                  .group_by { |(location_id, _time), _count| location_id }
+    # Group and count in SQL
+    raw_data = TrackingEvent
+               .where("scanned_at >= ? AND scanned_at < ?", @selected_day.beginning_of_day, @selected_day.end_of_day)
+               .group(Arel.sql("location_id"), Arel.sql(time_bucket_sql))
+               .order(Arel.sql("location_id"), Arel.sql(time_bucket_sql))
+               .count
+
+    # Load locations
+    location_ids = raw_data.keys.map(&:first).uniq
+    @locations = Location.where(id: location_ids).index_by(&:id)
+
+    # Format data into: { location_id => { "HH:MM" => count } }
+    @chart_data = raw_data
+                  .group_by { |(location_id, _), _| location_id }
                   .transform_values do |entries|
       raw = entries.to_h { |((_loc_id, ts), count)| [ts.strftime("%H:%M"), count] }
 
-      # Fill in missing time slots with 0
       time_buckets.to_h do |ts|
         time_str = ts.strftime("%H:%M")
         [time_str, raw[time_str] || 0]
