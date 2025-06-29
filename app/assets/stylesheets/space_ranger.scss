@@ -113,7 +113,7 @@ $table-striped-color: lighten($info, 10%);
     align-items: flex-end; /* was center */
     justify-content: center;
     gap: 5vw;
-    padding-bottom: 5vh; /* optional: adds spacing from bottom edge */
+    padding-bottom: 13vh; /* optional: adds spacing from bottom edge */
     box-sizing: border-box;
   }
 
@@ -125,8 +125,8 @@ $table-striped-color: lighten($info, 10%);
   }
 
   .eye {
-    width: 70vh; /* radius */
-    height: 70vh; /* radius */
+    width: 60vh; /* radius */
+    height: 60vh; /* radius */
     background: white;
     border: 13px solid black; /* even thicker eye outline */
     border-radius: 50%;
