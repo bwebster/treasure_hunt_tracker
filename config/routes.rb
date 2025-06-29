@@ -21,7 +21,9 @@ Rails.application.routes.draw do
 
   resources :rfid_tags, only: %i[index edit update]
   resources :progress, only: [:index]
-  resources :tracking_events, only: [:index]
+  resources :tracking_events, only: [:index] do
+    get :activity, on: :collection
+  end
   resources :scores, only: [:index]
   resources :welcome_lines
 

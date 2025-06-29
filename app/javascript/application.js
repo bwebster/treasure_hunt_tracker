@@ -5,6 +5,13 @@ import "bootstrap"
 import "channels/register_channel";
 import "channels/display_channel";
 import "tom-select";
+import Chartkick from "chartkick";
+import "chart.js";
+
+Chartkick.use(Chart)
+
+// Make Chartkick global if needed in inline scripts:
+window.Chartkick = Chartkick
 
 document.addEventListener("turbo:load", () => {
     const register = "Enter Registration Mode";

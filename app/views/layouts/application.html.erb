@@ -23,6 +23,8 @@
   <%= javascript_importmap_tags %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css", media: "all" %>
+  <%#= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+  <%#= javascript_include_tag "chartkick" %>
 </head>
 
 <body class="<%= 'hide-navbar' if current_page?(register_path) || current_page?(root_path) || current_page?(display_path) %>">

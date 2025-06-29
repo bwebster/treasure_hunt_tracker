@@ -223,3 +223,11 @@ $table-striped-color: lighten($info, 10%);
     pointer-events: none;
   }
 }
+
+.chart-container {
+  height: 300px;
+  background-color: rgba(255, 255, 255, 0.08); // matches $card-bg
+  border: 1px solid #00FFFF; // matches $info
+  border-radius: 12px;
+  padding: 16px;
+}

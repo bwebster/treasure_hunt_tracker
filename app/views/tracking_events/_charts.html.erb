@@ -1,0 +1,56 @@
+<%= form_with url: activity_tracking_events_path, method: :get, local: true do |f| %>
+  <div class="row">
+  <div class="col-md-3 mt-3">
+    <%= f.label :day, "Select Date", class: "form-label" %>
+    <%= f.select :day, options_for_select(@available_days.map(&:to_s), @selected_day.to_s), {}, onchange: "this.form.submit()", class: "form-select" %>
+  </div>
+  </div>
+<% end %>
+
+<% @chart_data.each do |location_id, data| %>
+  <h3 class="mt-3"><%= @locations[location_id]&.name || "Unknown Location" %></h3>
+  <div id="chart-<%= location_id %>" class="chart-container"></div>
+
+  <script>
+      document.addEventListener("turbo:load", () => {
+          new Chartkick.ColumnChart("chart-<%= location_id %>", <%= raw data.to_json %>, {
+              xtitle: "Time",
+              ytitle: "Scans",
+              colors: ["#71C837"],
+              // library: {
+              //     scales: {
+              //         x: {
+              //             ticks: {
+              //                 color: "#00FFFF",
+              //                 font: {family: "Oxanium"},
+              //                 callback: function(value) {
+              //                     const str = String(value);
+              //                     return str.endsWith(":00") ? str : "";
+              //                 },
+              //                 autoSkip: false,
+              //                 maxRotation: 0,
+              //                 minRotation: 0
+              //             },
+              //             grid: {
+              //                 color: "rgba(0,255,255,0.1)"
+              //             }
+              //         },
+              //         y: {
+              //             ticks: {
+              //                 color: "#00FFFF",
+              //                 font: {family: "Oxanium"}
+              //             },
+              //             beginAtZero: true,
+              //             grid: {
+              //                 color: "rgba(0,255,255,0.1)"
+              //             }
+              //         }
+              //     },
+              //     plugins: {
+              //         legend: {display: false}
+              //     }
+              // }
+          });
+      });
+  </script>
+<% end %>
