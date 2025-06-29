@@ -5,7 +5,7 @@ import "bootstrap"
 import "channels/register_channel";
 import "channels/display_channel";
 import "tom-select";
-import Chartkick from "chartkick";
+import "chartkick";
 import "chart.js";
 
 Chartkick.use(Chart)
