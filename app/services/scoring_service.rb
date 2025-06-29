@@ -2,12 +2,14 @@
 
 class ScoringService
   TYPES = [
-    TYPE_SCAN = :scan,
-    TYPE_MULTIPLE_SCAN_BONUS = :multi_scan_bonus
+    TYPE_SCAN = "scan",
+    TYPE_SCAN_AGAIN = "scan_again",
+    TYPE_MULTIPLE_SCAN_BONUS = "multi_scan_bonus"
   ].freeze
 
   SCORING = {
     TYPE_SCAN => Integer(ENV.fetch("SCORING_TYPE_SCAN", "10000")),
+    TYPE_SCAN_AGAIN => Integer(ENV.fetch("SCORING_TYPE_SCAN", "100")),
     TYPE_MULTIPLE_SCAN_BONUS => Integer(ENV.fetch("TYPE_MULTIPLE_SCAN_BONUS", "1000")) # multiplied by count of previous scan
   }.freeze
 
@@ -43,7 +45,7 @@ class ScoringService
 
     begin
       scan_score = add_score_for_scan(tracking_event)
-      add_score_if_previous_scan(tracking_event) if scan_score
+      add_score_if_previous_scan(tracking_event) if scan_score && scan_score.score_type == TYPE_SCAN
     ensure
       ActiveRecord::Base.connection.execute(
         ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT pg_advisory_unlock(?)", lock_key])
@@ -58,10 +60,7 @@ class ScoringService
       Rails.logger.info "Skipping event - already scored"
       return
     end
-    if Score.where(rfid_tag_id: tracking_event.rfid_tag_id, location_id: tracking_event.location_id).any?
-      Rails.logger.info "Skipping event - score exists for tag and location"
-      return
-    end
+    prev_count = Score.where(rfid_tag_id: tracking_event.rfid_tag_id, location_id: tracking_event.location_id).count
 
     Score.find_or_create_by!(id: "#{tracking_event.id}-score") do |s|
       s.tracking_event_id = tracking_event.id
@@ -69,8 +68,9 @@ class ScoringService
       s.location_id = tracking_event.location_id
       s.rfid_tag_id = tracking_event.rfid_tag_id
 
-      s.score = SCORING.fetch(TYPE_SCAN)
-      s.score_type = TYPE_SCAN
+      type = prev_count.zero? ? TYPE_SCAN : TYPE_SCAN_AGAIN
+      s.score = SCORING.fetch(type)
+      s.score_type = type
 
       loc = tracking_event.location.name
       time = tracking_event.scanned_at.in_time_zone("America/Chicago").strftime("%Y-%m-%d %H:%M:%S")
