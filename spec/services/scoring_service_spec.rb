@@ -45,6 +45,29 @@ RSpec.describe ScoringService do
       end
     end
 
+    context "with a display location" do
+      it "creates a single score" do
+        tracking_event = FactoryBot.create(:tracking_event, location: FactoryBot.create(:location, :display))
+
+        expect { described_class.score(tracking_event:) }.to change(Score, :count).by(1)
+
+        score = Score.last
+        expect(score).to have_attributes(
+          id: "#{tracking_event.id}-score",
+          score: 10_000,
+          score_type: "scan",
+          source: /Scan at #{tracking_event.location.name} on .*/,
+          event_id: tracking_event.location.event_id,
+          location_id: tracking_event.location_id,
+          rfid_tag_id: tracking_event.rfid_tag_id,
+          tracking_event_id: tracking_event.id
+        )
+
+        score = Score.where(rfid_tag_id: tracking_event.rfid_tag.id).sum(:score)
+        expect(score).to eq(10_000)
+      end
+    end
+
     context "with two events for same tag at different locations" do
       it "returns three scores" do
         event = FactoryBot.create(:event)

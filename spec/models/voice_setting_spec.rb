@@ -20,5 +20,17 @@
 require "rails_helper"
 
 RSpec.describe VoiceSetting, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe ".rand_voice" do
+    it "returns a random value" do
+      model = FactoryBot.build(:voice_setting, voice_ids: "a,b,c")
+      expect(%w[a b c]).to include(model.rand_voice)
+    end
+  end
+
+  describe ".rand_robotic_voice" do
+    it "returns a random value" do
+      model = FactoryBot.build(:voice_setting, robot_voice_ids: "a,b,c")
+      expect(%w[a b c]).to include(model.rand_robotic_voice)
+    end
+  end
 end
