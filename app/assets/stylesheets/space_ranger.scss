@@ -202,12 +202,19 @@ $table-striped-color: lighten($info, 10%);
   .overlay-card .card-title {
     color: yellow;
     font-weight: bold;
-    font-size: 6rem;
+    font-size: 5rem;
   }
 
-  .overlay-card .card-text {
+  .overlay-card .card-body {
     color: white;
-    font-size: 9rem;
+
+    .score {
+      font-size: 8rem;
+    }
+    .level {
+      font-size: 4rem;
+      color: $light;
+    }
   }
 
   .overlay-card.hidden {

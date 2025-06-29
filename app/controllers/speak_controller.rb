@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "net/http"
+require "numbers_and_words"
 
 class SpeakController < AdminController
   include ActionView::Helpers::NumberHelper
@@ -37,16 +38,17 @@ class SpeakController < AdminController
     Rails.logger.info "*** Score is #{score} for user #{username}"
 
     text = if score.positive?
+             score = Integer(score).to_words
              WelcomeLine
                .new(text: "{{username}}, you have {{score}} points!")
                .interpolate(
                  username:,
-                 score: number_with_delimiter(score),
+                 score:,
                  location: location.name
                )
            else
              WelcomeLine
-               .new(text: "{{username}}, you have {{score}} points.")
+               .new(text: "{{username}}, you have no points yet.")
                .interpolate(
                  username: username,
                  score:,

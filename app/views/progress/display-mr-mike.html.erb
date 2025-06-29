@@ -1,10 +1,11 @@
 <% if @username.present? %>
   <div class="card overlay-card">
     <div class="card-header text-center">
-      <h2 class="card-title"><%= @username %></h2>
+      <h3 class="card-title"><%= @username %></h3>
     </div>
     <div class="card-body text-center py-5">
-      <h1 class="card-text"><%= number_with_delimiter(@score) %> points</h1>
+      <h1 class="score"><%= number_with_delimiter(@score) %> points</h1>
+      <h2 class="level"><%= leveling(@score).level %>: <%= leveling(@score).title %></h2>
     </div>
   </div>
   <script>

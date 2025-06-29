@@ -33,6 +33,7 @@ gem "rubocop"
 gem "rubocop-performance"
 gem "rubocop-rails"
 gem "rubocop-rspec"
+gem "numbers_and_words"
 
 gem "redis"
 

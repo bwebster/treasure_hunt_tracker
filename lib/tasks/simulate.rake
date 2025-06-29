@@ -172,7 +172,7 @@ namespace :simulate do
     response = Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
 
     if response.code == "201"
-      puts "✔ Event: RFID #{rfid_tag_id} scanned at #{location.name} (#{event.name}) at #{event.date}"
+      puts "✔ Event: RFID #{rfid_tag_id} scanned at #{location.name} (#{location.id}) for event #{event.name} on #{event.date}"
     else
       puts "❌ Event failed: #{response.body}"
     end
