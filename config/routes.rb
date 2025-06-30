@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   end
   resources :scores, only: [:index]
   resources :welcome_lines
+  resources :status, only: [:index]
 
   get "voice_settings", to: "voice_settings#edit"
   patch "voice_settings", to: "voice_settings#update"

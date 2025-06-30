@@ -1,0 +1,53 @@
+<div class="container mt-5 pt-3">
+  <%= render partial: "flash" %>
+
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4>System Status</h4>
+    </div>
+    <div class="card-body">
+      <% if @status.present? %>
+        <p class="text-muted my-3 px-5">
+          This shows the current "health" of the system.  Each RFID scanner will occasionally report back,
+          indicating that it's connected to the wifi and generally functioning.  If you don't see a recent scan
+          for a location, it might be having issues.  It should be unplugged and plugged back in to reset.
+        </p>
+        <h4>Health Checks</h4>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Reported Location</th>
+              <th>Last Known Location</th>
+              <th>Last Health Check</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @status.each do |status| %>
+              <tr>
+                <td>
+                  <%= status.number %>
+                </td>
+                <td>
+                  <% if status.location %>
+                    <%= status.location.event.name %> - <%= status.location.name %>
+                  <% else %>
+                    <i class="bi bi-question-circle-fill"></i>
+                  <% end %>
+
+                </td>
+                <td>
+                  <%= time_ago_in_words(status.received) %> ago
+                  (<%= human_time(status.received) %>)
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="text-muted">No status checks have been recorded.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
