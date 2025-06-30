@@ -10,7 +10,7 @@ RSpec.describe "Api::HealthChecks", type: :request do
       location = FactoryBot.create(:location)
 
       params = {
-        l: location.number
+        l: location.number.to_s
       }
       expect do
         get "/api/health_checks", params:, headers:
@@ -18,7 +18,7 @@ RSpec.describe "Api::HealthChecks", type: :request do
 
       expect(response).to have_http_status(200)
 
-      expect(HealthCheck.last).to have_attributes(location:)
+      expect(HealthCheck.last).to have_attributes(location: location.number.to_s)
     end
   end
 end
