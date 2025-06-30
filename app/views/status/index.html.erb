@@ -6,19 +6,61 @@
       <h4>System Status</h4>
     </div>
     <div class="card-body">
-      <% if @status.present? %>
-        <p class="text-muted my-3 px-5">
-          This shows the current "health" of the system.  Each RFID scanner will occasionally report back,
-          indicating that it's connected to the wifi and generally functioning.  If you don't see a recent scan
-          for a location, it might be having issues.  It should be unplugged and plugged back in to reset.
-        </p>
-        <h4>Health Checks</h4>
+      <h4>Location Health</h4>
+      <p class="text-muted p-3">
+        Location health shows the health of each location configured for the current event.  If there is no current
+        event for today, then it shows the most recent event.
+        <b>If you don't see a recent scan for a location, it might be having issues.
+          It should be unplugged and plugged back in to reset.</b>
+      </p>
+      <% if @location_status.present? %>
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>Reported Location</th>
-              <th>Last Known Location</th>
+              <th>Location Name</th>
+              <th>Location Number</th>
+              <th>Last Health Check</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @location_status.each do |status| %>
+              <tr>
+                <td><%= status.location.event.name %> - <%= status.location.name %></td>
+                <td><%= status.location.number %></td>
+                <td>
+                  <% if status.received %>
+                    <%= time_ago_in_words(status.received) %> ago
+                    (<%= human_time(status.received) %>)
+                  <% else %>
+                    <i class="bi bi-question-circle-fill"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="text-muted">No status checks have been recorded.</p>
+      <% end %>
+
+      <hr/>
+
+      <h4>Scanner Health</h4>
+      <p class="text-muted my-3 px-5">
+        Scanner health shows the most recent health check for each unique location.
+        Each RFID scanner will occasionally report back, indicating that it's connected to the wifi
+        and generally functioning.
+        <b>If you don't see a recent scan for a location, it might be having issues.
+          It should be unplugged and plugged back in to reset.</b>
+      </p>
+      <% if @status.present? %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Location Number</th>
               <th>Last Health Check</th>
             </tr>
             </thead>
@@ -27,14 +69,6 @@
               <tr>
                 <td>
                   <%= status.number %>
-                </td>
-                <td>
-                  <% if status.location %>
-                    <%= status.location.event.name %> - <%= status.location.name %>
-                  <% else %>
-                    <i class="bi bi-question-circle-fill"></i>
-                  <% end %>
-
                 </td>
                 <td>
                   <%= time_ago_in_words(status.received) %> ago

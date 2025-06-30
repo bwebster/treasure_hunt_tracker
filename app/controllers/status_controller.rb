@@ -24,5 +24,14 @@ class StatusController < AdminController
         received: health_check.received
       )
     end
+
+    @location_status = current_locations.values.collect do |location|
+      Status.new(
+        location: location,
+        received: health_checks
+                    .detect { |hc| hc.location == location.number.to_s }
+                    &.received
+      )
+    end.sort_by { |status| status.location.name }
   end
 end
