@@ -24,10 +24,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_29_210829) do
   end
 
   create_table "health_checks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "location_id", null: false
+    t.string "location", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["location_id"], name: "index_health_checks_on_location_id"
   end
 
   create_table "locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -242,7 +241,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_29_210829) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "health_checks", "locations"
   add_foreign_key "locations", "events"
   add_foreign_key "rfid_tags", "users"
   add_foreign_key "scores", "events"

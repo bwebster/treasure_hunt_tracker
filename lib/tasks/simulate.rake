@@ -179,4 +179,37 @@ namespace :simulate do
 
     puts "✅ Simulation complete!"
   end
+
+  desc "Simulate health checks for all known locations and one unknown"
+  task health_checks: :environment do
+    api_endpoint = if ENV.key?("HEROKU_APP_DEFAULT_DOMAIN_NAME")
+                     "https://#{ENV['HEROKU_APP_DEFAULT_DOMAIN_NAME']}/api/health_checks"
+                   else
+                     "http://localhost:3000/api/health_checks"
+                   end
+
+    location_numbers = Location.distinct(:number).pluck(:number)
+
+    # add one unknown location
+    1.upto(20).each do |i|
+      next if location_numbers.include?(i)
+
+      location_numbers << i
+      break
+    end
+
+    location_numbers.each do |loc|
+      uri = URI(api_endpoint)
+      uri.query = "l=#{loc}"
+      body = Net::HTTP.get(uri, "Content-Type" => "application/json")
+
+      if body && body["ok"]
+        puts "✔ Health Check send for location #{loc}"
+      else
+        puts "❌ Health Check failed: #{response.body}"
+      end
+    end
+
+    puts "✅ Simulation complete!"
+  end
 end

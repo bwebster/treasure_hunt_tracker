@@ -7,11 +7,8 @@ module Api
     rescue_from StandardError, with: :handle_exception
 
     def index
-      location = Location.find_by(number: params[:l])
-      return render json: { e: "Bad location" }, status: :bad_request unless location
-
-      HealthCheck.create!(location:)
-      render json: {}
+      HealthCheck.create!(location: params[:l])
+      render json: { ok: true }
     end
 
     private
