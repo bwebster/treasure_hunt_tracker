@@ -8,7 +8,7 @@ module Api
 
     def index
       HealthCheck.create!(location: params[:l])
-      render json: {}
+      render json: { ok: true }
     end
 
     private
