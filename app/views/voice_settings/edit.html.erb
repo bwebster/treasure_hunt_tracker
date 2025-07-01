@@ -111,9 +111,9 @@
               </div>
             </div>
 
-            <div class="mb-3">
-              <%= form.label :use_speaker_boost, class: "form-label" %>
-              <%= form.checkbox :use_speaker_boost, class: "form-checkbox" %>
+            <div class="form-check mb-3">
+              <%= form.checkbox :use_speaker_boost, class: "form-check-input" %>
+              <%= form.label :use_speaker_boost, class: "form-check-label" %>
               <div class="form-text">
                 This setting boosts the similarity to the original speaker.
                 Using this setting requires a slightly higher computational load, which in turn increases latency.
