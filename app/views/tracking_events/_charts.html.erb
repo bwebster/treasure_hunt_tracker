@@ -7,64 +7,67 @@
   </div>
 <% end %>
 
-<% @chart_data.each do |location_id, data| %>
-  <div class="card mt-3">
-    <div class="card-header">
-      <b><%= @locations[location_id]&.name || "Unknown Location" %></b>
-    </div>
-    <div class="card-body">
-      <svg
+<div class="chart-grid">
+  <% @chart_data.each do |location_id, data| %>
+    <div class="card">
+      <div class="card-header">
+        <b><%= @locations[location_id]&.name || "Unknown Location" %></b>
+      </div>
+      <div class="card-body">
+        <svg
           id="chart-<%= location_id %>"
           class="scan-chart"
           data-chart='<%= raw data.to_json %>'
           width="100%"
           height="200"></svg>
+      </div>
     </div>
-  </div>
+  <% end %>
+</div>
 
-  <script>
-      document.addEventListener("turbo:load", () => {
-          document.querySelectorAll("svg.scan-chart").forEach(svg => {
-              const data = JSON.parse(svg.dataset.chart);
-              renderBarChart(svg, data);
-          });
-      });
+<script>
+    document.addEventListener("turbo:load", () => {
+        document.querySelectorAll("svg.scan-chart").forEach(svg => {
+            const data = JSON.parse(svg.dataset.chart);
+            renderBarChart(svg, data);
+        });
+    });
 
-      function renderBarChart(svgElement, data) {
-          const svg = d3.select(svgElement);
-          const margin = { top: 10, right: 10, bottom: 40, left: 40 };
-          const width = svg.node().getBoundingClientRect().width - margin.left - margin.right;
-          const height = +svg.attr("height") - margin.top - margin.bottom;
+    function renderBarChart(svgElement, data) {
+        const svg = d3.select(svgElement);
+        const margin = { top: 10, right: 10, bottom: 40, left: 40 };
+        const width = svg.node().getBoundingClientRect().width - margin.left - margin.right;
+        const height = +svg.attr("height") - margin.top - margin.bottom;
 
-          const fullTimes = Object.keys(data);
+        const fullTimes = Object.keys(data);
         // Filter to keep only 07:00 and later
-          const times = fullTimes.filter(t => {
-              const [hour] = t.split(":").map(Number);
-              return hour >= 7;
-          });
-          const counts = Object.values(data);
-          const maxCount = d3.max(counts);
+        const times = fullTimes.filter(t => {
+            const [hour] = t.split(":").map(Number);
+            return hour >= 7;
+        });
+        const counts = Object.values(data);
+        const maxCount = d3.max(counts);
 
-          const x = d3.scaleBand()
+        const x = d3.scaleBand()
             .domain(times)
             .range([0, width])
             .padding(0.1);
 
-          const y = d3.scaleLinear()
+        const y = d3.scaleLinear()
             .domain([0, maxCount])
             .range([height, 0]);
 
-          const chart = svg.append("g")
+        const chart = svg.append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-          // x-axis: only show hour labels (e.g., "01:00", "02:00")
-          const tickValues = times.filter(t => t.endsWith(":00"));
+        // x-axis: only show hour labels (e.g., "01:00", "02:00")
+        const tickValues = times.filter(t => t.endsWith(":00"));
 
-          chart.append("g")
+        chart.append("g")
             .attr("transform", `translate(0,${height})`)
             .call(
-              d3.axisBottom(x)
-                .tickValues(tickValues)
+                d3.axisBottom(x)
+                    .tickValues(tickValues)
             )
             .selectAll("text")
             .attr("transform", "rotate(45)")
@@ -72,15 +75,15 @@
             .style("fill", "#00FFFF")
             .style("font-family", "Oxanium");
 
-          // y-axis
-          chart.append("g")
+        // y-axis
+        chart.append("g")
             .call(d3.axisLeft(y).ticks(4))
             .selectAll("text")
             .style("fill", "#00FFFF")
             .style("font-family", "Oxanium");
 
-          // bars
-          chart.selectAll("rect")
+        // bars
+        chart.selectAll("rect")
             .data(times)
             .enter()
             .append("rect")
@@ -89,8 +92,8 @@
             .attr("width", x.bandwidth())
             .attr("height", d => height - y(data[d]))
             .attr("fill", "#71C837"); // your $primary color
-      }
+    }
 
 
-  </script>
-<% end %>
+</script>
+

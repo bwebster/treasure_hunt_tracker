@@ -1,0 +1,119 @@
+.mr-mike {
+  .face {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end; /* was center */
+    justify-content: center;
+    gap: 5vw;
+    padding-bottom: 16vh; /* optional: adds spacing from bottom edge */
+    box-sizing: border-box;
+  }
+
+  .eye-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .eye {
+    width: 60vh; /* radius */
+    height: 60vh; /* radius */
+    background: white;
+    border: 13px solid black; /* even thicker eye outline */
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pupil {
+    width: 35vh;
+    height: 35vh;
+    background: black;
+    border-radius: 50%;
+    position: absolute;
+    transition: left 1s ease-in-out, top 1s ease-in-out;
+  }
+
+  .eyelid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    border-radius: 50%;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.2s ease-in-out;
+    z-index: 2;
+  }
+
+  .eye.blink .eyelid {
+    transform: scaleY(1);
+  }
+
+  .eyebrow {
+    width: 25vh;
+    height: 3vh;
+    background: black;
+    position: absolute;
+    top: -10vh;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  #left-brow {
+    left: 5vh;
+    /* transform: rotate(15deg); */
+  }
+
+  #right-brow {
+    right: 5vh;
+    /* transform: rotate(-15deg); */
+  }
+
+  .overlay-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70vw;
+    height: 60vh;
+    z-index: 10;
+    background-color: #007bff;
+    color: white;
+    border: 15px solid red;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.6s ease, opacity 0.5s ease;
+  }
+
+  .overlay-card .card-header {
+    background-color: lighten(#007bff, 10%);
+  }
+
+  .overlay-card .card-title {
+    color: yellow;
+    font-weight: bold;
+    font-size: 5rem;
+  }
+
+  .overlay-card .card-body {
+    color: white;
+
+    .score {
+      font-size: 8rem;
+    }
+    .level {
+      font-size: 4rem;
+      color: $light;
+    }
+  }
+
+  .overlay-card.hidden {
+    transform: translate(-50%, -150%);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
