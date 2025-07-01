@@ -2,20 +2,27 @@
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-      <%= render partial: "flash" %>
-
       <div class="card shadow-sm">
         <div class="card-header">
           <h4>Reports</h4>
         </div>
         <div class="card-body">
-          <ul>
-            <li>
-              <%= link_to "Scans per Event by User", report_path(id: "events-scanned-per-user") %>
-            </li>
-          </ul>
+          <%= render partial: "flash" %>
+
+          <table class="table table-borderless w-auto mx-auto">
+            <tbody>
+            <tr>
+              <td class="text-nowrap">
+                <%= link_to "Scans per Event by User", report_path(id: "events-scanned-per-user") %>
+              </td>
+              <td class="text-muted">
+                See the numbers of times a user has had at least one scan for each configured event.
+                <b>NOTE: this will include any test events during the week.</b>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
-</div>

@@ -27,6 +27,28 @@
               </td>
             </tr>
             <tr>
+              <td colspan="2">
+                <hr/>
+                <h5>Event Management</h5>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <%= link_to "Events", events_path %>
+              </td>
+              <td class="text-muted">
+                View all events and locations.  Events and locations must be configured to track RFID tag scans.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <%= link_to "Reports", reports_path %>
+              </td>
+              <td class="text-muted">
+                Various reports to see user and scan activity over time.
+              </td>
+            </tr>
+            <tr>
               <td>
                 <%= link_to "RFID Tags", rfid_tags_path %>
               </td>
@@ -40,14 +62,6 @@
               </td>
               <td class="text-muted">
                 View all users.  Users can be created manually, or created when assigned to a RFID Tag.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "Events", events_path %>
-              </td>
-              <td class="text-muted">
-                View all events and locations.  Events and locations must be configured to track RFID tag scans.
               </td>
             </tr>
             <tr>
