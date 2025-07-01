@@ -45,7 +45,7 @@ class ScoringService
 
     begin
       scan_score = add_score_for_scan(tracking_event)
-      add_score_if_previous_scan(tracking_event) if scan_score && scan_score.score_type == TYPE_SCAN
+      add_score_if_previous_scan(tracking_event) if scan_score && scan_score.score_type == TYPE_SCAN && scan_score.score.positive?
     ensure
       ActiveRecord::Base.connection.execute(
         ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT pg_advisory_unlock(?)", lock_key])
@@ -69,8 +69,12 @@ class ScoringService
       s.rfid_tag_id = tracking_event.rfid_tag_id
 
       type = prev_count.zero? ? TYPE_SCAN : TYPE_SCAN_AGAIN
-      s.score = SCORING.fetch(type)
       s.score_type = type
+      s.score = if tracking_event.location.event.test_event?
+                  0
+                else
+                  SCORING.fetch(type)
+                end
 
       loc = tracking_event.location.name
       time = tracking_event.scanned_at.in_time_zone("America/Chicago").strftime("%Y-%m-%d %H:%M:%S")

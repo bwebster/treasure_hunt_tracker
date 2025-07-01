@@ -15,5 +15,9 @@ FactoryBot.define do
     trait :display do
       display { true }
     end
+
+    trait :test_event do
+      association :event, test_event: true
+    end
   end
 end

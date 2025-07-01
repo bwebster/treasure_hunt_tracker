@@ -17,6 +17,7 @@
             <tr>
               <th>Name</th>
               <th>Date</th>
+              <th>Test Event?</th>
               <th>Locations</th>
             </tr>
             </thead>
@@ -28,7 +29,11 @@
                 </td>
                 <td><%= event.date.strftime("%B %d, %Y") %></td>
                 <td>
-
+                  <% if event.test_event? %>
+                    <i class="bi bi-check-circle-fill"></i> Test Event
+                  <% end %>
+                </td>
+                <td>
                   <table class="table table-sm table-borderless mb-0">
                     <tbody>
                     <% event.locations.order(number: :asc).each do |loc| %>

@@ -27,6 +27,11 @@
           <%= f.date_field :date, class: "form-control", required: true %>
         </div>
 
+        <div class="form-check mb-3">
+          <%= f.check_box :test_event, class: "form-check-input" %>
+          <%= f.label :test_event, "Registration Location", class: "form-check-label" %>
+        </div>
+
         <div class="text-end">
           <%= link_to "Cancel", events_path, class: "btn btn-secondary" %>
           <%= f.submit "Save", class: "btn btn-primary" %>

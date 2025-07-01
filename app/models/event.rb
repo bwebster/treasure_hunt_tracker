@@ -5,8 +5,9 @@
 # Table name: events
 #
 #  id         :uuid             not null, primary key
-#  name       :string           not null
 #  date       :date
+#  name       :string           not null
+#  test_event :boolean          default(FALSE), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
