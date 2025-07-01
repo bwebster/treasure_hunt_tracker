@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ReportsController < AdminController
-  EVENTS_SCANNED_PER_USER = "events-scanned-per-user"
+  SCANS_PER_USER = "scans-per-user"
 
   Report = Struct.new(:name, :data, :key, keyword_init: true)
 
@@ -9,7 +9,7 @@ class ReportsController < AdminController
 
   def show
     case params[:id]
-    when EVENTS_SCANNED_PER_USER
+    when SCANS_PER_USER
       @report = events_scanned_per_user
     else
       flash.now[:error] = "Report #{params[:id]} not found"
@@ -28,13 +28,14 @@ class ReportsController < AdminController
               when rt.user_id is not null then 'user'
               else 'tag'
           end as type,
-          count(e.name) as count
+          count(distinct(e.name)) as event_count,
+          count(*) as total_count
         from scores s
         left join events e on e.id = s.event_id
         left outer join rfid_tags rt on rt.id = s.rfid_tag_id
         left outer join users u on u.id = rt.user_id
         group by 1, 2, 3
-        order by 4 desc
+        order by 4 desc, 5 desc, 1 desc
       SQL
     ).tap do |v|
       Rails.logger.info "Report results: #{v.inspect}"
@@ -43,7 +44,7 @@ class ReportsController < AdminController
     Report.new(
       name: "Events Scanned per User",
       data:,
-      key: EVENTS_SCANNED_PER_USER
+      key: SCANS_PER_USER
     )
   end
 end

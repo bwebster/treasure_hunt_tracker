@@ -13,7 +13,7 @@
             <tbody>
             <tr>
               <td class="text-nowrap">
-                <%= link_to "Scans per Event by User", report_path(id: "events-scanned-per-user") %>
+                <%= link_to "Scans per Event by User", report_path(id: ReportsController::SCANS_PER_USER) %>
               </td>
               <td class="text-muted">
                 See the numbers of times a user has had at least one scan for each configured event.
@@ -26,3 +26,4 @@
       </div>
     </div>
   </div>
+</div>
