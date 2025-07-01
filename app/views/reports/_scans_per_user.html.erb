@@ -3,7 +3,8 @@
   <tr>
     <th>Username</th>
     <td>Type</td>
-    <th>Number of Events with a Scan</th>
+    <th>Non-test Events<br/>with a Scan</th>
+    <th>All Events<br/> with a Scan</th>
     <th>Number Total Scan</th>
   </tr>
   </thead>
@@ -18,6 +19,7 @@
       <% end %>
     </td>
     <td><%= row["type"] %></td>
+    <td><%= row["non_test_events_count"] %></td>
     <td><%= row["event_count"] %></td>
     <td><%= row["total_count"] %></td>
   </tr>

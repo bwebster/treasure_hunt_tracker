@@ -28,6 +28,7 @@ class ReportsController < AdminController
               when rt.user_id is not null then 'user'
               else 'tag'
           end as type,
+          count(distinct(case when e.test_event then NULL else e.name end)) as non_test_events_count,
           count(distinct(e.name)) as event_count,
           count(*) as total_count
         from scores s
@@ -35,7 +36,7 @@ class ReportsController < AdminController
         left outer join rfid_tags rt on rt.id = s.rfid_tag_id
         left outer join users u on u.id = rt.user_id
         group by 1, 2, 3
-        order by 4 desc, 5 desc, 1 desc
+        order by 4 desc, 6 desc, 1 desc
       SQL
     ).tap do |v|
       Rails.logger.info "Report results: #{v.inspect}"
