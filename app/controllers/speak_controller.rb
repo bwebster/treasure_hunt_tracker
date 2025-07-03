@@ -69,11 +69,9 @@ class SpeakController < AdminController
       text:,
       model_id: settings.model_id,
       voice_settings: {
-        stability: 0.95,
-        # use_speaker_boost: settings.use_speaker_boost,
-        similarity_boost: 0.95,
-        # style: settings.style,
-        speed: 1.2
+        stability: 0.80,
+        similarity_boost: 0.80,
+        speed: 0.9
       }
     }.to_json
 
