@@ -38,17 +38,30 @@ class SpeakController < AdminController
     Rails.logger.info "*** Score is #{score} for user #{username}"
 
     text = if score.positive?
+             line = [
+               "{{username}}, you have {{score}} points!",
+               "Good job {{username}}, {{score}} points!",
+               "Attention everyone! {{username}} has {{score}} points.",
+               "{{score}} points!  Keep up the good work {{username}}!"
+             ].sample
+
              score = Integer(score).to_words
              WelcomeLine
-               .new(text: "{{username}}, you have {{score}} points!")
+               .new(text: line)
                .interpolate(
                  username:,
                  score:,
                  location: location.name
                )
            else
+             line = [
+               "{{username}}, see Mr. Potato Head for points.",
+               "{{username}}, you have no points yet.",
+               "{{username}}, visit the Barbie dream house for points.",
+               "{{username}}, points are hiding by the front doors."
+             ].sample
              WelcomeLine
-               .new(text: "{{username}}, you have no points yet.")
+               .new(text: line)
                .interpolate(
                  username: username,
                  score:,
