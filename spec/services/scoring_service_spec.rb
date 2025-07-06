@@ -315,5 +315,121 @@ RSpec.describe ScoringService do
                            10_000 + (4 * 1_000))
       end
     end
+
+    context "with a single tag and 2 events" do
+      it "creates a single score" do
+        rfid_tag = FactoryBot.create(:rfid_tag)
+        event1 = FactoryBot.create(:event, date: 2.weeks.ago)
+        event2 = FactoryBot.create(:event, date: 1.week.ago)
+        location1 =  FactoryBot.create(:location, event: event1)
+        location2 =  FactoryBot.create(:location, event: event2)
+        tracking_event1 = FactoryBot.create(:tracking_event, location: location1, rfid_tag:)
+        tracking_event2 = FactoryBot.create(:tracking_event, location: location2, rfid_tag:)
+
+        expect { described_class.score(tracking_event: tracking_event1) }.to change(Score, :count).by(1)
+
+        score = Score.find_by(tracking_event_id: tracking_event1.id)
+        expect(score).to have_attributes(
+          id: "#{tracking_event1.id}-score",
+          score: 10_000,
+          score_type: "scan",
+          source: /Scan at #{tracking_event1.location.name} on .*/,
+          event_id: tracking_event1.location.event_id,
+          location_id: tracking_event1.location_id,
+          rfid_tag_id: tracking_event1.rfid_tag_id,
+          tracking_event_id: tracking_event1.id
+        )
+
+        expect { described_class.score(tracking_event: tracking_event2) }.to change(Score, :count).by(2)
+
+        scores = Score.where(tracking_event_id: tracking_event2.id).order(created_at: :asc).last(2)
+
+        score = scores[0]
+        expect(score).to have_attributes(
+          id: "#{tracking_event2.id}-score",
+          score: 10_000,
+          score_type: "scan",
+          source: /Scan at #{tracking_event2.location.name} on .*/,
+          event_id: tracking_event2.location.event_id,
+          location_id: tracking_event2.location_id,
+          rfid_tag_id: tracking_event2.rfid_tag_id,
+          tracking_event_id: tracking_event2.id
+        )
+
+        score = scores[1]
+        expect(score).to have_attributes(
+          id: "#{tracking_event2.id}-multi-event-scan",
+          score: 25_000,
+          score_type: "multi_event_bonus",
+          source: "Bonus: multiple events",
+          event_id: tracking_event2.location.event_id,
+          location_id: tracking_event2.location_id,
+          rfid_tag_id: tracking_event2.rfid_tag_id,
+          tracking_event_id: tracking_event2.id
+        )
+
+        score = Score.where(rfid_tag_id: rfid_tag.id).sum(:score)
+        expect(score).to eq(45_000)
+      end
+    end
+
+    context "with a single user, 2 tags across 2 events" do
+      it "creates a single score" do
+        user = FactoryBot.create(:user)
+        rfid_tag1 = FactoryBot.create(:rfid_tag, user:)
+        rfid_tag2 = FactoryBot.create(:rfid_tag, user:)
+        event1 = FactoryBot.create(:event, date: 2.weeks.ago)
+        event2 = FactoryBot.create(:event, date: 1.week.ago)
+        location1 =  FactoryBot.create(:location, event: event1)
+        location2 =  FactoryBot.create(:location, event: event2)
+        tracking_event1 = FactoryBot.create(:tracking_event, location: location1, rfid_tag: rfid_tag1)
+        tracking_event2 = FactoryBot.create(:tracking_event, location: location2, rfid_tag: rfid_tag2)
+
+        expect { described_class.score(tracking_event: tracking_event1) }.to change(Score, :count).by(1)
+
+        score = Score.find_by(tracking_event_id: tracking_event1.id)
+        expect(score).to have_attributes(
+          id: "#{tracking_event1.id}-score",
+          score: 10_000,
+          score_type: "scan",
+          source: /Scan at #{tracking_event1.location.name} on .*/,
+          event_id: tracking_event1.location.event_id,
+          location_id: tracking_event1.location_id,
+          rfid_tag_id: tracking_event1.rfid_tag_id,
+          tracking_event_id: tracking_event1.id
+        )
+
+        expect { described_class.score(tracking_event: tracking_event2) }.to change(Score, :count).by(2)
+
+        scores = Score.where(tracking_event_id: tracking_event2.id).order(created_at: :asc).last(2)
+
+        score = scores[0]
+        expect(score).to have_attributes(
+          id: "#{tracking_event2.id}-score",
+          score: 10_000,
+          score_type: "scan",
+          source: /Scan at #{tracking_event2.location.name} on .*/,
+          event_id: tracking_event2.location.event_id,
+          location_id: tracking_event2.location_id,
+          rfid_tag_id: tracking_event2.rfid_tag_id,
+          tracking_event_id: tracking_event2.id
+        )
+
+        score = scores[1]
+        expect(score).to have_attributes(
+          id: "#{tracking_event2.id}-multi-event-scan",
+          score: 25_000,
+          score_type: "multi_event_bonus",
+          source: "Bonus: multiple events",
+          event_id: tracking_event2.location.event_id,
+          location_id: tracking_event2.location_id,
+          rfid_tag_id: tracking_event2.rfid_tag_id,
+          tracking_event_id: tracking_event2.id
+        )
+
+        score = Score.where(rfid_tag_id: [rfid_tag1.id, rfid_tag2.id]).sum(:score)
+        expect(score).to eq(45_000)
+      end
+    end
   end
 end
