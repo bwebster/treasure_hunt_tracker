@@ -101,7 +101,7 @@ class ScoringService
                  .count
     return unless prev_count.positive?
 
-    Score.find_or_create_by!(id: "#{tracking_event.id}-multi-event-scan") do |s|
+    Score.find_or_create_by!(id: "#{tracking_event.location.event.id}-multi-event-scan") do |s|
       s.tracking_event_id = tracking_event.id
       s.event_id = tracking_event.location.event_id
       s.location_id = tracking_event.location_id

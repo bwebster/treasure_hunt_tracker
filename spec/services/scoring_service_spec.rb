@@ -358,7 +358,7 @@ RSpec.describe ScoringService do
 
         score = scores[1]
         expect(score).to have_attributes(
-          id: "#{tracking_event2.id}-multi-event-scan",
+          id: "#{event2.id}-multi-event-scan",
           score: 25_000,
           score_type: "multi_event_bonus",
           source: "Bonus: multiple events",
@@ -417,7 +417,7 @@ RSpec.describe ScoringService do
 
         score = scores[1]
         expect(score).to have_attributes(
-          id: "#{tracking_event2.id}-multi-event-scan",
+          id: "#{event2.id}-multi-event-scan",
           score: 25_000,
           score_type: "multi_event_bonus",
           source: "Bonus: multiple events",
