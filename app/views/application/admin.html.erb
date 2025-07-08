@@ -1,138 +1,184 @@
 <div class="container pt-3 mt-5">
   <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
       <div class="card shadow-sm">
         <div class="card-header">
           <h4>Admin</h4>
         </div>
         <div class="card-body">
-          <%= render partial: "flash" %>
+          <div class="row">
+            <div class="col-sm-9">
+              <%= render partial: "flash" %>
 
-          <p class="text-muted my-3">
-            Pages below require authentication.  Talk to the Life.Church staff to get the username and password.
-          </p>
+              <p class="text-muted my-3">
+                Pages below require authentication.  Talk to the Life.Church staff to get the username and password.
+              </p>
 
-          <hr/>
+              <hr/>
 
-          <table class="table table-borderless w-auto mx-auto">
-            <tbody>
-            <tr>
-              <td>
-                <%= link_to "Registration", register_path %>
-              </td>
-              <td class="text-muted">
-                Landing page for registering tags.  You must first go to <%= link_to "Events", events_path, class: "text-muted" %> page
-                and enter registration mode.
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <hr/>
-                <h5>Event Management</h5>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "Events", events_path %>
-              </td>
-              <td class="text-muted">
-                View all events and locations.  Events and locations must be configured to track RFID tag scans.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "Reports", reports_path %>
-              </td>
-              <td class="text-muted">
-                Various reports to see user and scan activity over time.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "RFID Tags", rfid_tags_path %>
-              </td>
-              <td class="text-muted">
-                View all RFID tags that have been registered or scanned at least once.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "Users", users_path %>
-              </td>
-              <td class="text-muted">
-                View all users.  Users can be created manually, or created when assigned to a RFID Tag.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "Welcome Lines", welcome_lines_path %>
-              </td>
-              <td class="text-muted">
-                View welcome lines, which are played in registration mode when a username is associated with a RFID tag.
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <hr/>
-                <h5>System Configuration</h5>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "Activity", activity_tracking_events_path %>
-              </td>
-              <td class="text-muted">
-                See scan activity.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "System Status", status_index_path %>
-              </td>
-              <td class="text-muted">
-                See system status.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "Voice Settings", voice_settings_path %>
-              </td>
-              <td class="text-muted">
-                Configure voice settings used to speak welcome lines.
-              </td>
-            </tr>
-            <tr>
-              <td class="text-nowrap">
-                <%= link_to "Tracking Events", tracking_events_path %>
-              </td>
-              <td class="text-muted">
-                View all received tracking events.
-              </td>
-            </tr>
-            <tr>
-              <td class="text-nowrap">
-                <%= link_to "Tracking Event Activity", activity_tracking_events_path %>
-              </td>
-              <td class="text-muted">
-                View activity for tracking events by day.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <%= link_to "Scores", scores_path %>
-              </td>
-              <td class="text-muted">
-                View all computed scores.  Scores are based off tracking events that have been received for a valid
-                event and location.
-              </td>
-            </tr>
-            </tbody>
-          </table>
+              <table class="table table-borderless w-auto mx-auto">
+                <tbody>
+                <tr>
+                  <td colspan="2">
+                    <h5>Event Management</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "Events", events_path %>
+                  </td>
+                  <td class="text-muted">
+                    View all events and locations.  Events and locations must be configured to track RFID tag scans.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "Registration", register_path %>
+                  </td>
+                  <td class="text-muted">
+                    Landing page for registering tags.  You must first go to <%= link_to "Events", events_path, class: "text-muted" %> page
+                    and enter registration mode.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "Reports", reports_path %>
+                  </td>
+                  <td class="text-muted">
+                    Various reports to see user and scan activity over time.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "RFID Tags", rfid_tags_path %>
+                  </td>
+                  <td class="text-muted">
+                    View all RFID tags that have been registered or scanned at least once.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "Users", users_path %>
+                  </td>
+                  <td class="text-muted">
+                    View all users.  Users can be created manually, or created when assigned to a RFID Tag.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "Welcome Lines", welcome_lines_path %>
+                  </td>
+                  <td class="text-muted">
+                    View welcome lines, which are played in registration mode when a username is associated with a RFID tag.
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <hr/>
+                    <h5>System Configuration</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "Analytics", activity_tracking_events_path %>
+                  </td>
+                  <td class="text-muted">
+                    See the scans for each location for any event.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "Scores", scores_path %>
+                  </td>
+                  <td class="text-muted">
+                    View all computed scores.  Scores are based off tracking events that have been received for a valid
+                    event and location.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "System Status", status_index_path %>
+                  </td>
+                  <td class="text-muted">
+                    See system status.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-nowrap">
+                    <%= link_to "Tracking Events", tracking_events_path %>
+                  </td>
+                  <td class="text-muted">
+                    View all received tracking events.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <%= link_to "Voice Settings", voice_settings_path %>
+                  </td>
+                  <td class="text-muted">
+                    Configure voice settings used to speak welcome lines.
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-3">
+
+              <!-- Users -->
+              <div class="card shadow-sm text-center mb-5">
+                <div class="card-header">
+                  <div style="font-size: 3rem;">
+                    <%= @unique_user_count %>
+                  </div>
+                </div>
+                <div class="card-body">
+                  Unique Users
+                </div>
+              </div>
+
+              <!-- Returning users -->
+              <div class="card shadow-sm text-center mb-5">
+                <div class="card-header">
+                  <div style="font-size: 3rem;">
+                    <%= @multi_sunday_users %>
+                  </div>
+                </div>
+                <div class="card-body">
+                  Multi-Sunday Users
+                </div>
+              </div>
+
+              <!-- Tags -->
+              <div class="card shadow-sm text-center mb-5">
+                <div class="card-header">
+                  <div style="font-size: 3rem;">
+                    <%= @unique_tag_count %>
+                  </div>
+                </div>
+                <div class="card-body">
+                  Unique Tags
+                </div>
+              </div>
+
+              <!-- Scans -->
+              <div class="card shadow-sm text-center mb-5">
+                <div class="card-header">
+                  <div style="font-size: 3rem;">
+                    <%= number_with_delimiter(@scan_count) %>
+                  </div>
+                </div>
+                <div class="card-body">
+                  Unique Tags
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
   </div>
 
 </div>
