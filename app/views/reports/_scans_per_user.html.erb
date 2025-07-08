@@ -1,6 +1,7 @@
 <table class="table table-striped">
   <thead>
   <tr>
+    <th></th>
     <th>Username</th>
     <td>Type</td>
     <th>Non-test Events<br/>with a Scan</th>
@@ -9,8 +10,9 @@
   </tr>
   </thead>
   <tbody>
-  <% data.each do |row| %>
+  <% data.each_with_index do |row, index| %>
   <tr>
+    <td><%= index + 1 %></td>
     <td>
       <% if row["type"] == "user" %>
         <%= link_to row["username"], edit_user_path(row["id"]) %>
