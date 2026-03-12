@@ -22,7 +22,7 @@ class VoiceSettingsController < AdminController
 
   def edit
     @voice_setting = VoiceSetting.singleton
-    @usage = get_usage
+    @usage = usage
   end
 
   def update
@@ -40,7 +40,7 @@ class VoiceSettingsController < AdminController
     params.expect(voice_setting: %i[api_key stability use_speaker_boost similarity_boost style speed voice_ids robot_voice_ids])
   end
 
-  def get_usage
+  def usage
     api_key = VoiceSetting.singleton.api_key
     return Usage.unknown unless api_key
 

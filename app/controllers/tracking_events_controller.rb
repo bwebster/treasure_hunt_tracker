@@ -12,15 +12,13 @@ class TrackingEventsController < AdminController
                        .per(PAGE_SIZE)
   end
 
-  private
-
   def activity
     time_zone = "America/Chicago"
 
     @available_days = fetch_available_days
     @selected_day = params[:day]&.to_date || @available_days.last
 
-    return unless @selected_day.present?
+    return if @selected_day.blank?
 
     @locations, @chart_data = fetch_activity_data(time_zone)
   end
@@ -56,8 +54,8 @@ class TrackingEventsController < AdminController
     locations = Location.where(id: location_ids).index_by(&:id)
 
     chart_data = raw_data
-                .group_by { |(location_id, _), _| location_id }
-                .transform_values do |entries|
+                 .group_by { |(location_id, _), _| location_id }
+                 .transform_values do |entries|
       raw = entries.to_h { |((_loc_id, ts), count)| [ts.strftime("%H:%M"), count] }
 
       time_buckets.to_h do |ts|
