@@ -8,13 +8,24 @@ class SpeakController < AdminController
 
   skip_before_action :verify_authenticity_token
 
+  POSITIVE_SCORE_MESSAGES = [
+    "{{username}}, you have {{score}} points!",
+    "Good job {{username}}, {{score}} points!",
+    "Attention everyone! {{username}} has {{score}} points.",
+    "{{score}} points!  Keep up the good work {{username}}!"
+  ].freeze
+
+  ZERO_SCORE_MESSAGES = [
+    "{{username}}, see Mr. Potato Head for points.",
+    "{{username}}, you have no points yet.",
+    "{{username}}, visit the Barbie dream house for points.",
+    "{{username}}, points are hiding by the front doors."
+  ].freeze
+
   def progress
     settings = VoiceSetting.singleton
 
-    if settings.api_key.blank?
-      Rails.logger.info "Skipping TTS - no API key"
-      return render json: {}, status: :no_content
-    end
+    return render(json: {}, status: :no_content) if settings.api_key.blank?
 
     tracking_event = TrackingEvent.find_by(id: params[:tracking_event_id])
     unless tracking_event
@@ -22,12 +33,7 @@ class SpeakController < AdminController
       return render json: {}, status: :no_content
     end
 
-    username = if tracking_event.rfid_tag.user.present?
-                 tracking_event.rfid_tag.user.username
-               else
-                 tracking_event.rfid_tag.label
-               end
-
+    username = tracking_event.rfid_tag.user&.username || tracking_event.rfid_tag.label
     location = tracking_event.location
     unless location
       Rails.logger.info "No location found"
@@ -37,73 +43,16 @@ class SpeakController < AdminController
     score = params[:score] || 0
     Rails.logger.info "*** Score is #{score} for user #{username}"
 
-    text = if score.positive?
-             line = [
-               "{{username}}, you have {{score}} points!",
-               "Good job {{username}}, {{score}} points!",
-               "Attention everyone! {{username}} has {{score}} points.",
-               "{{score}} points!  Keep up the good work {{username}}!"
-             ].sample
-
-             score = Integer(score).to_words
-             WelcomeLine
-               .new(text: line)
-               .interpolate(
-                 username:,
-                 score:,
-                 location: location.name
-               )
-           else
-             line = [
-               "{{username}}, see Mr. Potato Head for points.",
-               "{{username}}, you have no points yet.",
-               "{{username}}, visit the Barbie dream house for points.",
-               "{{username}}, points are hiding by the front doors."
-             ].sample
-             WelcomeLine
-               .new(text: line)
-               .interpolate(
-                 username: username,
-                 score:,
-                 location: location.name
-               )
-           end
+    text = build_progress_message(username, score, location)
     Rails.logger.info "<<<< Generating audio for #{text}"
 
-    settings = VoiceSetting.singleton
-
-    Rails.logger.info "Calling TTS with settings: #{settings.as_json}"
-
-    uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{settings.rand_robotic_voice}/stream")
-    req = Net::HTTP::Post.new(uri)
-    req["xi-api-key"] = settings.api_key
-    req["Content-Type"] = "application/json"
-    req.body = {
-      text:,
-      model_id: settings.model_id,
-      voice_settings: {
-        stability: 0.80,
-        similarity_boost: 0.80,
-        speed: 0.9
-      }
-    }.to_json
-
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-      http.request(req) do |response|
-        self.response.headers["Content-Type"] = "audio/mpeg"
-        self.response.headers["Cache-Control"] = "no-cache"
-        self.response_body = response.body
-      end
-    end
+    send_tts_request(settings, text, settings.rand_robotic_voice, robotic_voice_settings)
   end
 
   def tts
     settings = VoiceSetting.singleton
 
-    if settings.api_key.blank?
-      Rails.logger.info "Skipping TTS - no API key"
-      return render json: {}, status: :no_content
-    end
+    return render(json: {}, status: :no_content) if settings.api_key.blank?
 
     user = User.find_by(id: params[:user_id])
     unless user
@@ -122,22 +71,52 @@ class SpeakController < AdminController
       location: location.name
     )
 
+    send_tts_request(settings, text, settings.rand_voice, user_voice_settings(settings))
+  end
+
+  private
+
+  def build_progress_message(username, score, location)
+    lines = score.positive? ? POSITIVE_SCORE_MESSAGES : ZERO_SCORE_MESSAGES
+    line = lines.sample
+    score_value = score.positive? ? Integer(score).to_words : score
+
+    WelcomeLine.new(text: line).interpolate(
+      username: username,
+      score: score_value,
+      location: location.name
+    )
+  end
+
+  def robotic_voice_settings
+    {
+      stability: 0.80,
+      similarity_boost: 0.80,
+      speed: 0.9
+    }
+  end
+
+  def user_voice_settings(settings)
+    {
+      stability: settings.stability,
+      use_speaker_boost: settings.use_speaker_boost,
+      similarity_boost: settings.similarity_boost,
+      style: settings.style,
+      speed: settings.speed
+    }
+  end
+
+  def send_tts_request(settings, text, voice_id, voice_settings)
     Rails.logger.info "Calling TTS with settings: #{settings.as_json}"
 
-    uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{settings.rand_voice}/stream")
+    uri = URI("https://api.elevenlabs.io/v1/text-to-speech/#{voice_id}/stream")
     req = Net::HTTP::Post.new(uri)
     req["xi-api-key"] = settings.api_key
     req["Content-Type"] = "application/json"
     req.body = {
       text:,
       model_id: settings.model_id,
-      voice_settings: {
-        stability: settings.stability,
-        use_speaker_boost: settings.use_speaker_boost,
-        similarity_boost: settings.similarity_boost,
-        style: settings.style,
-        speed: settings.speed
-      }
+      voice_settings: voice_settings
     }.to_json
 
     Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
