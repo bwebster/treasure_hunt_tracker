@@ -31,15 +31,10 @@ class StatusController < AdminController
   private
 
   def build_location_status(current_locations, health_checks)
-    current_locations.values
-                     .collect do |location|
-                       Status.new(
-                         location: location,
-                         received: health_checks
-                                     .detect { |hc| hc.location == location.number.to_s }
-                                     &.received
-                       )
-                     end
-                     .sort_by { |status| status.location.name }
+    status_objects = current_locations.values.map do |location|
+      received = health_checks.detect { |hc| hc.location == location.number.to_s }&.received
+      Status.new(location: location, received: received)
+    end
+    status_objects.sort_by { |status| status.location.name }
   end
 end

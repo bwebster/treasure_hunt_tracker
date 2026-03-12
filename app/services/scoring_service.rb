@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class ScoringService
   TYPES = [
     TYPE_SCAN = "scan",
@@ -146,3 +147,4 @@ class ScoringService
       .count
   end
 end
+# rubocop:enable Metrics/ClassLength
