@@ -14,6 +14,17 @@ module Api
 
       location = find_location(scanned_at, submitted_location)
 
+      rfid_tag, tracking_event = create_tracking_event(rfid_id, submitted_location, scanned_at, metadata, location)
+
+      ProcessTrackingEventJob.perform_later(tracking_event_id: tracking_event.id)
+      broadcast_location_update(location, rfid_tag, tracking_event)
+
+      render json: { success: true, tracking_event: tracking_event }, status: :created
+    end
+
+    private
+
+    def create_tracking_event(rfid_id, submitted_location, scanned_at, metadata, location)
       rfid_tag = nil
       tracking_event = ActiveRecord::Base.transaction do
         rfid_tag = find_or_create_tag(rfid_id)
@@ -25,26 +36,25 @@ module Api
           location_id: location&.id
         )
       end
-
-      ProcessTrackingEventJob.perform_later(tracking_event_id: tracking_event.id)
-
-      if location&.registration?
-        ActionCable.server.broadcast("register_channel", {
-                                       rfid_id: rfid_tag.id,
-                                       location_number: location.id,
-                                       tracking_event_id: tracking_event.id
-                                     })
-      elsif location&.display?
-        ActionCable.server.broadcast("display_channel", {
-                                       location_number: location.id,
-                                       tracking_event_id: tracking_event.id
-                                     })
-      end
-
-      render json: { success: true, tracking_event: tracking_event }, status: :created
+      [rfid_tag, tracking_event]
     end
 
-    private
+    def broadcast_location_update(location, rfid_tag, tracking_event)
+      return unless location
+
+      if location.registration?
+        ActionCable.server.broadcast("register_channel", {
+          rfid_id: rfid_tag.id,
+          location_number: location.id,
+          tracking_event_id: tracking_event.id
+        })
+      elsif location.display?
+        ActionCable.server.broadcast("display_channel", {
+          location_number: location.id,
+          tracking_event_id: tracking_event.id
+        })
+      end
+    end
 
     def find_or_create_tag(rfid_id)
       RfidTag.find_or_create_by!(tag_id: rfid_id) do |tag|

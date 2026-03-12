@@ -45,7 +45,6 @@ class RfidTagsController < AdminController
   end
 
   def update
-    # For registration - we need to proxy along these params
     user_id = params[:user_id]
     location_id = params[:location_id]
     registration_mode = params[:registration_mode] == "true"
@@ -56,31 +55,14 @@ class RfidTagsController < AdminController
     update_params[:label] = RfidTag.generate_label if update_params[:label].blank?
 
     # If it's not a number, treat it as a new username
-    user_id_or_name = update_params[:user_id]
-    if user_id_or_name.present? && !uuid?(user_id_or_name)
-      new_user = User.find_or_create_by(username: user_id_or_name)
-      update_params[:user_id] = new_user.id
-    end
+    handle_username_as_name(update_params)
 
     prev_username = @rfid_tag.username
 
     if @rfid_tag.update(update_params)
-      if registration_mode
-        username_changed = prev_username.nil? || prev_username != @rfid_tag.username
-        user_id = @rfid_tag.user&.id if username_changed
-
-        redirect_to register_path(user_id:, location_id:), notice: "RFID tag updated successfully."
-      else
-        redirect_to rfid_tags_path, notice: "RFID tag updated successfully."
-      end
-    elsif registration_mode
-      # Go back to registration with errors
-      redirect_to register_path(user_id:, location_id:)
+      handle_successful_update(user_id, location_id, registration_mode, prev_username)
     else
-      # Go back to edit with errors
-      @users = get_all_users
-      @scores = Score.where(rfid_tag: @rfid_tag).order(created_at: :asc)
-      render :edit, status: :unprocessable_entity
+      handle_failed_update(user_id, location_id, registration_mode)
     end
   end
 
@@ -89,6 +71,35 @@ class RfidTagsController < AdminController
   end
 
   private
+
+  def handle_username_as_name(update_params)
+    user_id_or_name = update_params[:user_id]
+    return unless user_id_or_name.present? && !uuid?(user_id_or_name)
+
+    new_user = User.find_or_create_by(username: user_id_or_name)
+    update_params[:user_id] = new_user.id
+  end
+
+  def handle_successful_update(user_id, location_id, registration_mode, prev_username)
+    if registration_mode
+      username_changed = prev_username.nil? || prev_username != @rfid_tag.username
+      user_id = @rfid_tag.user&.id if username_changed
+
+      redirect_to register_path(user_id:, location_id:), notice: "RFID tag updated successfully."
+    else
+      redirect_to rfid_tags_path, notice: "RFID tag updated successfully."
+    end
+  end
+
+  def handle_failed_update(user_id, location_id, registration_mode)
+    if registration_mode
+      redirect_to register_path(user_id:, location_id:)
+    else
+      @users = get_all_users
+      @scores = Score.where(rfid_tag: @rfid_tag).order(created_at: :asc)
+      render :edit, status: :unprocessable_entity
+    end
+  end
 
   def get_all_users
     User.order(:username).order(username: :asc)
