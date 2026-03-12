@@ -23,7 +23,7 @@ gem "stimulus-rails"
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "brakeman"
+gem "brakeman", "~> 8.0"
 gem "chartkick"
 gem "faker"
 gem "groupdate"
