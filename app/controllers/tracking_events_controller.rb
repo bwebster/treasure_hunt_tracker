@@ -12,46 +12,52 @@ class TrackingEventsController < AdminController
                        .per(PAGE_SIZE)
   end
 
+  private
+
   def activity
     time_zone = "America/Chicago"
 
-    # Get all unique days with tracking data
-    @available_days = TrackingEvent
-                      .where.not(scanned_at: nil)
-                      .distinct
-                      .pluck(Arel.sql("DATE(scanned_at AT TIME ZONE 'UTC' AT TIME ZONE '#{time_zone}')"))
-                      .sort
-
+    @available_days = fetch_available_days
     @selected_day = params[:day]&.to_date || @available_days.last
 
     return unless @selected_day.present?
 
-    # Precompute 144 10-minute intervals in local time
+    @locations, @chart_data = fetch_activity_data(time_zone)
+  end
+
+  private
+
+  def fetch_available_days
+    time_zone = "America/Chicago"
+    TrackingEvent
+      .where.not(scanned_at: nil)
+      .distinct
+      .pluck(Arel.sql("DATE(scanned_at AT TIME ZONE 'UTC' AT TIME ZONE '#{time_zone}')"))
+      .sort
+  end
+
+  def fetch_activity_data(time_zone)
     local_day_start = @selected_day.in_time_zone(time_zone).beginning_of_day
     time_buckets = (0..143).map { |i| local_day_start + i * 10.minutes }
 
-    # SQL to convert scanned_at to local time and truncate into 10-minute intervals
     time_zone_sql = "scanned_at AT TIME ZONE 'UTC' AT TIME ZONE '#{time_zone}'"
     time_bucket_sql = <<~SQL.squish
       date_trunc('hour', #{time_zone_sql}) +
       floor(date_part('minute', #{time_zone_sql}) / 10) * interval '10 minutes'
     SQL
 
-    # Group and count in SQL
     raw_data = TrackingEvent
                .where("scanned_at >= ? AND scanned_at < ?", @selected_day.beginning_of_day, @selected_day.end_of_day)
                .group(Arel.sql("location_id"), Arel.sql(time_bucket_sql))
                .order(Arel.sql("location_id"), Arel.sql(time_bucket_sql))
                .count
 
-    # Load locations
     location_ids = raw_data.keys.map(&:first).uniq
-    @locations = Location.where(id: location_ids).index_by(&:id)
+    locations = Location.where(id: location_ids).index_by(&:id)
 
-    # Format data into: { location_id => { "HH:MM" => count } }
-    @chart_data = raw_data
-                  .group_by { |(location_id, _), _| location_id }
-                  .transform_values do |entries|
+    chart_data = raw_data
+                .group_by { |(location_id, _), _| location_id }
+                .transform_values do |entries|
       raw = entries.to_h { |((_loc_id, ts), count)| [ts.strftime("%H:%M"), count] }
 
       time_buckets.to_h do |ts|
@@ -59,5 +65,7 @@ class TrackingEventsController < AdminController
         [time_str, raw[time_str] || 0]
       end
     end
+
+    [locations, chart_data]
   end
 end

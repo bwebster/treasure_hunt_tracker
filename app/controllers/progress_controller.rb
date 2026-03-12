@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ProgressController < ApplicationController
-  SCORES_BY_TAG_SQL = <<~SQL.freeze
+  SCORES_BY_TAG_SQL = <<~SQL
     with scores as (
       select
         coalesce(rt.user_id, rt.id)    as id,
@@ -58,40 +58,6 @@ class ProgressController < ApplicationController
 
     render template: "progress/display-mr-mike", layout: "mr_mike"
   end
-
-  SCORES_BY_TAG_SQL = <<~SQL.freeze
-    with scores as (
-      select
-        coalesce(rt.user_id, rt.id)    as id,
-        coalesce(u.username, rt.label) as label,
-        case
-            when rt.user_id is not null then 'user'
-            else 'tag'
-        end as type,
-        s.event_id,
-        s.location_id,
-        s.score_type,
-        s.score_type,
-        array_agg(s.score),
-        case
-            when s.score_type = 'scan_again' then sum(s.score)
-            else min(s.score)
-        end as score
-      from scores s
-          left outer join rfid_tags rt on rt.id = s.rfid_tag_id
-          left outer join users u on u.id = rt.user_id
-      group by 1, 2, 3, 4, 5, 6, 7
-    )
-    select
-        id,
-        label,
-        type,
-        sum(score)::integer as score,
-        dense_rank() over (order by sum(score) desc) as rank
-    from scores
-    group by 1, 2, 3
-    order by 4 desc
-  SQL
 
   private
 

@@ -43,16 +43,22 @@ module Api
       return unless location
 
       if location.registration?
-        ActionCable.server.broadcast("register_channel", {
-          rfid_id: rfid_tag.id,
-          location_number: location.id,
-          tracking_event_id: tracking_event.id
-        })
+        ActionCable.server.broadcast(
+          "register_channel",
+          {
+            rfid_id: rfid_tag.id,
+            location_number: location.id,
+            tracking_event_id: tracking_event.id
+          }
+        )
       elsif location.display?
-        ActionCable.server.broadcast("display_channel", {
-          location_number: location.id,
-          tracking_event_id: tracking_event.id
-        })
+        ActionCable.server.broadcast(
+          "display_channel",
+          {
+            location_number: location.id,
+            tracking_event_id: tracking_event.id
+          }
+        )
       end
     end
 
