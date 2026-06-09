@@ -91,7 +91,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
-    date (3.4.1)
+    date (3.5.1)
     diff-lcs (1.6.2)
     dotenv (3.1.8)
     drb (2.2.3)
@@ -167,7 +167,7 @@ GEM
       turbo-rails
     msgpack (1.8.0)
     mustache (1.1.1)
-    net-imap (0.5.8)
+    net-imap (0.5.15)
       date
       net-protocol
     net-pop (0.1.2)
@@ -340,7 +340,7 @@ GEM
     thruster (0.1.14-arm64-darwin)
     thruster (0.1.14-x86_64-darwin)
     thruster (0.1.14-x86_64-linux)
-    timeout (0.4.3)
+    timeout (0.6.1)
     turbo-rails (2.0.16)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
